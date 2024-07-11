@@ -57,7 +57,7 @@ body {
 .right {
   flex: 1;
   transition: 1s;
-  background-image: url("/public/img/login.png");
+
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
