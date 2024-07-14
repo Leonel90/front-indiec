@@ -1,25 +1,59 @@
 <template>
-<div class="container">
-  <div class="left">
-    <div class="header">
-      <h2 class="animation a1">Bienvenido</h2>
+  <div class="container">
+    <div class="left">
+      <div class="header">
+        <h2 class="animation a1">Bienvenido</h2>
+      </div>
+      <div class="form">
+        <input v-model="email" type="email" class="form-field animation a3" placeholder="Correo Electronico">
+        <input v-model="password" type="password" class="form-field animation a4" placeholder="Contraseña">
+        <button @click="login" class="animation a6">Ingresar</button>
+        <p class="animation a5">Si no tienes cuenta?<router-link to="/registro"><strong> Registrate </strong></router-link></p>
+      </div>
     </div>
-    <div class="form">
-    
-      <input type="email" class="form-field animation a3" placeholder="Correo Electronico">
-      <input type="password" class="form-field animation a4" placeholder="Contraseña">
-      <button class="animation a6">Ingresar</button>
-            <p class="animation a5">Si no tienes cuenta?<router-link to="/registro"><Strong> Registrate </Strong> </router-link></p>
-
-    </div>
+    <div class="right"></div>
   </div>
-  <div class="right"></div>
-</div> 
-
 </template>
-<script>
-export default {};
 
+<script>
+import axios from 'axios';
+import Swal from 'sweetalert2';
+
+export default {
+  data() {
+    return {
+      email: '',
+      password: ''
+    };
+  },
+  methods: {
+    async login() {
+      try {
+        const response = await axios.post('http://localhost:3000/login', {
+          email: this.email,
+          password: this.password
+        });
+        localStorage.setItem('token', response.data.token); // Guarda el token en el almacenamiento local
+        Swal.fire({
+          icon: 'success',
+          title: '¡Ingreso exitoso!',
+          text: 'Redirigiendo al dashboard...',
+          timer: 2000,
+          showConfirmButton: false
+        });
+        setTimeout(() => {
+          this.$router.push('/dashboard'); // Redirige a la vista protegida
+        }, 2000);
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al iniciar sesión',
+          text: error.response.data.message || 'Ha ocurrido un error, por favor intenta nuevamente.',
+        });
+      }
+    }
+  }
+};
 </script>
 <style>
 * {

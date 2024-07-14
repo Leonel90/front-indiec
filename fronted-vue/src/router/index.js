@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import login from '@/views/LoginViev.vue'
-import registre from '@/views/RegistreView.vue'
+import DashboardView from '@/views/DashboardView.vue'
+import LoginViev from '@/views/LoginViev.vue'
+import RegistreView from '@/views/RegistreView.vue'
 
 const routes = [
   {
@@ -12,18 +13,38 @@ const routes = [
   {
     path: '/registro',
     name: 'registre',
-    component: registre
+    component: RegistreView
   },
   {
     path: '/login',
     name: 'login',
-    component: login
+    component: LoginViev
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: DashboardView,
+    meta: { requiresAuth: true } // Indica que esta ruta requiere autenticación
   }
+
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+
 })
 
-export default router
+// Añade un guardia de navegación para proteger las rutas
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  const token = localStorage.getItem('token');
+
+  if (requiresAuth && !token) {
+    next('/login'); 
+  } else {
+    next(); 
+  }
+});
+
+export default router;

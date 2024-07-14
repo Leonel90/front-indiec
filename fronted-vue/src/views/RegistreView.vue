@@ -1,30 +1,69 @@
 <template>
   <div class="container">
-        <div class="right"></div>
-
+    <div class="right"></div>
     <div class="left">
       <div class="header">
         <h5 class="animation a1">¡Por favor, complete el formulario para el Administrador!</h5>
       </div>
       <div class="form">
-        <input type="email" class="form-field animation a3" placeholder="Ingrese Nombre"/>
-        <input type="email" class="form-field animation a3" placeholder="Ingrese Apellido"/>
-        <input type="email" class="form-field animation a3" placeholder="Ingrese Correo Electronico"/>
-        <input type="email" class="form-field animation a3" placeholder="Ingrese Celular"/>
-        <input type="password" class="form-field animation a4" placeholder="Contraseña" />
-
-        <button class="animation a6">Ingresar</button>
+        <input v-model="firstName" type="text" class="form-field animation a3" placeholder="Ingrese Nombre"/>
+        <input v-model="lastName" type="text" class="form-field animation a3" placeholder="Ingrese Apellido"/>
+        <input v-model="email" type="email" class="form-field animation a3" placeholder="Ingrese Correo Electronico"/>
+        <input v-model="phone" type="text" class="form-field animation a3" placeholder="Ingrese Celular"/>
+        <input v-model="password" type="password" class="form-field animation a4" placeholder="Contraseña" />
+        <button @click="register" class="animation a6">Registrate</button>
         <p class="animation a5">
-          ¿Sí tengo una cuenta? <router-link to="/login"
-            ><Strong> Inicia Sesion </Strong>
-          </router-link>
+          ¿Sí tengo una cuenta? <router-link to="/login"><strong>Inicia Sesión</strong></router-link>
         </p>
       </div>
     </div>
   </div>
 </template>
+
 <script>
-export default {};
+import axios from 'axios';
+import Swal from 'sweetalert2';
+
+export default {
+  data() {
+    return {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      password: ''
+    };
+  },
+  methods: {
+    async register() {
+      try {
+        const response = await axios.post('http://localhost:3000/register', {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          email: this.email,
+          phone: this.phone,
+          password: this.password
+        });
+        Swal.fire({
+          icon: 'success',
+          title: '¡Registro exitoso!',
+          text: 'Redirigiendo al inicio de sesión...',
+          timer: 2000,
+          showConfirmButton: false
+        });
+        setTimeout(() => {
+          this.$router.push('/login'); // Redirige a la vista de inicio de sesión
+        }, 2000);
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al registrarse',
+          text: error.response.data.message || 'Ha ocurrido un error, por favor intenta nuevamente.',
+        });
+      }
+    }
+  }
+};
 </script>
 <style>
 * {
