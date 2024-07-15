@@ -84,12 +84,13 @@ export default {
           this.$router.push("/login"); // Redirige a la vista de inicio de sesión
         }, 2000);
       } catch (error) {
+        const errorMessage =
+          error.response?.data?.message ||
+          "Ha ocurrido un error, por favor intenta nuevamente.";
         Swal.fire({
           icon: "error",
           title: "Error al registrarse",
-          text:
-            error.response.data.message ||
-            "Ha ocurrido un error, por favor intenta nuevamente.",
+          text: errorMessage,
         });
       }
     },

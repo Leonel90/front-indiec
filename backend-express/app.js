@@ -27,13 +27,14 @@ const authenticateToken = (req, res, next) => {
 };
 
 app.post('/register', async (req, res) => {
-  const { foto_perfil, nombre, apellido, correo, celular1, password } = req.body;
+  const { nombre, apellido, correo, celular1, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 8);
+
   try {
-    const artista = await Artista.create({ foto_perfil, nombre, apellido, correo, celular1, password: hashedPassword });
+    const artista = await Artista.create({nombre, apellido, correo, celular1, password: hashedPassword });
     res.status(201).json(artista);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ message: err.message });
   }
 });
 

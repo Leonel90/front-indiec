@@ -2,10 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
 const Artista = sequelize.define('artista', {
-  foto_perfil: {
-    type: DataTypes.STRING(255),
-    allowNull: false
-  },
+
   nombre: {
     type: DataTypes.STRING(255),
     allowNull: false
