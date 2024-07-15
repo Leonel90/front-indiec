@@ -1,21 +1,21 @@
 <template>
-  <div class="dashboard">
-    <ProtectedNavbar />
-    <p>Perfil artista</p>
-  </div>
+  <ProtectedNavbar />
+  <p>musica</p>
 </template>
 
 <script>
 import ProtectedNavbar from "../components/ProtectedNavbar.vue";
 
 export default {
-  name: "pefil-artista",
+  name: "Musica",
   components: {
     ProtectedNavbar,
   },
+  methods: {
+    logout() {
+      localStorage.removeItem("token");
+      this.$router.push("/login");
+    },
+  },
 };
 </script>
-
-<style>
-/*estilos del dasboard*/
-</style>

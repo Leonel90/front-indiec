@@ -1,20 +1,26 @@
 <template>
   <div class="dashboard">
-    <h1>Dashboard</h1>
-    <p>Bienvenido al panel de control.</p>
-    <button @click="logout">Cerrar sesión</button>
+    <ProtectedNavbar />
+<p>inico admin</p>    
   </div>
 </template>
 
 <script>
+import ProtectedNavbar from '../components/ProtectedNavbar.vue';
+
 export default {
-  name: "Dashboard",
+  name: 'Dashboard',
+  components: {
+    ProtectedNavbar
+  },
+  
   methods: {
     logout() {
       localStorage.removeItem("token");
-      this.$router.push("/Login");
+      this.$router.push("/login");
     },
   },
+
 };
 </script>
 
