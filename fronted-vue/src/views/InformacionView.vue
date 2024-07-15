@@ -9,11 +9,20 @@
   </header>
   <main class="main1">
     <section class="intro">
-      <h1>UNA EXPERIENCIA ÚNICA </h1>
+      <h1>UNA EXPERIENCIA ÚNICA</h1>
       <div class="text-container">
-        <p class="text1">Con nuestras funciones conseguirás la experiencia musical más personalizada que existe.</p>
-        <p class="text2">Con nuestras funciones conseguirás la experiencia musical más personalizada que existe.</p>
-        <p class="text3">Con nuestras funciones conseguirás la experiencia musical más personalizada que existe.</p>
+        <p class="text1">
+          Con nuestras funciones conseguirás la experiencia musical más personalizada que
+          existe.
+        </p>
+        <p class="text2">
+          Con nuestras funciones conseguirás la experiencia musical más personalizada que
+          existe.
+        </p>
+        <p class="text3">
+          Con nuestras funciones conseguirás la experiencia musical más personalizada que
+          existe.
+        </p>
       </div>
       <button class="register">Regístrate gratis</button>
       <div class="imagen"></div>
@@ -22,7 +31,12 @@
   <main class="main2">
     <section class="features">
       <h2>Nuestra Misión</h2>
-      <p class="feature-text">En indiEC, creemos en el poder transformador de la música independiente. Nos dedicamos a proporcionar un espacio donde los artistas pueden compartir su creatividad sin restricciones y donde los oyentes pueden descubrir sonidos nuevos y emocionantes que no encontrarán en las plataformas convencionales.</p>
+      <p class="feature-text">
+        En indiEC, creemos en el poder transformador de la música independiente. Nos
+        dedicamos a proporcionar un espacio donde los artistas pueden compartir su
+        creatividad sin restricciones y donde los oyentes pueden descubrir sonidos nuevos
+        y emocionantes que no encontrarán en las plataformas convencionales.
+      </p>
       <div class="imagen2"></div>
     </section>
   </main>
@@ -30,7 +44,7 @@
     <section class="titulo">
       <h1>UTILIZA NUESTRA PAGINA</h1>
     </section>
-    
+
     <div class="video-container">
       <video
         ref="videoElement"
@@ -40,7 +54,10 @@
         @mouseover="playVideo"
         @mouseleave="pauseVideo"
       >
-        <source src="/img/invideo-ai-480 ¡Descubre cómo funciona nuestra web de m 2024-07-12 (1).mp4" type="video/mp4">
+        <source
+          src="/img/invideo-ai-480 ¡Descubre cómo funciona nuestra web de m 2024-07-12 (1).mp4"
+          type="video/mp4"
+        />
         Tu navegador no soporta el elemento de video.
       </video>
     </div>
@@ -50,7 +67,7 @@
 <script>
 export default {
   mounted() {
-    window.addEventListener('scroll', this.checkVideoInView);
+    window.addEventListener("scroll", this.checkVideoInView);
   },
   methods: {
     playVideo() {
@@ -73,16 +90,16 @@ export default {
       } else {
         this.pauseVideo();
       }
-    }
+    },
   },
   beforeDestroy() {
-    window.removeEventListener('scroll', this.checkVideoInView);
-  }
+    window.removeEventListener("scroll", this.checkVideoInView);
+  },
 };
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Oswald:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Oswald:wght@300;400;500;600;700&display=swap");
 .main1 {
   background-image: url("/public/img/imagen8.png");
   background-size: cover;
@@ -91,7 +108,7 @@ export default {
   flex: 1; /*mein es el contenedor principal */
   margin-top: 80px; /* Asegura que el contenido esté debajo del header */
   max-width: 2100px;
-  background-position:  calc(0% + 60px) calc(2% + 2px);
+  background-position: calc(0% + 60px) calc(2% + 2px);
 }
 .main2 {
   background-image: url("/public/img/imagen5.png");
@@ -104,7 +121,6 @@ export default {
   max-width: 2100px;
   margin: 0 auto;
   margin-bottom: 5px;
-
 }
 
 .main3 {
@@ -133,7 +149,6 @@ header {
   z-index: 1000;
   height: 80px;
   margin-bottom: 20px;
-
 }
 
 .imagen {
@@ -159,7 +174,6 @@ header {
   }
 }
 
-
 .imagen2 {
   background-image: url("/public/img/dezer3.webp.png");
   background-size: contain;
@@ -170,9 +184,9 @@ header {
   animation: floatEffect 10s infinite;
   overflow: visible;
   border-radius: 10px; /* Agrega bordes redondeados si lo deseas */
-  position:relative;
+  position: relative;
   bottom: 290px;
-  left:350px;
+  left: 350px;
 }
 
 @keyframes floatEffect {
@@ -196,7 +210,6 @@ header {
   position: relative;
   left: 345px;
   border-radius: 50px;
- 
 }
 
 .titulo {
@@ -204,7 +217,7 @@ header {
   font-size: 45px;
   font-weight: 700;
   transition: color 0.3s ease, transform 10.3s ease;
-  position:relative;
+  position: relative;
   top: 5px;
 }
 
@@ -214,36 +227,44 @@ header {
 }
 
 .feature-text {
-    font-family: "Abezee";
-    font-size: 40px;
-    color: #ada7a7;
-    font-weight: 500;
-    display: inline-block; /* Hace que el texto se comporte como si estuviera dentro de un contenedor */
-    width: 70%; /* Ocupa todo el ancho disponible */
-    text-align: justify; /* Puedes ajustar la alineación según necesites */
-    padding: 60px; /* Agrega relleno para simular el espacio del contenedor */
-    margin: 0 20px; /* Agrega márgenes para controlar el espacio alrededor del texto */
-    position: relative;
-    right: 150px
-    
-   }
-
+  font-family: "Abezee";
+  font-size: 40px;
+  color: #ada7a7;
+  font-weight: 500;
+  display: inline-block; /* Hace que el texto se comporte como si estuviera dentro de un contenedor */
+  width: 70%; /* Ocupa todo el ancho disponible */
+  text-align: justify; /* Puedes ajustar la alineación según necesites */
+  padding: 60px; /* Agrega relleno para simular el espacio del contenedor */
+  margin: 0 20px; /* Agrega márgenes para controlar el espacio alrededor del texto */
+  position: relative;
+  right: 150px;
+}
 
 .logo {
   display: flex;
   align-items: center;
-  background-image: url("/public/img/logo2.png");
+  background-image: url("/public/img/logo.png");
   background-size: contain;
   background-repeat: no-repeat;
   animation: shake 10.1s infinite; /* Aplica la animación 'shake' de 0.5 segundos de duración, infinitamente */
 }
 
 @keyframes shake {
-  0% { transform: translateX(0); } /* Estado inicial */
-  25% { transform: translateX(-5px) rotate(-5deg); } /* Movimiento hacia la izquierda */
-  50% { transform: translateX(5px) rotate(5deg); } /* Movimiento hacia la derecha */
-  75% { transform: translateX(-5px) rotate(-5deg); } /* Movimiento hacia la izquierda */
-  100% { transform: translateX(0); } /* Vuelve al estado inicial */
+  0% {
+    transform: translateX(0);
+  } /* Estado inicial */
+  25% {
+    transform: translateX(-5px) rotate(-5deg);
+  } /* Movimiento hacia la izquierda */
+  50% {
+    transform: translateX(5px) rotate(5deg);
+  } /* Movimiento hacia la derecha */
+  75% {
+    transform: translateX(-5px) rotate(-5deg);
+  } /* Movimiento hacia la izquierda */
+  100% {
+    transform: translateX(0);
+  } /* Vuelve al estado inicial */
 }
 
 .logo span {
@@ -254,8 +275,8 @@ header {
   color: #ffffff;
   height: 50px;
   margin-left: 50px;
-  position:relative;
-  top:5px;
+  position: relative;
+  top: 5px;
 }
 
 .open-player2 {
@@ -274,8 +295,6 @@ header {
   border-color: #00202e;
   transform: scale(1.1);
 }
-
-
 
 .intro {
   text-align: center;
@@ -297,7 +316,8 @@ h1:hover {
 }
 
 @keyframes blinkEffect {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   5% {
@@ -319,13 +339,15 @@ h1:hover {
   margin-right: 260px; /* Espacio entre los párrafos */
 }
 
-.text1, .text2, .text3 {
+.text1,
+.text2,
+.text3 {
   font-size: 20px;
   font-weight: 300;
   color: #b0b0b0;
   margin-bottom: 30px;
   width: 35%; /* Ajustar según necesites */
-  animation-duration: 8s ; /* Duración total de la animación */
+  animation-duration: 8s; /* Duración total de la animación */
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-fill-mode: both;
@@ -349,14 +371,16 @@ h1:hover {
     transform: translateX(100%);
     opacity: 0;
   }
-  10%, 40% {
+  10%,
+  40% {
     opacity: 1;
   }
   50% {
     transform: translateX(0);
     opacity: 1;
   }
-  90%, 120% {
+  90%,
+  120% {
     opacity: 0;
   }
   100% {
@@ -370,14 +394,16 @@ h1:hover {
     transform: translateX(100%);
     opacity: 0;
   }
-  10%, 40% {
+  10%,
+  40% {
     opacity: 1;
   }
   50% {
     transform: translateX(0);
     opacity: 1;
   }
-  90%, 120% {
+  90%,
+  120% {
     opacity: 1;
   }
   100% {
@@ -391,14 +417,16 @@ h1:hover {
     transform: translateX(100%);
     opacity: 0;
   }
-  10%, 40% {
+  10%,
+  40% {
     opacity: 1;
   }
   50% {
     transform: translateX(0);
     opacity: 1;
   }
-  90%, 120% {
+  90%,
+  120% {
     opacity: 1;
   }
   100% {
@@ -419,7 +447,7 @@ h1:hover {
   transition: transform 0.5s ease;
   box-shadow: 0 10px 20px rgba(194, 193, 193, 0.2);
   position: relative;
- bottom: 6px;
+  bottom: 6px;
 }
 
 .register:hover {
@@ -430,7 +458,6 @@ h1:hover {
 .features {
   text-align: center;
   margin-top: 40px;
-  
 }
 
 .features h2 {
@@ -438,7 +465,7 @@ h1:hover {
   font-size: 45px;
   font-weight: 700;
   transition: color 0.3s ease, transform 0.3s ease;
-  position:relative;
+  position: relative;
   bottom: 50px;
 }
 
@@ -448,21 +475,20 @@ h1:hover {
 }
 
 .feature-text {
-    font-family: "Abezee";
-    font-size: 20px;
-    color: #ada7a7;
-    font-weight: 500;
-    display: inline-block; /* Hace que el texto se comporte como si estuviera dentro de un contenedor */
-    width: 30%; /* Ocupa todo el ancho disponible */
-    text-align: justify; /* Puedes ajustar la alineación según necesites */
-    padding: 10px; /* Agrega relleno para simular el espacio del contenedor */
-    margin: 0 20px; /* Agrega márgenes para controlar el espacio alrededor del texto */
-    position: relative;
-    right: 360px;
-    transition: color 0.3s ease; /* Añade una transición para el cambio de color */
-   }
-   .feature-text:hover {
+  font-family: "Abezee";
+  font-size: 20px;
+  color: #ada7a7;
+  font-weight: 500;
+  display: inline-block; /* Hace que el texto se comporte como si estuviera dentro de un contenedor */
+  width: 30%; /* Ocupa todo el ancho disponible */
+  text-align: justify; /* Puedes ajustar la alineación según necesites */
+  padding: 10px; /* Agrega relleno para simular el espacio del contenedor */
+  margin: 0 20px; /* Agrega márgenes para controlar el espacio alrededor del texto */
+  position: relative;
+  right: 360px;
+  transition: color 0.3s ease; /* Añade una transición para el cambio de color */
+}
+.feature-text:hover {
   color: #ffffff; /* Cambia el color al pasar el mouse */
 }
-
 </style>

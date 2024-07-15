@@ -1,6 +1,8 @@
  
-<template> 
-
-<button class="boton">click</button>
+<template>
 </template>
+<style>
+
+
+</style>
 

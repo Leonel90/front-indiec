@@ -1,13 +1,7 @@
 <template>
 
-
-  <router-view/>
-
-
+  <router-view />
 </template>
 <style>
-  * {
-    text-align: center;
-  }
-</style>
 
+</style>
