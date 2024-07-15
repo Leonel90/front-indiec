@@ -3,17 +3,46 @@
     <div class="right"></div>
     <div class="left">
       <div class="header">
-        <h5 class="animation a1">¡Por favor, complete el formulario para el Administrador!</h5>
+        <h5 class="animation a1">
+          ¡Por favor, complete el formulario para el Administrador!
+        </h5>
       </div>
       <div class="form">
-        <input v-model="firstName" type="text" class="form-field animation a3" placeholder="Ingrese Nombre"/>
-        <input v-model="lastName" type="text" class="form-field animation a3" placeholder="Ingrese Apellido"/>
-        <input v-model="email" type="email" class="form-field animation a3" placeholder="Ingrese Correo Electronico"/>
-        <input v-model="phone" type="text" class="form-field animation a3" placeholder="Ingrese Celular"/>
-        <input v-model="password" type="password" class="form-field animation a4" placeholder="Contraseña" />
+        <input
+          v-model="nombre"
+          type="text"
+          class="form-field animation a3"
+          placeholder="Ingrese Nombre"
+          required
+        />
+        <input
+          v-model="apellido"
+          type="text"
+          class="form-field animation a3"
+          placeholder="Ingrese Apellido"
+        />
+        <input
+          v-model="correo"
+          type="email"
+          class="form-field animation a3"
+          placeholder="Ingrese Correo Electronico"
+        />
+        <input
+          v-model="celular1"
+          type="text"
+          class="form-field animation a3"
+          placeholder="Ingrese Celular"
+        />
+        <input
+          v-model="password"
+          type="password"
+          class="form-field animation a4"
+          placeholder="Contraseña"
+        />
         <button @click="register" class="animation a6">Registrate</button>
         <p class="animation a5">
-          ¿Sí tengo una cuenta? <router-link to="/login"><strong>Inicia Sesión</strong></router-link>
+          ¿Sí tengo una cuenta?
+          <router-link to="/login"><strong>Inicia Sesión</strong></router-link>
         </p>
       </div>
     </div>
@@ -21,48 +50,50 @@
 </template>
 
 <script>
-import axios from 'axios';
-import Swal from 'sweetalert2';
+import axios from "axios";
+import Swal from "sweetalert2";
 
 export default {
   data() {
     return {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      password: ''
+      nombre: "",
+      apellido: "",
+      correo: "",
+      celular1: "",
+      password: "",
     };
   },
   methods: {
     async register() {
       try {
-        const response = await axios.post('http://localhost:3000/register', {
-          firstName: this.firstName,
-          lastName: this.lastName,
-          email: this.email,
-          phone: this.phone,
-          password: this.password
+        const response = await axios.post("http://localhost:3000/register", {
+          nombre: this.nombre,
+          apellido: this.apellido,
+          correo: this.correo,
+          celular1: this.celular1,
+          password: this.password,
         });
         Swal.fire({
-          icon: 'success',
-          title: '¡Registro exitoso!',
-          text: 'Redirigiendo al inicio de sesión...',
+          icon: "success",
+          title: "¡Registro exitoso!",
+          text: "Redirigiendo al inicio de sesión...",
           timer: 2000,
-          showConfirmButton: false
+          showConfirmButton: false,
         });
         setTimeout(() => {
-          this.$router.push('/login'); // Redirige a la vista de inicio de sesión
+          this.$router.push("/login"); // Redirige a la vista de inicio de sesión
         }, 2000);
       } catch (error) {
         Swal.fire({
-          icon: 'error',
-          title: 'Error al registrarse',
-          text: error.response.data.message || 'Ha ocurrido un error, por favor intenta nuevamente.',
+          icon: "error",
+          title: "Error al registrarse",
+          text:
+            error.response.data.message ||
+            "Ha ocurrido un error, por favor intenta nuevamente.",
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
@@ -145,10 +176,9 @@ body {
   font-family: "Rubik", sans-serif;
 }
 
-.form > button:hover{
+.form > button:hover {
   background: linear-gradient(to right, #4453fd 0%, #afb3ff 100%);
 }
-
 
 .animation {
   animation-name: move;
