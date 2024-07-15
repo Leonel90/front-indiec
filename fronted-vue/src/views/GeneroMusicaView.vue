@@ -1,21 +1,25 @@
 <template>
-        <ProtectedNavbar />
-<p>Genero musical</p>
+  <ProtectedNavbar />
+  <div class="content">
+    <div class="header">
+      <h1>Genero</h1>
+    </div>
+  </div>
 </template>
 
 <script>
-import ProtectedNavbar from '../components/ProtectedNavbar.vue';
+import ProtectedNavbar from "../components/ProtectedNavbar.vue";
 
 export default {
-  name: 'genero-musical',
+  name: "genero-musical",
   components: {
-    ProtectedNavbar
+    ProtectedNavbar,
   },
   methods: {
     logout() {
-      localStorage.removeItem('token');
-      this.$router.push('/login');
-    }
-  }
+      localStorage.removeItem("token");
+      this.$router.push("/login");
+    },
+  },
 };
 </script>

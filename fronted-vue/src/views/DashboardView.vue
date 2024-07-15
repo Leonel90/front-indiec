@@ -1,26 +1,27 @@
 <template>
-  <div class="dashboard">
-    <ProtectedNavbar />
-<p>inico admin</p>    
+  <ProtectedNavbar />
+  <div class="content">
+    <div class="header">
+      <h1>inicio dahsboard</h1>
+    </div>
   </div>
 </template>
 
 <script>
-import ProtectedNavbar from '../components/ProtectedNavbar.vue';
+import ProtectedNavbar from "../components/ProtectedNavbar.vue";
 
 export default {
-  name: 'Dashboard',
+  name: "Dashboard",
   components: {
-    ProtectedNavbar
+    ProtectedNavbar,
   },
-  
+
   methods: {
     logout() {
       localStorage.removeItem("token");
       this.$router.push("/login");
     },
   },
-
 };
 </script>
 

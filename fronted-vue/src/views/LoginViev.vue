@@ -74,7 +74,7 @@ export default {
 <style scoped>
 * {
   box-sizing: border-box;
-  margin:0;
+  margin: 0;
 }
 @import url("https://fonts.googleapis.com/css?family=Rubik:400,500&display=swap");
 

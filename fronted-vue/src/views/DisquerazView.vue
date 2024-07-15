@@ -1,6 +1,10 @@
 <template>
   <ProtectedNavbar />
-  <p>disqueraz </p>
+  <div class="content">
+    <div class="header">
+      <h1>disqueraz</h1>
+    </div>
+  </div>
 </template>
 
 <script>

@@ -1,7 +1,9 @@
 <template>
-  <div class="dashboard">
-    <ProtectedNavbar />
-    <p>Perfil artista</p>
+  <ProtectedNavbar />
+  <div class="content">
+    <div class="header">
+      <h1>perfil artista</h1>
+    </div>
   </div>
 </template>
 

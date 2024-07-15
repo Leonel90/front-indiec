@@ -1,6 +1,10 @@
 <template>
   <ProtectedNavbar />
-  <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit dolore optio voluptatum, laboriosam soluta similique cum qui a quis fugiat tempora accusamus enim consequatur animi, eos nostrum eum? Minus, deserunt? album</p>
+  <div class="content">
+    <div class="header">
+      <h1>album</h1>
+    </div>
+  </div>
 </template>
 
 <script>
