@@ -4,7 +4,7 @@ import store from './store';
 import router from './router';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import axios from 'axios';
-import Swal from 'sweetalert2';
+
 import 'bootstrap/dist/js/bootstrap';
 
 // Configurar Axios para incluir el token en todas las solicitudes

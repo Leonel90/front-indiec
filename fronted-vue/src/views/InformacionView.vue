@@ -4,8 +4,8 @@
       <span>indiEC</span>
     </div>
     <nav>
-      <button class="open-player2">Iniciar sesión</button>
-    </nav>
+      <button class="open-player2" @click="goToLogin">Iniciar sesión</button>   
+       </nav>
   </header>
   <main class="main1">
     <section class="intro">
@@ -66,10 +66,14 @@
 
 <script>
 export default {
+
   mounted() {
     window.addEventListener("scroll", this.checkVideoInView);
   },
   methods: {
+    goToLogin() {
+      this.$router.push('/login');
+    },
     playVideo() {
       const video = this.$refs.videoElement;
       video.play();
@@ -96,6 +100,9 @@ export default {
     window.removeEventListener("scroll", this.checkVideoInView);
   },
 };
+
+
+
 </script>
 
 <style scoped>

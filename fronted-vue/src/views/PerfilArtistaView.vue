@@ -3,6 +3,8 @@
   <div class="content">
     <div class="header">
       <h1>perfil artista</h1>
+
+
     </div>
   </div>
 </template>
@@ -18,6 +20,6 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /*estilos del dasboard*/
 </style>

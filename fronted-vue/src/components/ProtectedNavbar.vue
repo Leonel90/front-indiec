@@ -48,19 +48,36 @@
 
 
 <script>
+import Swal from 'sweetalert2';
+
 export default {
   methods: {
     logout() {
-      localStorage.removeItem("token"); 
-      this.$router.push("/login"); 
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: '¿Quieres cerrar sesión?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, cerrar sesión',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          localStorage.removeItem("token");
+          this.$router.push("/login");
+          Swal.fire('Cerraste sesión', 'Hasta luego Artista!', 'success');
+        }
+      });
     },
   },
 };
 </script>
 
-<style>
+<style >
 
 .sidebar {
+  font-family: 'Times New Roman', Times, serif;
+
     width: 250px;
     background-color: #20252A;
     color: white;
