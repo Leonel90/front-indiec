@@ -42,7 +42,7 @@ export default {
   padding: 20px;
   border-radius: 20px;
   position: relative;
-  max-width: 350px;
+  max-width: 550px;
   width: 100%;
 }
 .close-button {
