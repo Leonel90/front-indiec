@@ -5,10 +5,10 @@
     <div class="content">
       <div class="header">
         <div id="capa-padre">
-          <h1>Maneger</h1>
+          <h1>Manager</h1>
           <div id="app">
             <button @click="showCreateModal = true">Crear Manager</button>
-            <MyModal :isVisible="showCreateModal" @close="showCreateModal = false">
+            <MyModal :isVisible="showCreateModal" @close="closeModals">
               <form @submit.prevent="handleCreate">
                 <h2>Crear Manager</h2>
                 <div class="form-group">
@@ -37,27 +37,65 @@
                     style="background-color: #0000002a"
                   />
                 </div>
+                <div class="form-group">
+                  <label for="foto">Foto:</label>
+                  <input type="text" v-model="formData.photo" />
+                </div>
                 <div class="button-container">
                   <button type="submit">Guardar</button>
                 </div>
+              </form>
+            </MyModal>
 
+            <!-- Modal Editar Manager -->
+            <MyModal :isVisible="showEditModal" @close="closeModals">
+              <form @submit.prevent="handleEdit">
+                <h2>Editar Manager</h2>
+                <div class="form-group">
+                  <label for="edit-nombre">Nombres:</label>
+                  <input type="text" id="edit-nombre" v-model="editFormData.firstName" required />
+                </div>
+                <div class="form-group">
+                  <label for="edit-apellido">Apellidos:</label>
+                  <input type="text" id="edit-apellido" v-model="editFormData.lastName" required />
+                </div>
+                <div class="form-group">
+                  <label for="edit-correo">Correo:</label>
+                  <input type="email" id="edit-correo" v-model="editFormData.email" required />
+                </div>
+                <div class="form-group">
+                  <label for="edit-genero">Género:</label>
+                  <input type="text" id="edit-genero" v-model="editFormData.gender" required />
+                </div>
+                <div class="form-group">
+                  <label for="estado">Estado:</label>
+                  <input
+                    type="text"
+                    v-model="editFormData.status"
+                    required
+                    disabled
+                    style="background-color: #0000002a"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="edit-foto">Foto:</label>
+                  <input type="text" id="edit-foto" v-model="editFormData.photo" />
+                </div>
+                <div class="button-container">
+                  <button type="submit">Guardar Cambios</button>
+                </div>
               </form>
             </MyModal>
           </div>
         </div>
       </div>
 
-         <!-- Carpetas -->
-     <div class="pdf">
-      <div>PDF</div>
-     </div>
-     <div class="excel"> 
-      <div>EXCEL</div>
-     </div>
-      <!-- Barra de busqueda  -->
-      <div class="buscar">
-      <div>Buscar</div>
-     </div>
+      <!-- Botones para exportar y buscar -->
+      <div class="button-container">
+        <button class="pdf">PDF</button>
+        <button class="excel">EXCEL</button>
+        <button class="buscar">Buscar</button>
+      </div>
 
       <!-- Tabla de Managers -->
       <div class="table-container">
@@ -68,7 +106,7 @@
               <th><div class="cell">Foto</div></th>
               <th><div class="cell">Apellidos</div></th>
               <th><div class="cell">Nombres</div></th>
-              <th><div class="cell">Email</div></th>
+              <th><div class="cell">Correo</div></th>
               <th><div class="cell">Género</div></th>
               <th><div class="cell">Estado</div></th>
               <th><div class="cell">Acciones</div></th>
@@ -81,7 +119,7 @@
               </td>
               <td>
                 <div class="cell">
-                  <img :src="user.photo" alt="Foto" class="user-photo" />
+                  <img :src="user.photo" alt="" class="user-photo">
                 </div>
               </td>
               <td>
@@ -100,7 +138,7 @@
                 <span
                   :class="{
                     'status-active': user.status === 'Activo',
-                    'status-inactive': user.status === 'Eliminado',
+                    'status-inactive': user.status === 'Inactivo',
                   }"
                   >{{ user.status }}</span
                 >
@@ -140,68 +178,71 @@ export default {
   data() {
     return {
       showCreateModal: false,
+      showEditModal: false,
       formData: {
         firstName: "",
         lastName: "",
         email: "",
         gender: "",
         status: "Activo",
+        photo: "path/to/default/photo.png", // Ejemplo de valor por defecto para la foto
       },
+      editFormData: {}, // Para almacenar los datos del manager que se está editando
       users: [
         {
+          firstName: "John",
+          lastName: "Doe",
+          email: "Alexander@ya.ed",
+          gender: "Masculino",
+          status: "Activo",
           photo: "path/to/photo1.png",
-          lastName: "Narvaez",
-          firstName: "Alexander",
-          email: "Alexander@ya.ed",
-          gender: "Masculino",
-          status: "Activo",
         },
         {
+          firstName: "Jane",
+          lastName: "Smith",
+          email: "Alexander@ya.ed",
+          gender: "Femenino",
+          status: "Inactivo",
           photo: "path/to/photo2.png",
-          lastName: "Narvaez",
+        },
+        {
           firstName: "Alexander",
+          lastName: "Narvaez",
           email: "Alexander@ya.ed",
           gender: "Masculino",
           status: "Activo",
-        },
-        {
           photo: "path/to/photo3.png",
-          lastName: "Narvaez",
-          firstName: "Alexander",
-          email: "Alexander@ya.ed",
-          gender: "Masculino",
-          status: "Eliminado",
         },
         {
+          firstName: "Alexander",
+          lastName: "Narvaez",
+          email: "Alexander@ya.ed",
+          gender: "Masculino",
+          status: "Activo",
           photo: "path/to/photo4.png",
-          lastName: "Narvaez",
+        },
+        {
           firstName: "Alexander",
+          lastName: "Narvaez",
           email: "Alexander@ya.ed",
           gender: "Masculino",
           status: "Activo",
-        },
-        {
           photo: "path/to/photo5.png",
-          lastName: "Narvaez",
-          firstName: "Alexander",
-          email: "Alexander@ya.ed",
-          gender: "Masculino",
-          status: "Activo",
         },
         {
-          photo: "path/to/photo6.png",
-          lastName: "Narvaez",
           firstName: "Alexander",
+          lastName: "Narvaez",
           email: "Alexander@ya.ed",
           gender: "Masculino",
           status: "Activo",
+          photo: "path/to/photo6.png",
         },
       ],
     };
   },
   methods: {
     handleCreate() {
-      const newUser = { ...this.formData, photo: "path/to/default/photo.png" };
+      const newUser = { ...this.formData };
       this.users.push(newUser);
       this.showCreateModal = false;
       this.resetFormData();
@@ -212,37 +253,79 @@ export default {
         confirmButtonText: "OK",
       });
     },
-    viewUser(user) {
+    handleEdit() {
+      // Encontrar el usuario en el array y actualizar sus datos
+      const index = this.users.findIndex((user) => user.email === this.editFormData.email);
+      if (index !== -1) {
+        this.users[index] = { ...this.editFormData };
+        this.showEditModal = false;
+        this.editFormData = {};
+        Swal.fire({
+          title: "¡Manager editado!",
+          text: "Los cambios han sido guardados exitosamente.",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+      }
+    },
+    editUser(user) {
+      // Mostrar el modal de edición y cargar los datos del usuario seleccionado
+      this.editFormData = { ...user };
+      this.showEditModal = true;
+    },
+    deleteUser(user) {
+      // Cambiar el estado del usuario a "Inactivo"
+      user.status = "Inactivo";
       Swal.fire({
-        title: "Información del Manager",
-        html: `
-          <p><strong>Nombre:</strong> ${user.firstName} ${user.lastName}</p>
-          <p><strong>Correo:</strong> ${user.email}</p>
-          <p><strong>Género:</strong> ${user.gender}</p>
-          <p><strong>Estado:</strong> ${user.status}</p>
-        `,
-        icon: "info",
+        title: "¡Manager eliminado!",
+        text: "El manager ha sido movido a la lista de Inactivos.",
+        icon: "success",
         confirmButtonText: "OK",
       });
     },
-    editUser(user) {
-      this.formData = { ...user };
-      this.showCreateModal = true;
-    },
-    deleteUser(user) {
-      user.status = "Eliminado";
-    },
     restoreUser(user) {
+      // Restaurar el estado del usuario a "Activo"
       user.status = "Activo";
+      Swal.fire({
+        title: "¡Manager restaurado!",
+        text: "El manager ha sido movido a la lista de Activos.",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    },
+    closeModals() {
+      // Cerrar todos los modales y limpiar datos de edición
+      this.showCreateModal = false;
+      this.showEditModal = false;
+      this.resetFormData();
+      this.editFormData = {};
     },
     resetFormData() {
+      // Reiniciar los datos del formulario de creación
       this.formData = {
         firstName: "",
         lastName: "",
         email: "",
         gender: "",
         status: "Activo",
+        photo: "path/to/default/photo.png",
       };
+    },
+    viewUser(user) {
+      Swal.fire({
+        title: "Detalles del Manager",
+        html: `
+          <div class="modal-details">
+            <p><strong>Nombres:</strong> ${user.firstName}</p>
+            <p><strong>Apellidos:</strong> ${user.lastName}</p>
+            <p><strong>Correo:</strong> ${user.email}</p>
+            <p><strong>Género:</strong> ${user.gender}</p>
+            <p><strong>Estado:</strong> ${user.status}</p>
+            <img src="${user.photo}" alt="Foto del Manager" class="modal-photo">
+          </div>
+        `,
+        confirmButtonText: "OK",
+      });
     },
   },
 };
@@ -336,10 +419,7 @@ button[type="submit"]:hover {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-top: 100px;/*con esto  puedo   bajar mas la tabla   para que haya espacio  entre el modal de crear y el cuadro */
-
-
-
+  margin-top: 20px;/*con esto  puedo   bajar mas la tabla   para que haya espacio  entre el modal de crear y el cuadro */
 }
 table {
   width: 100%;
@@ -412,47 +492,42 @@ th {
   color: #fff;
 }
 
+.pdf,
+.excel,
+.buscar {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 2px;
+}
+
 .pdf {
   background-color: #dc3545;
   color: #fff;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 0 2px;
-  width: 60px;
-  position: relative;
-  top: 120px;
 }
+
 .excel {
   background-color: #28a745;
   color: #fff;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 0 2px;
-  width: 60px;
-  position: relative;
-  top: 86px;
-  left:70px;
+  margin-left: 10px;
 }
 
-.buscar{
+.buscar {
   background-color: #ffffff;
-  color:black;
+  color: black;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
   padding: 5px 10px;
-  position:relative;
-  border: none;
-  left:500px;
-  top:50px;
   cursor: pointer;
-  margin: 0 2px;
-  width:380px;
-  border-radius:10px;
+  margin-left: 10px;
+  width: 380px;
+  border-radius: 10px;
   text-align: center;
-
+}
+.buscar:hover {
+  background-color: #ffffff; 
+  color: black; 
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25); 
 }
 
 /* Estilos de la vista previa de la imagen */
