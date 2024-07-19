@@ -5,14 +5,16 @@
         <div v-for="n in 20" :key="n" class="star"></div>
       </div>
       <div class="logo-section">
-        <img src="@/assets/logoact.png" alt="Logo" class="logo">
-        <p class="logo-name">IndiEc</p>
+        <img src="@/assets/logoact.png" alt="Logo" class="logo" hidden/>
+        <p class="logo-name"></p>
       </div>
       <div class="welcome-section">
-        <p class="welcome-message">Bienvenido</p>
+        <img src="@/assets/logoact.png" alt="Logo" class="logo" />
+
+        <p class="welcome-message">IndiEC</p>
       </div>
     </div>
-    
+
     <div class="main-content">
       <div class="stars">
         <div v-for="n in 20" :key="n" class="star"></div>
@@ -20,38 +22,49 @@
       <div class="avatar-background">
         <div class="avatar-section">
           <div class="avatar-circle">
-            <img src="@/assets/avatar.jpg" alt="Avatar" class="avatar">
+            <img src="@/assets/avatar.jpg" alt="Avatar" class="avatar" />
           </div>
-          <p class="create-avatar">Unete y se uno más de la familia</p>
-          <button class="register-button">Regístrate</button>
+          <p class="create-avatar">Unete y se uno más de la familia.</p>
+
+          <router-link to="/registro">
+            <button class="register-button">Registrate</button>
+          </router-link>
         </div>
-      </div> 
-
-
-      <div class="carousel">
-        <div 
-        class="carousel-slide"
-         v-for="(slide, index) in slides"
-         :key="index"
-          :style="{ backgroundImage: `url(${slide.image})`, backgroundColor: slide.color }"
-         :class="{ active: currentSlide === index }">
-       </div>
       </div>
 
+      <div class="carousel">
+        <div
+          class="carousel-slide"
+          v-for="(slide, index) in slides"
+          :key="index"
+          :style="{
+            backgroundImage: `url(${slide.image})`,
+            backgroundColor: slide.color,
+          }"
+          :class="{ active: currentSlide === index }"
+        ></div>
+      </div>
 
       <div class="description-section">
-        <img src="@/assets/fondo25.jpg" alt="Imagen de Descripción" class="description-image">
+        <img
+          src="@/assets/fondo25.jpg"
+          alt="Imagen de Descripción"
+          class="description-image"
+        />
         <div class="description-text">
           <h2>Te contamos más sobre nosotros</h2>
-          <p>Somos IndiEc, la página que te brindará un servicio de música sin límites y con alta calidad de sonido sin interrupciones con tus artistas favoritos y una administración de calidad.</p>
+          <p>
+            Somos IndiEc, la página que te brindará un servicio de música sin límites y
+            con alta calidad de sonido sin interrupciones con tus artistas favoritos y una
+            administración de calidad.
+          </p>
         </div>
       </div>
 
       <div class="video-section">
-          <video id="myVideo" src="@/assets/videoprueba.mp4" autoplay muted loop></video>
-          <div class="video-background"></div>
+        <video id="myVideo" src="@/assets/videoprueba.mp4" autoplay muted loop></video>
+        <div class="video-background"></div>
       </div>
-
 
       <div class="help-container" :class="{ expanded: helpVisible }">
           <button @click="toggleHelp" class="help-button">&#9835;</button>
@@ -65,15 +78,15 @@
 
 <script>
 export default {
-  name: 'TuComponente',
+  name: "TuComponente",
   data() {
     return {
       slides: [
-        { image: require('@/assets/publi1.png'), color: '#ff7f50' }, // Cambia los colores y las rutas según tus imágenes
-        { image: require('@/assets/gitp.png'), color: '#6a5acd' },
-        { image: require('@/assets/edit.png'), color: '#20b2aa' },
-        { image: require('@/assets/foto.png'), color: '#ff6347' },
-        { image: require('@/assets/nue.png'), color: '#4682b4' }
+        { image: require("@/assets/publi1.png"), color: "#ff7f50" }, // Cambia los colores y las rutas según tus imágenes
+        { image: require("@/assets/gitp.png"), color: "#6a5acd" },
+        { image: require("@/assets/edit.png"), color: "#20b2aa" },
+        { image: require("@/assets/foto.png"), color: "#ff6347" },
+        { image: require("@/assets/nue.png"), color: "#4682b4" },
       ],
       currentSlide: 0,
       helpVisible: false,
@@ -100,7 +113,6 @@ export default {
   width: 100%;
   background: linear-gradient(to right, rgb(184, 51, 224), rgb(48, 48, 48));
   padding: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -119,12 +131,12 @@ export default {
 
 .star {
   position: absolute;
-  width: 2px;
-  height: 2px;
+  width: 20px;
+  height: 20px;
   background: white;
-  border-radius: 50%;
+  border-radius: 80%;
   opacity: 0;
-  animation: shootingStar 3s linear infinite;
+  animation: shootingStar 5s linear infinite;
 }
 
 @keyframes shootingStar {
@@ -138,26 +150,106 @@ export default {
   }
 }
 
-.star:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
-.star:nth-child(2) { top: 20%; left: 20%; animation-delay: 0.3s; }
-.star:nth-child(3) { top: 30%; left: 30%; animation-delay: 0.6s; }
-.star:nth-child(4) { top: 40%; left: 40%; animation-delay: 0.9s; }
-.star:nth-child(5) { top: 50%; left: 50%; animation-delay: 1.2s; }
-.star:nth-child(6) { top: 60%; left: 60%; animation-delay: 1.5s; }
-.star:nth-child(7) { top: 70%; left: 70%; animation-delay: 1.8s; }
-.star:nth-child(8) { top: 80%; left: 80%; animation-delay: 2.1s; }
-.star:nth-child(9) { top: 90%; left: 90%; animation-delay: 2.4s; }
-.star:nth-child(10) { top: 15%; left: 25%; animation-delay: 2.7s; }
-.star:nth-child(11) { top: 25%; left: 35%; animation-delay: 3.0s; }
-.star:nth-child(12) { top: 35%; left: 45%; animation-delay: 3.3s; }
-.star:nth-child(13) { top: 45%; left: 55%; animation-delay: 3.6s; }
-.star:nth-child(14) { top: 55%; left: 65%; animation-delay: 3.9s; }
-.star:nth-child(15) { top: 65%; left: 75%; animation-delay: 4.2s; }
-.star:nth-child(16) { top: 75%; left: 85%; animation-delay: 4.5s; }
-.star:nth-child(17) { top: 85%; left: 95%; animation-delay: 4.8s; }
-.star:nth-child(18) { top: 5%; left: 15%; animation-delay: 5.1s; }
-.star:nth-child(19) { top: 95%; left: 5%; animation-delay: 5.4s; }
-.star:nth-child(20) { top: 50%; left: 50%; animation-delay: 5.7s; }
+.star:nth-child(1) {
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+}
+.star:nth-child(2) {
+  top: 20%;
+  left: 20%;
+  animation-delay: 0.3s;
+}
+.star:nth-child(3) {
+  top: 30%;
+  left: 30%;
+  animation-delay: 0.6s;
+}
+.star:nth-child(4) {
+  top: 40%;
+  left: 40%;
+  animation-delay: 0.9s;
+}
+.star:nth-child(5) {
+  top: 50%;
+  left: 50%;
+  animation-delay: 1.2s;
+}
+.star:nth-child(6) {
+  top: 60%;
+  left: 60%;
+  animation-delay: 1.5s;
+}
+.star:nth-child(7) {
+  top: 70%;
+  left: 70%;
+  animation-delay: 1.8s;
+}
+.star:nth-child(8) {
+  top: 80%;
+  left: 80%;
+  animation-delay: 2.1s;
+}
+.star:nth-child(9) {
+  top: 90%;
+  left: 90%;
+  animation-delay: 2.4s;
+}
+.star:nth-child(10) {
+  top: 15%;
+  left: 25%;
+  animation-delay: 2.7s;
+}
+.star:nth-child(11) {
+  top: 25%;
+  left: 35%;
+  animation-delay: 3s;
+}
+.star:nth-child(12) {
+  top: 35%;
+  left: 45%;
+  animation-delay: 3.3s;
+}
+.star:nth-child(13) {
+  top: 45%;
+  left: 55%;
+  animation-delay: 3.6s;
+}
+.star:nth-child(14) {
+  top: 55%;
+  left: 65%;
+  animation-delay: 3.9s;
+}
+.star:nth-child(15) {
+  top: 65%;
+  left: 75%;
+  animation-delay: 4.2s;
+}
+.star:nth-child(16) {
+  top: 75%;
+  left: 85%;
+  animation-delay: 4.5s;
+}
+.star:nth-child(17) {
+  top: 85%;
+  left: 95%;
+  animation-delay: 4.8s;
+}
+.star:nth-child(18) {
+  top: 5%;
+  left: 15%;
+  animation-delay: 5.1s;
+}
+.star:nth-child(19) {
+  top: 95%;
+  left: 5%;
+  animation-delay: 5.4s;
+}
+.star:nth-child(20) {
+  top: 50%;
+  left: 50%;
+  animation-delay: 5.7s;
+}
 
 .logo-section {
   display: flex;
@@ -169,7 +261,7 @@ export default {
   width: 75px;
   height: auto;
   margin-right: 10px;
-  animation: moveLogo 2s infinite alternate;
+  animation: moveLogo 5s infinite alternate;
 }
 
 .logo-name {
@@ -215,26 +307,29 @@ export default {
   }
 }
 
-
 .welcome-section {
   display: flex;
   align-items: center;
+  justify-content: center
 }
 
 .welcome-message {
   font-size: 40px;
   margin-right: 649px;
-  font-family: 'Rockwell', sans-serif;
-  animation: fadeInOut 3s infinite;
+  font-family: "Rockwell", sans-serif;
+  animation: fadeInOut 8s infinite;
   color: white;
 }
 
-
 @keyframes fadeInOut {
-  0%, 100% { opacity: 0; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
 }
-
 
 .stars {
   position: absolute;
@@ -266,50 +361,215 @@ export default {
   }
 }
 
-.star:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
-.star:nth-child(2) { top: 20%; left: 20%; animation-delay: 0.3s; }
-.star:nth-child(3) { top: 30%; left: 30%; animation-delay: 0.6s; }
-.star:nth-child(4) { top: 40%; left: 40%; animation-delay: 0.9s; }
-.star:nth-child(5) { top: 50%; left: 50%; animation-delay: 1.2s; }
-.star:nth-child(6) { top: 60%; left: 60%; animation-delay: 1.5s; }
-.star:nth-child(7) { top: 70%; left: 70%; animation-delay: 1.8s; }
-.star:nth-child(8) { top: 80%; left: 80%; animation-delay: 2.1s; }
-.star:nth-child(9) { top: 90%; left: 90%; animation-delay: 2.4s; }
-.star:nth-child(10) { top: 15%; left: 25%; animation-delay: 2.7s; }
-.star:nth-child(11) { top: 25%; left: 35%; animation-delay: 3.0s; }
-.star:nth-child(12) { top: 35%; left: 45%; animation-delay: 3.3s; }
-.star:nth-child(13) { top: 45%; left: 55%; animation-delay: 3.6s; }
-.star:nth-child(14) { top: 55%; left: 65%; animation-delay: 3.9s; }
-.star:nth-child(15) { top: 65%; left: 75%; animation-delay: 4.2s; }
-.star:nth-child(16) { top: 75%; left: 85%; animation-delay: 4.5s; }
-.star:nth-child(17) { top: 85%; left: 95%; animation-delay: 4.8s; }
-.star:nth-child(18) { top: 5%; left: 15%; animation-delay: 5.1s; }
-.star:nth-child(19) { top: 95%; left: 5%; animation-delay: 5.4s; }
-.star:nth-child(20) { top: 50%; left: 50%; animation-delay: 5.7s; }
-.star:nth-child(21) { top: 25%; left: 35%; animation-delay: 5.8s; }
-.star:nth-child(22) { top: 35%; left: 45%; animation-delay: 5.9s; }
-.star:nth-child(23) { top: 45%; left: 55%; animation-delay: 2.6s; }
-.star:nth-child(24) { top: 55%; left: 65%; animation-delay: 3.9s; }
-.star:nth-child(25) { top: 65%; left: 75%; animation-delay: 4.2s; }
-.star:nth-child(26) { top: 75%; left: 85%; animation-delay: 2.5s; }
-.star:nth-child(27) { top: 85%; left: 95%; animation-delay: 1.8s; }
-.star:nth-child(28) { top: 5%; left: 15%; animation-delay: 2.1s; }
-.star:nth-child(29) { top: 95%; left: 5%; animation-delay: 1.4s; }
-.star:nth-child(30) { top: 50%; left: 50%; animation-delay: 1.7s; }
-.star:nth-child(31) { top: 10%; left: 10%; animation-delay: 6s; }
-.star:nth-child(32) { top: 20%; left: 20%; animation-delay: 0.5s; }
-.star:nth-child(33) { top: 30%; left: 30%; animation-delay: 0.9s; }
-.star:nth-child(34) { top: 40%; left: 40%; animation-delay: 0.9s; }
-.star:nth-child(35) { top: 50%; left: 50%; animation-delay: 3.2s; }
-.star:nth-child(36) { top: 60%; left: 60%; animation-delay: 3.5s; }
-.star:nth-child(37) { top: 70%; left: 70%; animation-delay: 3.8s; }
-.star:nth-child(38) { top: 80%; left: 80%; animation-delay: 3.1s; }
-.star:nth-child(39) { top: 90%; left: 90%; animation-delay: 2.4s; }
-.star:nth-child(40) { top: 15%; left: 25%; animation-delay: 2.7s; }
+.star:nth-child(1) {
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+}
+.star:nth-child(2) {
+  top: 20%;
+  left: 20%;
+  animation-delay: 0.3s;
+}
+.star:nth-child(3) {
+  top: 30%;
+  left: 30%;
+  animation-delay: 0.6s;
+}
+.star:nth-child(4) {
+  top: 40%;
+  left: 40%;
+  animation-delay: 0.9s;
+}
+.star:nth-child(5) {
+  top: 50%;
+  left: 50%;
+  animation-delay: 1.2s;
+}
+.star:nth-child(6) {
+  top: 60%;
+  left: 60%;
+  animation-delay: 1.5s;
+}
+.star:nth-child(7) {
+  top: 70%;
+  left: 70%;
+  animation-delay: 1.8s;
+}
+.star:nth-child(8) {
+  top: 80%;
+  left: 80%;
+  animation-delay: 2.1s;
+}
+.star:nth-child(9) {
+  top: 90%;
+  left: 90%;
+  animation-delay: 2.4s;
+}
+.star:nth-child(10) {
+  top: 15%;
+  left: 25%;
+  animation-delay: 2.7s;
+}
+.star:nth-child(11) {
+  top: 25%;
+  left: 35%;
+  animation-delay: 3s;
+}
+.star:nth-child(12) {
+  top: 35%;
+  left: 45%;
+  animation-delay: 3.3s;
+}
+.star:nth-child(13) {
+  top: 45%;
+  left: 55%;
+  animation-delay: 3.6s;
+}
+.star:nth-child(14) {
+  top: 55%;
+  left: 65%;
+  animation-delay: 3.9s;
+}
+.star:nth-child(15) {
+  top: 65%;
+  left: 75%;
+  animation-delay: 4.2s;
+}
+.star:nth-child(16) {
+  top: 75%;
+  left: 85%;
+  animation-delay: 4.5s;
+}
+.star:nth-child(17) {
+  top: 85%;
+  left: 95%;
+  animation-delay: 4.8s;
+}
+.star:nth-child(18) {
+  top: 5%;
+  left: 15%;
+  animation-delay: 5.1s;
+}
+.star:nth-child(19) {
+  top: 95%;
+  left: 5%;
+  animation-delay: 5.4s;
+}
+.star:nth-child(20) {
+  top: 50%;
+  left: 50%;
+  animation-delay: 5.7s;
+}
+.star:nth-child(21) {
+  top: 25%;
+  left: 35%;
+  animation-delay: 5.8s;
+}
+.star:nth-child(22) {
+  top: 35%;
+  left: 45%;
+  animation-delay: 5.9s;
+}
+.star:nth-child(23) {
+  top: 45%;
+  left: 55%;
+  animation-delay: 2.6s;
+}
+.star:nth-child(24) {
+  top: 55%;
+  left: 65%;
+  animation-delay: 3.9s;
+}
+.star:nth-child(25) {
+  top: 65%;
+  left: 75%;
+  animation-delay: 4.2s;
+}
+.star:nth-child(26) {
+  top: 75%;
+  left: 85%;
+  animation-delay: 2.5s;
+}
+.star:nth-child(27) {
+  top: 85%;
+  left: 95%;
+  animation-delay: 1.8s;
+}
+.star:nth-child(28) {
+  top: 5%;
+  left: 15%;
+  animation-delay: 2.1s;
+}
+.star:nth-child(29) {
+  top: 95%;
+  left: 5%;
+  animation-delay: 1.4s;
+}
+.star:nth-child(30) {
+  top: 50%;
+  left: 50%;
+  animation-delay: 1.7s;
+}
+.star:nth-child(31) {
+  top: 10%;
+  left: 10%;
+  animation-delay: 6s;
+}
+.star:nth-child(32) {
+  top: 20%;
+  left: 20%;
+  animation-delay: 0.5s;
+}
+.star:nth-child(33) {
+  top: 30%;
+  left: 30%;
+  animation-delay: 0.9s;
+}
+.star:nth-child(34) {
+  top: 40%;
+  left: 40%;
+  animation-delay: 0.9s;
+}
+.star:nth-child(35) {
+  top: 50%;
+  left: 50%;
+  animation-delay: 3.2s;
+}
+.star:nth-child(36) {
+  top: 60%;
+  left: 60%;
+  animation-delay: 3.5s;
+}
+.star:nth-child(37) {
+  top: 70%;
+  left: 70%;
+  animation-delay: 3.8s;
+}
+.star:nth-child(38) {
+  top: 80%;
+  left: 80%;
+  animation-delay: 3.1s;
+}
+.star:nth-child(39) {
+  top: 90%;
+  left: 90%;
+  animation-delay: 2.4s;
+}
+.star:nth-child(40) {
+  top: 15%;
+  left: 25%;
+  animation-delay: 2.7s;
+}
 
 .main-content {
   padding: 20px;
-  background: linear-gradient(to bottom, rgb(48, 0, 103), rgb(27, 48, 122), rgb(0, 48, 64));
+  background: linear-gradient(
+    to bottom,
+    rgb(48, 0, 103),
+    rgb(27, 48, 122),
+    rgb(0, 48, 64)
+  );
   display: flex;
   justify-content: center;
   align-items: center;
@@ -318,12 +578,10 @@ export default {
   overflow: hidden;
 }
 
-
-
 .carousel {
   position: center;
   width: 90%;
-  height: 600px; /* Ajusta según tus necesidades */
+  height: 300px; /* Ajusta según tus necesidades */
   overflow: hidden;
   border-radius: 10px;
   margin-top: 80px;
@@ -350,27 +608,6 @@ export default {
   z-index: 1;
 }
 
-.carousel-slide:nth-child(1).active {
-  background-color: #ff7f50;
-}
-
-.carousel-slide:nth-child(2).active {
-  background-color: #6a5acd;
-}
-
-.carousel-slide:nth-child(3).active {
-  background-color: #20b2aa;
-}
-
-.carousel-slide:nth-child(4).active {
-  background-color: #ff6347;
-}
-
-.carousel-slide:nth-child(5).active {
-  background-color: #4682b4;
-}
-
-
 
 
 .description-section {
@@ -393,26 +630,26 @@ export default {
 
 .description-text h2 {
   margin: 70px;
-  font-family: 'Rockwell', sans-serif;
+  font-family: "Rockwell", sans-serif;
 }
 
 .description-text p {
   margin: 70px;
-  font-family: 'Gill Sans', sans-serif;
+  font-family: "Gill Sans", sans-serif;
 }
 /* Parte final descripcion */
 
-
 /* Parte del avatar */
 .avatar-background {
-  background-image: url('@/assets/fondo21.jpg');
+  background-image: url("@/assets/fondo21.jpg");
   background-size: cover;
   background-position: center;
-  width: 100%;
+  width: 95%;
   height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius:10px;
 }
 
 .avatar-section {
@@ -434,28 +671,36 @@ export default {
 }
 
 @keyframes moveAvatar {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .create-avatar {
   font-size: 20px;
   margin-top: 10px;
-  font-family: 'Gill Sans', sans-serif;
+  font-family: "Gill Sans", sans-serif;
   color: white;
 }
 
 .register-button {
   margin-top: 10px;
   padding: 10px 20px;
-  border: 10;
+  box-shadow:0 0 10px rgba(238, 238, 238, 0.87);
   background-color: purple;
   color: white;
   cursor: pointer;
   border-radius: 20px;
 }
-/* Parte final del avatar */
+.register-button:hover{
+  box-shadow:0 0 30px rgba(238, 238, 238, 0.87);
 
+}
+/* Parte final del avatar */
 
 /* Parte del video*/
 .video-section {
@@ -477,8 +722,6 @@ export default {
   z-index: 1;
 }
 
-
-
 .help-container {
   position: fixed;
   bottom: 20px;
@@ -487,6 +730,7 @@ export default {
   flex-direction: column;
   align-items: flex-end;
   z-index: 10;
+
 }
 
 .help-button {
@@ -501,7 +745,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow:0 0 10px rgba(238, 238, 238, 0.87);
   z-index: 11;
 }
 
