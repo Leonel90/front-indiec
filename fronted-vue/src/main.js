@@ -4,8 +4,12 @@ import store from './store';
 import router from './router';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import axios from 'axios';
-
-import 'bootstrap/dist/js/bootstrap';
+import PrimeVue from 'primevue/config';
+import Calendar from 'primevue/calendar';
+import 'primevue/resources/themes/saga-blue/theme.css'; // Theme
+import 'primevue/resources/primevue.min.css';           // Core CSS
+import 'primeicons/primeicons.css';                     // Icons
+import 'primeflex/primeflex.css';                       // PrimeFl
 
 // Configurar Axios para incluir el token en todas las solicitudes
 axios.interceptors.request.use(
@@ -25,6 +29,8 @@ axios.interceptors.request.use(
 const app = createApp(App);
 
 // Usar las bibliotecas necesarias
+app.component('Calendar', Calendar);
+app.use(PrimeVue);
 app.use(store);
 app.use(router);
 

@@ -16,17 +16,21 @@
                   <label for="imagen" class="upload-label custom-upload-label">
                     <i class="bx bx-check"></i> Subir Imagen
                   </label>
-                  <input 
-                    type="file" 
-                    id="imagen" 
-                    class="custom-upload-input" 
-                    @change="handleFileUpload" 
-                    accept="image/*" 
+                  <input
+                    type="file"
+                    id="imagen"
+                    class="custom-upload-input"
+                    @change="handleFileUpload"
+                    accept="image/*"
                   />
                 </div>
                 <!-- Vista previa de la imagen seleccionada -->
                 <div v-if="imagePreview" class="image-preview custom-image-preview">
-                  <img :src="imagePreview" alt="Vista previa de la imagen" class="custom-preview-img" />
+                  <img
+                    :src="imagePreview"
+                    alt="Vista previa de la imagen"
+                    class="custom-preview-img"
+                  />
                 </div>
                 <div class="form-group">
                   <label for="songName">Nombre de la Canción:</label>
@@ -57,17 +61,21 @@
                   <label for="edit-imagen" class="upload-label custom-upload-label">
                     <i class="bx bx-check"></i> Cambiar Imagen
                   </label>
-                  <input 
-                    type="file" 
-                    id="edit-imagen" 
-                    class="custom-upload-input" 
-                    @change="handleEditFileUpload" 
-                    accept="image/*" 
+                  <input
+                    type="file"
+                    id="edit-imagen"
+                    class="custom-upload-input"
+                    @change="handleEditFileUpload"
+                    accept="image/*"
                   />
                 </div>
                 <!-- Vista previa de la imagen seleccionada en edición -->
                 <div v-if="editImagePreview" class="image-preview custom-image-preview">
-                  <img :src="editImagePreview" alt="Vista previa de la imagen" class="custom-preview-img" />
+                  <img
+                    :src="editImagePreview"
+                    alt="Vista previa de la imagen"
+                    class="custom-preview-img"
+                  />
                 </div>
                 <div class="form-group">
                   <label for="songName">Nombre de la Canción:</label>
@@ -98,7 +106,12 @@
       <div class="button-container">
         <button class="pdf">PDF</button>
         <button class="excel">EXCEL</button>
-        <button class="buscar">Buscar</button>
+        <input
+          type="text"
+          placeholder="Buscar . . ."
+          class="buscar"
+          v-model="searchQuery"
+        />
       </div>
 
       <!-- Tabla de Canciones -->
@@ -117,16 +130,24 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(song, index) in songs" :key="index">
-              <td><div class="cell">{{ index + 1 }}</div></td>
+            <tr v-for="(song, index) in filteredSongs" :key="index">
+              <td>
+                <div class="cell">{{ index + 1 }}</div>
+              </td>
               <td>
                 <div class="cell">
                   <img :src="song.photo" alt="Foto" class="song-photo" />
                 </div>
               </td>
-              <td><div class="cell">{{ song.songName }}</div></td>
-              <td><div class="cell">{{ song.artistName }}</div></td>
-              <td><div class="cell">{{ song.album }}</div></td>
+              <td>
+                <div class="cell">{{ song.songName }}</div>
+              </td>
+              <td>
+                <div class="cell">{{ song.artistName }}</div>
+              </td>
+              <td>
+                <div class="cell">{{ song.album }}</div>
+              </td>
               <td>
                 <div class="cell">
                   <a :href="song.url" target="_blank">{{ song.url }}</a>
@@ -139,10 +160,22 @@
               </td>
               <td>
                 <div class="button-group">
-                  <button class="btn view-btn" @click="viewSongDetails(song)">Ver</button>
-                  <button class="btn edit-btn" @click="startEditing(song)">Editar</button>
-                  <button class="btn delete-btn" v-if="song.status === 'Activo'" @click="deleteSong(song)">Eliminar</button>
-                  <button class="btn restore-btn" v-else @click="restoreSong(song)">Restaurar</button>
+                  <button class="btn view-btn" @click="viewSongDetails(song)">
+                    <i class="bx bx-show"></i>
+                  </button>
+                  <button class="btn edit-btn" @click="startEditing(song)">
+                    <i class="bx bx-edit"></i>
+                  </button>
+                  <button
+                    class="btn delete-btn"
+                    v-if="song.status === 'Activo'"
+                    @click="deleteSong(song)"
+                  >
+                    <i class="bx bx-trash"></i>
+                  </button>
+                  <button class="btn restore-btn" v-else @click="restoreSong(song)">
+                    <i class="bx bx-undo"></i>
+                  </button>
                 </div>
               </td>
             </tr>
@@ -166,6 +199,7 @@ export default {
   data() {
     return {
       showCreateModal: false,
+      searchQuery: "",
       formData: {
         songName: "",
         artistName: "",
@@ -205,6 +239,19 @@ export default {
       imagePreview: null, // Para previsualización de imagen en creación
       editImagePreview: null, // Para previsualización de imagen en edición
     };
+  },
+  computed: {
+    filteredSongs() {
+      const query = this.searchQuery.toLowerCase();
+      return this.songs.filter(
+        (song) =>
+          song.songName.toLowerCase().includes(query) ||
+          song.artistName.toLowerCase().includes(query) ||
+          song.album.toLowerCase().includes(query) ||
+          song.url.toLowerCase().includes(query) ||
+          song.status.toLowerCase().includes(query)
+      );
+    },
   },
   methods: {
     handleFileUpload(event) {
@@ -287,19 +334,19 @@ export default {
           <p><strong>URL:</strong> <a href="${song.url}" target="_blank">${song.url}</a></p>
           <p><strong>Estado:</strong> ${song.status}</p>
         `,
-        confirmButtonText: 'Cerrar',
+        confirmButtonText: "Cerrar",
         customClass: {
-          popup: 'custom-swal-popup',
-          content: 'custom-swal-content',
-          closeButton: 'custom-swal-close',
-          confirmButton: 'custom-swal-confirm',
-        }
+          popup: "custom-swal-popup",
+          content: "custom-swal-content",
+          closeButton: "custom-swal-close",
+          confirmButton: "custom-swal-confirm",
+        },
       });
     },
     getSongStatusClass(status) {
       return {
-        'status-active': status === 'Activo',
-        'status-inactive': status === 'Eliminado',
+        "status-active": status === "Activo",
+        "status-inactive": status === "Eliminado",
       };
     },
   },
@@ -369,6 +416,10 @@ form {
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  background-color: aliceblue;
+  padding: 10px;
+  box-shadow:  2px 2px 2px 2px rgba(0, 0, 0, 0.137);
+  border-radius:12px;
 }
 
 button[type="submit"] {
@@ -387,10 +438,10 @@ button[type="submit"]:hover {
 
 .table-container {
   padding: 20px;
-  background-color: #fff;
+  background-color: aliceblue;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
+  margin-top: 20px; /*con esto  puedo   bajar mas la tabla   para que haya espacio  entre el modal de crear y el cuadro */
 }
 
 table {
@@ -402,6 +453,7 @@ th,
 td {
   padding: 10px;
   text-align: center;
+  border-bottom: 1px solid #ddd;
 }
 
 th {
@@ -411,8 +463,11 @@ th {
 
 .cell {
   padding: 10px;
-  background-color: #f1f1f1;
   border-radius: 5px;
+  display: inline-block;
+}
+.cell:hover {
+  background-color: white;
 }
 
 .song-photo {
@@ -452,21 +507,25 @@ th {
 .view-btn {
   background-color: #6c757d;
   color: #fff;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.137);
 }
 
 .edit-btn {
   background-color: #ffc107;
   color: #fff;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.137);
 }
 
 .delete-btn {
   background-color: #dc3545;
   color: #fff;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.137);
 }
 
 .restore-btn {
   background-color: #17a2b8;
   color: #fff;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.137);
 }
 
 .pdf,
@@ -482,30 +541,26 @@ th {
 .pdf {
   background-color: #dc3545;
   color: #fff;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.137);
 }
 
 .excel {
   background-color: #28a745;
   color: #fff;
   margin-left: 10px;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.137);
 }
 
 .buscar {
   background-color: #ffffff;
   color: black;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 5px 2px 3px 1px rgba(0, 0, 0, 0.164);
   padding: 5px 10px;
   cursor: pointer;
   margin-left: 10px;
   width: 380px;
   border-radius: 10px;
   text-align: center;
-}
-
-.buscar:hover {
-  background-color: #ffffff;
-  color: black;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
 }
 
 .custom-form-group {
@@ -533,8 +588,8 @@ th {
 }
 
 .custom-preview-img {
-  max-width: 90%;
-  max-height: 80px;
+  max-width: 80%;
+  max-height: 50px;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -544,5 +599,7 @@ th {
   max-height: 50px;
   border-radius: 4px;
   object-fit: cover;
+}
+.buscar {
 }
 </style>

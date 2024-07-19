@@ -53,19 +53,39 @@
                 <h2>Editar Manager</h2>
                 <div class="form-group">
                   <label for="edit-nombre">Nombres:</label>
-                  <input type="text" id="edit-nombre" v-model="editFormData.firstName" required />
+                  <input
+                    type="text"
+                    id="edit-nombre"
+                    v-model="editFormData.firstName"
+                    required
+                  />
                 </div>
                 <div class="form-group">
                   <label for="edit-apellido">Apellidos:</label>
-                  <input type="text" id="edit-apellido" v-model="editFormData.lastName" required />
+                  <input
+                    type="text"
+                    id="edit-apellido"
+                    v-model="editFormData.lastName"
+                    required
+                  />
                 </div>
                 <div class="form-group">
                   <label for="edit-correo">Correo:</label>
-                  <input type="email" id="edit-correo" v-model="editFormData.email" required />
+                  <input
+                    type="email"
+                    id="edit-correo"
+                    v-model="editFormData.email"
+                    required
+                  />
                 </div>
                 <div class="form-group">
                   <label for="edit-genero">Género:</label>
-                  <input type="text" id="edit-genero" v-model="editFormData.gender" required />
+                  <input
+                    type="text"
+                    id="edit-genero"
+                    v-model="editFormData.gender"
+                    required
+                  />
                 </div>
                 <div class="form-group">
                   <label for="estado">Estado:</label>
@@ -94,7 +114,12 @@
       <div class="button-container">
         <button class="pdf">PDF</button>
         <button class="excel">EXCEL</button>
-        <button class="buscar">Buscar</button>
+        <input
+          type="text"
+          placeholder="Buscar . . ."
+          class="buscar"
+          v-model="searchQuery"
+        />
       </div>
 
       <!-- Tabla de Managers -->
@@ -113,13 +138,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(user, index) in users" :key="index">
+            <tr v-for="(user, index) in filteredUsers" :key="index">
               <td>
                 <div class="cell">{{ index + 1 }}</div>
               </td>
               <td>
                 <div class="cell">
-                  <img :src="user.photo" alt="" class="user-photo">
+                  <img :src="user.photo" alt="" class="user-photo" />
                 </div>
               </td>
               <td>
@@ -144,17 +169,21 @@
                 >
               </td>
               <td>
-                <button class="btn view-btn" @click="viewUser(user)">Ver</button>
-                <button class="btn edit-btn" @click="editUser(user)">Editar</button>
+                <button class="btn view-btn" @click="viewUser(user)">
+                  <i class="bx bx-show"></i>
+                </button>
+                <button class="btn edit-btn" @click="editUser(user)">
+                  <i class="bx bx-edit"></i>
+                </button>
                 <button
                   class="btn delete-btn"
                   v-if="user.status === 'Activo'"
                   @click="deleteUser(user)"
                 >
-                  Eliminar
+                  <i class="bx bx-edit"></i>
                 </button>
                 <button class="btn restore-btn" v-else @click="restoreUser(user)">
-                  Restaurar
+                  <i class="bx bx-undo"></i>
                 </button>
               </td>
             </tr>
@@ -179,6 +208,7 @@ export default {
     return {
       showCreateModal: false,
       showEditModal: false,
+      searchQuery: "",
       formData: {
         firstName: "",
         lastName: "",
@@ -213,32 +243,21 @@ export default {
           status: "Activo",
           photo: "path/to/photo3.png",
         },
-        {
-          firstName: "Alexander",
-          lastName: "Narvaez",
-          email: "Alexander@ya.ed",
-          gender: "Masculino",
-          status: "Activo",
-          photo: "path/to/photo4.png",
-        },
-        {
-          firstName: "Alexander",
-          lastName: "Narvaez",
-          email: "Alexander@ya.ed",
-          gender: "Masculino",
-          status: "Activo",
-          photo: "path/to/photo5.png",
-        },
-        {
-          firstName: "Alexander",
-          lastName: "Narvaez",
-          email: "Alexander@ya.ed",
-          gender: "Masculino",
-          status: "Activo",
-          photo: "path/to/photo6.png",
-        },
       ],
     };
+  },
+  computed: {
+    filteredUsers() {
+      const query = this.searchQuery.toLowerCase();
+      return this.users.filter(
+        (user) =>
+          user.firstName.toLowerCase().includes(query) ||
+          user.lastName.toLowerCase().includes(query) ||
+          user.email.toLowerCase().includes(query) ||
+          user.gender.toLowerCase().includes(query) ||
+          user.status.toLowerCase().includes(query)
+      );
+    },
   },
   methods: {
     handleCreate() {
@@ -255,7 +274,9 @@ export default {
     },
     handleEdit() {
       // Encontrar el usuario en el array y actualizar sus datos
-      const index = this.users.findIndex((user) => user.email === this.editFormData.email);
+      const index = this.users.findIndex(
+        (user) => user.email === this.editFormData.email
+      );
       if (index !== -1) {
         this.users[index] = { ...this.editFormData };
         this.showEditModal = false;
@@ -397,6 +418,10 @@ form {
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  background-color: aliceblue;
+  padding: 10px;
+  box-shadow:  2px 2px 2px 2px rgba(0, 0, 0, 0.137);
+  border-radius:12px;
 }
 
 button[type="submit"] {
@@ -416,10 +441,10 @@ button[type="submit"]:hover {
 /* Estilos para la tabla */
 .table-container {
   padding: 20px;
-  background-color: #fff;
+  background-color: aliceblue;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;/*con esto  puedo   bajar mas la tabla   para que haya espacio  entre el modal de crear y el cuadro */
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
+  margin-top: 20px; /*con esto  puedo   bajar mas la tabla   para que haya espacio  entre el modal de crear y el cuadro */
 }
 table {
   width: 100%;
@@ -430,6 +455,7 @@ th,
 td {
   padding: 10px;
   text-align: center;
+  border-bottom: 1px solid #ddd;
 }
 
 th {
@@ -439,9 +465,11 @@ th {
 
 .cell {
   padding: 10px;
-  background-color: #f1f1f1;
   border-radius: 5px;
   display: inline-block;
+}
+.cell:hover {
+  background-color: white;
 }
 
 .user-photo {
@@ -475,21 +503,29 @@ th {
 .view-btn {
   background-color: #6c757d;
   color: #fff;
+  box-shadow:  2px 2px 2px 2px rgba(0, 0, 0, 0.137);
+
 }
 
 .edit-btn {
   background-color: #ffc107;
   color: #fff;
+  box-shadow:  2px 2px 2px 2px rgba(0, 0, 0, 0.137);
+
 }
 
 .delete-btn {
   background-color: #dc3545;
   color: #fff;
+    box-shadow:  2px 2px 2px 2px rgba(0, 0, 0, 0.137);
+
 }
 
 .restore-btn {
   background-color: #17a2b8;
   color: #fff;
+    box-shadow:  2px 2px 2px 2px rgba(0, 0, 0, 0.137);
+
 }
 
 .pdf,
@@ -505,18 +541,22 @@ th {
 .pdf {
   background-color: #dc3545;
   color: #fff;
+  box-shadow:  2px 2px 2px 2px rgba(0, 0, 0, 0.137);
+
 }
 
 .excel {
   background-color: #28a745;
   color: #fff;
   margin-left: 10px;
+  box-shadow:  2px 2px 2px 2px rgba(0, 0, 0, 0.137);
+
 }
 
 .buscar {
   background-color: #ffffff;
   color: black;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 5px 2px 3px 1px rgba(0, 0, 0, 0.164);
   padding: 5px 10px;
   cursor: pointer;
   margin-left: 10px;
@@ -524,18 +564,13 @@ th {
   border-radius: 10px;
   text-align: center;
 }
-.buscar:hover {
-  background-color: #ffffff; 
-  color: black; 
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25); 
-}
 
 /* Estilos de la vista previa de la imagen */
 .image-preview {
   margin: 80px;
 }
 .image-preview img {
-  max-width: 100%;
+  max-width: 50%;
   height: auto;
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
@@ -551,5 +586,6 @@ th {
   text-align: center;
 }
 
-
+.buscar {
+}
 </style>
