@@ -62,7 +62,7 @@
       </div>
 
       <div class="video-section">
-        <video id="myVideo" src="@/assets/videoprueba.mp4" autoplay muted loop></video>
+        <video id="myVideo" src="@/assets/home.mp4" autoplay muted loop></video>
         <div class="video-background"></div>
       </div>
 
