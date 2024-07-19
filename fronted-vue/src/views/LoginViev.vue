@@ -2,14 +2,17 @@
   <div class="container">
     <div class="left">
       <div class="header">
-        <h2 class="animation a1">Bienvenido</h2>
+        <h1 class="animation a1">Bienvenido</h1>
+        <br>
       </div>
       <div class="form">
         <input
           v-model="correo"
           type="email"
           class="form-field animation a3"
-          placeholder="Correo Electronico"
+          placeholder="example@yavirac.edu.ec"
+          @input="validateEmail"
+          required
         />
         <input
           v-model="password"
@@ -38,10 +41,30 @@ export default {
     return {
       correo: "",
       password: "",
+      emailError: "", // Add this to store email validation error message
     };
   },
   methods: {
+    validateEmail() {
+      // Regex to match email ending with @yavirac.edu.ec
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@yavirac\.edu\.ec$/;
+      this.emailError = emailPattern.test(this.correo)
+        ? ""
+        : "El correo debe terminar en @yavirac.edu.ec";
+    },
     async login() {
+      // Validate email before proceeding
+      this.validateEmail();
+
+      if (this.emailError) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: this.emailError
+        });
+        return;
+      }
+
       try {
         const response = await axios.post("http://localhost:3000/login", {
           correo: this.correo,
@@ -71,16 +94,11 @@ export default {
   },
 };
 </script>
+
 <style scoped>
-* {
-  box-sizing: border-box;
-  margin: 0;
-}
+
 @import url("https://fonts.googleapis.com/css?family=Rubik:400,500&display=swap");
 
-body {
-  font-family: "Rubik", sans-serif;
-}
 
 .container {
   display: flex;
@@ -109,10 +127,10 @@ body {
   background-position: center;
 }
 
-.header > h2 {
+.header > h1 {
   color: #4f46a5;
+text-align: center;
 }
-
 .form {
   max-width: 80%;
   display: flex;
@@ -128,10 +146,9 @@ body {
 
 .form-field {
   height: 30px;
-  padding: 0 16px;
+  padding: 20px;
   border: 2px solid #656ed3;
-  border-radius: 20px;
-  font-family: "Rubik", sans-serif;
+  border-radius: 15px;
   outline: 0;
   transition: 0.2s;
   margin: 13px;
@@ -142,14 +159,13 @@ body {
 }
 
 .form > button {
-  padding: 12px 10px;
+  padding: 10px 10px;
   border: 0;
   background: linear-gradient(to right, #656ed3 0%, #afb3ff 100%);
   border-radius: 15px;
   margin: 5px;
   color: #fff;
   letter-spacing: 1px;
-  font-family: "Rubik", sans-serif;
 }
 
 .animation {

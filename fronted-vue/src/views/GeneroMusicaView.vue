@@ -276,7 +276,6 @@ button[type="submit"]:hover {
   justify-content: center;
   align-items: center;
   height: 100%;
-  background-color: #f0f0f0;
 }
 
 .table-container {
