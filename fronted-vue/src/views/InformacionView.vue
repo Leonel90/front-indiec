@@ -1,501 +1,521 @@
 <template>
-  <header>
-    <div class="logo">
-      <span>indiEC</span>
-    </div>
-    <nav>
-      <button class="open-player2" @click="goToLogin">Iniciar sesión</button>   
-       </nav>
-  </header>
-  <main class="main1">
-    <section class="intro">
-      <h1>UNA EXPERIENCIA ÚNICA</h1>
-      <div class="text-container">
-        <p class="text1">
-          Con nuestras funciones conseguirás la experiencia musical más personalizada que
-          existe.
-        </p>
-        <p class="text2">
-          Con nuestras funciones conseguirás la experiencia musical más personalizada que
-          existe.
-        </p>
-        <p class="text3">
-          Con nuestras funciones conseguirás la experiencia musical más personalizada que
-          existe.
-        </p>
+  <div>
+    <div class="navbar">
+      <div class="stars">
+        <div v-for="n in 20" :key="n" class="star"></div>
       </div>
-      <button class="register">Regístrate gratis</button>
-      <div class="imagen"></div>
-    </section>
-  </main>
-  <main class="main2">
-    <section class="features">
-      <h2>Nuestra Misión</h2>
-      <p class="feature-text">
-        En indiEC, creemos en el poder transformador de la música independiente. Nos
-        dedicamos a proporcionar un espacio donde los artistas pueden compartir su
-        creatividad sin restricciones y donde los oyentes pueden descubrir sonidos nuevos
-        y emocionantes que no encontrarán en las plataformas convencionales.
-      </p>
-      <div class="imagen2"></div>
-    </section>
-  </main>
-  <main class="main3">
-    <section class="titulo">
-      <h1>UTILIZA NUESTRA PAGINA</h1>
-    </section>
-
-    <div class="video-container">
-      <video
-        ref="videoElement"
-        width="640"
-        height="360"
-        controls
-        @mouseover="playVideo"
-        @mouseleave="pauseVideo"
-      >
-        <source
-          src="/img/invideo-ai-480 ¡Descubre cómo funciona nuestra web de m 2024-07-12 (1).mp4"
-          type="video/mp4"
-        />
-        Tu navegador no soporta el elemento de video.
-      </video>
+      <div class="logo-section">
+        <img src="@/assets/logoact.png" alt="Logo" class="logo">
+        <p class="logo-name">IndiEc</p>
+      </div>
+      <div class="welcome-section">
+        <p class="welcome-message">Bienvenido</p>
+      </div>
     </div>
-  </main>
+    
+    <div class="main-content">
+      <div class="stars">
+        <div v-for="n in 20" :key="n" class="star"></div>
+      </div>
+      <div class="avatar-background">
+        <div class="avatar-section">
+          <div class="avatar-circle">
+            <img src="@/assets/avatar.jpg" alt="Avatar" class="avatar">
+          </div>
+          <p class="create-avatar">Unete y se uno más de la familia</p>
+          <button class="register-button">Regístrate</button>
+        </div>
+      </div> 
+
+
+      <div class="carousel">
+        <div 
+        class="carousel-slide"
+         v-for="(slide, index) in slides"
+         :key="index"
+          :style="{ backgroundImage: `url(${slide.image})`, backgroundColor: slide.color }"
+         :class="{ active: currentSlide === index }">
+       </div>
+      </div>
+
+
+      <div class="description-section">
+        <img src="@/assets/fondo25.jpg" alt="Imagen de Descripción" class="description-image">
+        <div class="description-text">
+          <h2>Te contamos más sobre nosotros</h2>
+          <p>Somos IndiEc, la página que te brindará un servicio de música sin límites y con alta calidad de sonido sin interrupciones con tus artistas favoritos y una administración de calidad.</p>
+        </div>
+      </div>
+
+      <div class="video-section">
+          <video id="myVideo" src="@/assets/videoprueba.mp4" autoplay muted loop></video>
+          <div class="video-background"></div>
+      </div>
+
+
+      <div class="help-container" :class="{ expanded: helpVisible }">
+          <button @click="toggleHelp" class="help-button">&#9835;</button>
+        <div v-if="helpVisible" class="help-message">
+          Regístrate
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-
+  name: 'TuComponente',
+  data() {
+    return {
+      slides: [
+        { image: require('@/assets/publi1.png'), color: '#ff7f50' }, // Cambia los colores y las rutas según tus imágenes
+        { image: require('@/assets/gitp.png'), color: '#6a5acd' },
+        { image: require('@/assets/edit.png'), color: '#20b2aa' },
+        { image: require('@/assets/foto.png'), color: '#ff6347' },
+        { image: require('@/assets/nue.png'), color: '#4682b4' }
+      ],
+      currentSlide: 0,
+      helpVisible: false,
+    };
+  },
   mounted() {
-    window.addEventListener("scroll", this.checkVideoInView);
+    this.startCarousel();
   },
   methods: {
-    goToLogin() {
-      this.$router.push('/login');
+    startCarousel() {
+      setInterval(() => {
+        this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+      }, 3000); // Cambia el intervalo según tus necesidades
     },
-    playVideo() {
-      const video = this.$refs.videoElement;
-      video.play();
+    toggleHelp() {
+      this.helpVisible = !this.helpVisible;
     },
-    pauseVideo() {
-      const video = this.$refs.videoElement;
-      video.pause();
-    },
-    checkVideoInView() {
-      const video = this.$refs.videoElement;
-      if (!video) return;
-
-      const rect = video.getBoundingClientRect();
-      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-
-      if (rect.top >= 0 && rect.bottom <= windowHeight) {
-        this.playVideo();
-      } else {
-        this.pauseVideo();
-      }
-    },
-  },
-  beforeDestroy() {
-    window.removeEventListener("scroll", this.checkVideoInView);
   },
 };
-
-
-
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Oswald:wght@300;400;500;600;700&display=swap");
-.main1 {
-  background-image: url("/public/img/imagen8.png");
-  background-size: cover;
-  padding: 40px 20px;
-  min-height: auto;
-  flex: 1; /*mein es el contenedor principal */
-  margin-top: 80px; /* Asegura que el contenido esté debajo del header */
-  max-width: 2100px;
-  background-position: calc(0% + 60px) calc(2% + 2px);
-}
-.main2 {
-  background-image: url("/public/img/imagen5.png");
-  background-size: cover;
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  padding-top: 40px;
-  height: 80vh;
-  max-width: 2100px;
-  margin: 0 auto;
-  margin-bottom: 5px;
-}
-
-.main3 {
-  background-image: url("/public/img/imagen9\ .png");
-  background-size: cover;
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  padding-top: 30px;
-  height: 80vh;
-  max-width: 2500px;
-  margin: -10px auto;
-}
-
-header {
+.navbar {
+  width: 100%;
+  background: linear-gradient(to right, rgb(184, 51, 224), rgb(48, 48, 48));
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
-  background-color: #1a1a1a;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  position: fixed;
+  position: relative;
+  overflow: hidden;
+}
+
+.stars {
+  position: absolute;
   top: 0;
   left: 0;
-  z-index: 1000;
-  height: 80px;
-  margin-bottom: 20px;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
 }
 
-.imagen {
-  background-image: url("/public/img/dezer4.webp.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 340px;
-  margin: 20px auto;
-  animation: zoomEffect 10s infinite;
-  overflow: visible;
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: shootingStar 3s linear infinite;
 }
 
-@keyframes zoomEffect {
+@keyframes shootingStar {
   0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
+    transform: translateX(-100%) translateY(-100%);
+    opacity: 1;
   }
   100% {
-    transform: scale(1);
+    transform: translateX(200%) translateY(200%);
+    opacity: 0;
   }
 }
 
-.imagen2 {
-  background-image: url("/public/img/dezer3.webp.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 340px;
-  margin: 20px auto;
-  animation: floatEffect 10s infinite;
-  overflow: visible;
-  border-radius: 10px; /* Agrega bordes redondeados si lo deseas */
-  position: relative;
-  bottom: 290px;
-  left: 350px;
-}
+.star:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+.star:nth-child(2) { top: 20%; left: 20%; animation-delay: 0.3s; }
+.star:nth-child(3) { top: 30%; left: 30%; animation-delay: 0.6s; }
+.star:nth-child(4) { top: 40%; left: 40%; animation-delay: 0.9s; }
+.star:nth-child(5) { top: 50%; left: 50%; animation-delay: 1.2s; }
+.star:nth-child(6) { top: 60%; left: 60%; animation-delay: 1.5s; }
+.star:nth-child(7) { top: 70%; left: 70%; animation-delay: 1.8s; }
+.star:nth-child(8) { top: 80%; left: 80%; animation-delay: 2.1s; }
+.star:nth-child(9) { top: 90%; left: 90%; animation-delay: 2.4s; }
+.star:nth-child(10) { top: 15%; left: 25%; animation-delay: 2.7s; }
+.star:nth-child(11) { top: 25%; left: 35%; animation-delay: 3.0s; }
+.star:nth-child(12) { top: 35%; left: 45%; animation-delay: 3.3s; }
+.star:nth-child(13) { top: 45%; left: 55%; animation-delay: 3.6s; }
+.star:nth-child(14) { top: 55%; left: 65%; animation-delay: 3.9s; }
+.star:nth-child(15) { top: 65%; left: 75%; animation-delay: 4.2s; }
+.star:nth-child(16) { top: 75%; left: 85%; animation-delay: 4.5s; }
+.star:nth-child(17) { top: 85%; left: 95%; animation-delay: 4.8s; }
+.star:nth-child(18) { top: 5%; left: 15%; animation-delay: 5.1s; }
+.star:nth-child(19) { top: 95%; left: 5%; animation-delay: 5.4s; }
+.star:nth-child(20) { top: 50%; left: 50%; animation-delay: 5.7s; }
 
-@keyframes floatEffect {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-
-.video-container {
+.logo-section {
   display: flex;
-  justify-content: center;
   align-items: center;
-  width: 50%;
-  height: 100%;
-  position: relative;
-  left: 345px;
-  border-radius: 50px;
-}
-
-.titulo {
-  font-family: "Roboto Slab";
-  font-size: 45px;
-  font-weight: 700;
-  transition: color 0.3s ease, transform 10.3s ease;
-  position: relative;
-  top: 5px;
-}
-
-.titulo h1:hover {
-  color: #ada7a7;
-  transform: scale(1.1);
-}
-
-.feature-text {
-  font-family: "Abezee";
-  font-size: 40px;
-  color: #ada7a7;
-  font-weight: 500;
-  display: inline-block; /* Hace que el texto se comporte como si estuviera dentro de un contenedor */
-  width: 70%; /* Ocupa todo el ancho disponible */
-  text-align: justify; /* Puedes ajustar la alineación según necesites */
-  padding: 60px; /* Agrega relleno para simular el espacio del contenedor */
-  margin: 0 20px; /* Agrega márgenes para controlar el espacio alrededor del texto */
-  position: relative;
-  right: 150px;
+  position: relative; /* Asegura que los elementos absolutos se posicionen correctamente */
 }
 
 .logo {
-  display: flex;
-  align-items: center;
-  background-image: url("/public/img/logo.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  animation: shake 10.1s infinite; /* Aplica la animación 'shake' de 0.5 segundos de duración, infinitamente */
+  width: 75px;
+  height: auto;
+  margin-right: 10px;
+  animation: moveLogo 2s infinite alternate;
 }
 
-@keyframes shake {
-  0% {
-    transform: translateX(0);
-  } /* Estado inicial */
-  25% {
-    transform: translateX(-5px) rotate(-5deg);
-  } /* Movimiento hacia la izquierda */
-  50% {
-    transform: translateX(5px) rotate(5deg);
-  } /* Movimiento hacia la derecha */
-  75% {
-    transform: translateX(-5px) rotate(-5deg);
-  } /* Movimiento hacia la izquierda */
-  100% {
-    transform: translateX(0);
-  } /* Vuelve al estado inicial */
+.logo-name {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  position: relative; /* Asegura que los elementos absolutos se posicionen correctamente */
+  overflow: hidden; /* Oculta el contenido que se desborda */
 }
 
-.logo span {
-  font-family: "Roboto Slab";
-  align-items: center;
-  font-size: 24px;
-  font-weight: 700;
-  color: #ffffff;
-  height: 50px;
-  margin-left: 50px;
-  position: relative;
-  top: 5px;
-}
-
-.open-player2 {
-  background: none;
-  border: 1px solid #ffffff;
-  color: #ffffff;
-  padding: 10px 20px;
-  border-radius: 20px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.5s ease;
-}
-
-.open-player2:hover {
-  background-color: #122e56;
-  border-color: #00202e;
-  transform: scale(1.1);
-}
-
-.intro {
-  text-align: center;
-}
-
-h1 {
-  font-family: "Roboto Slab";
-  font-size: 48px;
-  font-weight: 700;
-  margin-bottom: 40px;
-  color: #e6e6fa;
-  transition: transform 0.1s ease-in-out, color 0.1s ease-in-out;
-  animation: blinkEffect 10s infinite;
-}
-
-h1:hover {
-  transform: scale(1);
-  color: #fff;
-}
-
-@keyframes blinkEffect {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  5% {
-    opacity: 0;
-  }
-}
-
-.text-container {
-  position: relative;
+.logo-name::before {
+  content: attr(data-text); /* Utiliza el valor del atributo data-text como contenido */
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  overflow: hidden;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent 50%, white 50%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: disintegrate 2s forwards;
+  overflow: hidden; /* Asegura que el contenido que se desborda se oculte */
+}
+
+@keyframes disintegrate {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes moveLogo {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(10px);
+  }
+}
+
+
+.welcome-section {
   display: flex;
-  justify-content: space-between;
-  font-family: "Abezee";
+  align-items: center;
 }
 
-.text-container p {
-  flex: 1; /* Para que los párrafos ocupen el espacio disponible */
-  margin-right: 260px; /* Espacio entre los párrafos */
+.welcome-message {
+  font-size: 40px;
+  margin-right: 649px;
+  font-family: 'Rockwell', sans-serif;
+  animation: fadeInOut 3s infinite;
+  color: white;
 }
 
-.text1,
-.text2,
-.text3 {
-  font-size: 20px;
-  font-weight: 300;
-  color: #b0b0b0;
-  margin-bottom: 30px;
-  width: 35%; /* Ajustar según necesites */
-  animation-duration: 8s; /* Duración total de la animación */
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-fill-mode: both;
-  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }
 
-.text1 {
-  animation-name: textEffect1;
+
+.stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
 }
 
-.text2 {
-  animation-name: textEffect2;
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: shootingStar 3s linear infinite;
 }
 
-.text3 {
-  animation-name: textEffect3;
-}
-
-@keyframes textEffect1 {
+@keyframes shootingStar {
   0% {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  10%,
-  40% {
-    opacity: 1;
-  }
-  50% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  90%,
-  120% {
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-}
-
-@keyframes textEffect2 {
-  0% {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  10%,
-  40% {
-    opacity: 1;
-  }
-  50% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  90%,
-  120% {
+    transform: translateX(-100%) translateY(-100%);
     opacity: 1;
   }
   100% {
-    transform: translateX(-100%);
+    transform: translateX(200%) translateY(200%);
     opacity: 0;
   }
 }
 
-@keyframes textEffect3 {
-  0% {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  10%,
-  40% {
-    opacity: 1;
-  }
-  50% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  90%,
-  120% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-}
+.star:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+.star:nth-child(2) { top: 20%; left: 20%; animation-delay: 0.3s; }
+.star:nth-child(3) { top: 30%; left: 30%; animation-delay: 0.6s; }
+.star:nth-child(4) { top: 40%; left: 40%; animation-delay: 0.9s; }
+.star:nth-child(5) { top: 50%; left: 50%; animation-delay: 1.2s; }
+.star:nth-child(6) { top: 60%; left: 60%; animation-delay: 1.5s; }
+.star:nth-child(7) { top: 70%; left: 70%; animation-delay: 1.8s; }
+.star:nth-child(8) { top: 80%; left: 80%; animation-delay: 2.1s; }
+.star:nth-child(9) { top: 90%; left: 90%; animation-delay: 2.4s; }
+.star:nth-child(10) { top: 15%; left: 25%; animation-delay: 2.7s; }
+.star:nth-child(11) { top: 25%; left: 35%; animation-delay: 3.0s; }
+.star:nth-child(12) { top: 35%; left: 45%; animation-delay: 3.3s; }
+.star:nth-child(13) { top: 45%; left: 55%; animation-delay: 3.6s; }
+.star:nth-child(14) { top: 55%; left: 65%; animation-delay: 3.9s; }
+.star:nth-child(15) { top: 65%; left: 75%; animation-delay: 4.2s; }
+.star:nth-child(16) { top: 75%; left: 85%; animation-delay: 4.5s; }
+.star:nth-child(17) { top: 85%; left: 95%; animation-delay: 4.8s; }
+.star:nth-child(18) { top: 5%; left: 15%; animation-delay: 5.1s; }
+.star:nth-child(19) { top: 95%; left: 5%; animation-delay: 5.4s; }
+.star:nth-child(20) { top: 50%; left: 50%; animation-delay: 5.7s; }
+.star:nth-child(21) { top: 25%; left: 35%; animation-delay: 5.8s; }
+.star:nth-child(22) { top: 35%; left: 45%; animation-delay: 5.9s; }
+.star:nth-child(23) { top: 45%; left: 55%; animation-delay: 2.6s; }
+.star:nth-child(24) { top: 55%; left: 65%; animation-delay: 3.9s; }
+.star:nth-child(25) { top: 65%; left: 75%; animation-delay: 4.2s; }
+.star:nth-child(26) { top: 75%; left: 85%; animation-delay: 2.5s; }
+.star:nth-child(27) { top: 85%; left: 95%; animation-delay: 1.8s; }
+.star:nth-child(28) { top: 5%; left: 15%; animation-delay: 2.1s; }
+.star:nth-child(29) { top: 95%; left: 5%; animation-delay: 1.4s; }
+.star:nth-child(30) { top: 50%; left: 50%; animation-delay: 1.7s; }
+.star:nth-child(31) { top: 10%; left: 10%; animation-delay: 6s; }
+.star:nth-child(32) { top: 20%; left: 20%; animation-delay: 0.5s; }
+.star:nth-child(33) { top: 30%; left: 30%; animation-delay: 0.9s; }
+.star:nth-child(34) { top: 40%; left: 40%; animation-delay: 0.9s; }
+.star:nth-child(35) { top: 50%; left: 50%; animation-delay: 3.2s; }
+.star:nth-child(36) { top: 60%; left: 60%; animation-delay: 3.5s; }
+.star:nth-child(37) { top: 70%; left: 70%; animation-delay: 3.8s; }
+.star:nth-child(38) { top: 80%; left: 80%; animation-delay: 3.1s; }
+.star:nth-child(39) { top: 90%; left: 90%; animation-delay: 2.4s; }
+.star:nth-child(40) { top: 15%; left: 25%; animation-delay: 2.7s; }
 
-.register {
-  background-color: #122e56;
-  border: none;
-  color: #ffffff;
-  padding: 15px 30px;
-  border-radius: 20px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.5s ease;
-  box-shadow: 0 10px 20px rgba(194, 193, 193, 0.2);
+.main-content {
+  padding: 20px;
+  background: linear-gradient(to bottom, rgb(48, 0, 103), rgb(27, 48, 122), rgb(0, 48, 64));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   position: relative;
-  bottom: 6px;
+  overflow: hidden;
 }
 
-.register:hover {
-  background-color: #00202e;
-  transform: scale(1.1);
+
+
+.carousel {
+  position: center;
+  width: 90%;
+  height: 600px; /* Ajusta según tus necesidades */
+  overflow: hidden;
+  border-radius: 10px;
+  margin-top: 80px;
 }
 
-.features {
+.carousel-slide {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(20%, -50%);
+  margin-top: 100px;
+  left: 50%;
+  width: 70%;
+  height: 120%;
+  background-size: cover;
+  background-position: center;
+  transition: left 1s ease-in-out;
+  z-index: -1;
+}
+
+.carousel-slide.active {
+  left: 0;
+  margin-top: 0px;
+  z-index: 1;
+}
+
+.carousel-slide:nth-child(1).active {
+  background-color: #ff7f50;
+}
+
+.carousel-slide:nth-child(2).active {
+  background-color: #6a5acd;
+}
+
+.carousel-slide:nth-child(3).active {
+  background-color: #20b2aa;
+}
+
+.carousel-slide:nth-child(4).active {
+  background-color: #ff6347;
+}
+
+.carousel-slide:nth-child(5).active {
+  background-color: #4682b4;
+}
+
+
+
+
+.description-section {
+  display: flex;
+  align-items: center;
+  margin-top: 90px;
+}
+
+.description-image {
+  border-radius: 10px;
+  margin-right: -10px;
+  width: 50%;
+  height: 400px;
+  display: flex;
+}
+
+.description-text {
+  color: white;
+}
+
+.description-text h2 {
+  margin: 70px;
+  font-family: 'Rockwell', sans-serif;
+}
+
+.description-text p {
+  margin: 70px;
+  font-family: 'Gill Sans', sans-serif;
+}
+/* Parte final descripcion */
+
+
+/* Parte del avatar */
+.avatar-background {
+  background-image: url('@/assets/fondo21.jpg');
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-section {
   text-align: center;
-  margin-top: 40px;
 }
 
-.features h2 {
-  font-family: "Roboto Slab";
-  font-size: 45px;
-  font-weight: 700;
-  transition: color 0.3s ease, transform 0.3s ease;
-  position: relative;
-  bottom: 50px;
+.avatar-circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto;
+  animation: moveAvatar 5s infinite;
 }
 
-.features h2:hover {
-  color: #ada7a7;
-  transform: scale(1.1);
+.avatar {
+  width: 100%;
+  height: auto;
 }
 
-.feature-text {
-  font-family: "Abezee";
+@keyframes moveAvatar {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.create-avatar {
   font-size: 20px;
-  color: #ada7a7;
-  font-weight: 500;
-  display: inline-block; /* Hace que el texto se comporte como si estuviera dentro de un contenedor */
-  width: 30%; /* Ocupa todo el ancho disponible */
-  text-align: justify; /* Puedes ajustar la alineación según necesites */
-  padding: 10px; /* Agrega relleno para simular el espacio del contenedor */
-  margin: 0 20px; /* Agrega márgenes para controlar el espacio alrededor del texto */
-  position: relative;
-  right: 360px;
-  transition: color 0.3s ease; /* Añade una transición para el cambio de color */
+  margin-top: 10px;
+  font-family: 'Gill Sans', sans-serif;
+  color: white;
 }
-.feature-text:hover {
-  color: #ffffff; /* Cambia el color al pasar el mouse */
+
+.register-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: 10;
+  background-color: purple;
+  color: white;
+  cursor: pointer;
+  border-radius: 20px;
+}
+/* Parte final del avatar */
+
+
+/* Parte del video*/
+.video-section {
+  margin-top: 70px;
+  position: relative;
+  overflow: hidden;
+  border: 10px solid transparent; /* Ancho del borde ajustable */
+  border-image: linear-gradient(135deg, #8a2be2, #4169e1) 1;
+  border-image-slice: 5; /* Ajusta la anchura del borde */
+}
+
+.video-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+
+
+.help-container {
+  position: fixed;
+  bottom: 20px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  z-index: 10;
+}
+
+.help-button {
+  background: linear-gradient(135deg, #ff8acb, #89c6ff);
+  color: white;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 11;
+}
+
+.help-message {
+  position: absolute;
+  bottom: 60px; /* Adjust this value based on the button's size and spacing */
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  border-radius: 20px;
+  font-size: 14px;
+  width: 200px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  z-index: 10;
 }
 </style>
