@@ -11,6 +11,10 @@ import 'primevue/resources/primevue.min.css';           // Core CSS
 import 'primeicons/primeicons.css';                     // Icons
 import 'primeflex/primeflex.css';                       // PrimeFl
 
+import { registerLicense } from '@syncfusion/ej2-base'
+
+registerLicense("Ngo9BigBOggjHTQxAR8/V1NCaF5cXmZCdkx3Q3xbf1x0ZFRMZV5bQHBPIiBoS35RckVkWHZfcnFRQ2BaVUd0")
+
 // Configurar Axios para incluir el token en todas las solicitudes
 axios.interceptors.request.use(
   config => {
