@@ -210,7 +210,7 @@ export default {
       },
       songs: [
         {
-          photo: "path/to/photo1.png",
+          photo: "https://w7.pngwing.com/pngs/766/288/png-transparent-logo-fairy-tail-symbol-fairy-tail-emblem-text-heart-thumbnail.png",
           recordlabelName: "Disquera 1",
           descriptiontName: "Descripcion 1",
           platform: "Plataforma 1",
@@ -218,7 +218,7 @@ export default {
           status: "Activo",
         },
         {
-          photo: "path/to/photo2.png",
+          photo: "https://w7.pngwing.com/pngs/766/288/png-transparent-logo-fairy-tail-symbol-fairy-tail-emblem-text-heart-thumbnail.png",
           recordlabelName: "Disquera 2",
           descriptiontName: "Descripcion 2",
           platform: "Plataforma 2",

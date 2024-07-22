@@ -197,21 +197,21 @@ export default {
       },
       songs: [
         {
-          photo: "path/to/photo1.png",
+          photo: "https://i.pinimg.com/736x/48/22/bf/4822bf54ee339f9e3842192de95a906e.jpg",
           songName: "Canción 1",
           artistName: "Artista 1",
           album: "Álbum 1",
           status: "Activo",
         },
         {
-          photo: "path/to/photo2.png",
+          photo: "https://i.pinimg.com/736x/48/22/bf/4822bf54ee339f9e3842192de95a906e.jpg",
           songName: "Canción 2",
           artistName: "Artista 2",
           album: "Álbum 2",
           status: "Activo",
         },
         {
-          photo: "path/to/photo3.png",
+          photo: "https://i.pinimg.com/736x/48/22/bf/4822bf54ee339f9e3842192de95a906e.jpg",
           songName: "Canción 3",
           artistName: "Artista 3",
           album: "Álbum 3",

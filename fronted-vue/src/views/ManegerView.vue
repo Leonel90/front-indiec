@@ -225,7 +225,7 @@ export default {
           email: "Alexander@ya.ed",
           gender: "Masculino",
           status: "Activo",
-          photo: "path/to/photo1.png",
+          photo: "https://i.pinimg.com/736x/a2/56/51/a256518753a01a4fe95d1bfd35b63317.jpg",
         },
         {
           firstName: "Jane",
@@ -233,7 +233,7 @@ export default {
           email: "Alexander@ya.ed",
           gender: "Femenino",
           status: "Inactivo",
-          photo: "path/to/photo2.png",
+          photo: "https://i.pinimg.com/736x/a2/56/51/a256518753a01a4fe95d1bfd35b63317.jpg",
         },
         {
           firstName: "Alexander",
@@ -241,7 +241,7 @@ export default {
           email: "Alexander@ya.ed",
           gender: "Masculino",
           status: "Activo",
-          photo: "path/to/photo3.png",
+          photo: "https://i.pinimg.com/736x/a2/56/51/a256518753a01a4fe95d1bfd35b63317.jpg",
         },
       ],
     };

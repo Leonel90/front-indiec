@@ -210,7 +210,7 @@ export default {
       },
       songs: [
         {
-          photo: "path/to/photo1.png",
+          photo: "https://cdn.icon-icons.com/icons2/1029/PNG/256/Luffys_flag_icon-icons.com_76118.png",
           recordlabelName: "Disquera 1",
           descriptiontName: "Descripcion 1",
           platform: "Plataforma 1",
@@ -218,7 +218,7 @@ export default {
           status: "Activo",
         },
         {
-          photo: "path/to/photo2.png",
+          photo: "https://cdn.icon-icons.com/icons2/1029/PNG/256/Luffys_flag_icon-icons.com_76118.png",
           recordlabelName: "Disquera 2",
           descriptiontName: "Descripcion 2",
           platform: "Plataforma 2",
@@ -226,7 +226,7 @@ export default {
           status: "Eliminado",
         },
         {
-          photo: "path/to/photo3.png",
+          photo: "https://cdn.icon-icons.com/icons2/1029/PNG/256/Luffys_flag_icon-icons.com_76118.png",
           recordlabelName: "Disquera 3",
           descriptiontName: "Descripcion 3",
           platform: "Plataforma 3",
