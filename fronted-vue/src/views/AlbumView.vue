@@ -100,7 +100,6 @@ export default {
   margin: 5px auto;
   padding: 10px;
   box-shadow: 5px 2px 3px 1px rgba(0, 0, 0, 0.26);
-  font-family: 'Times New Roman', Times, serif;
   font-size: 16px;
   color: black;
 }
