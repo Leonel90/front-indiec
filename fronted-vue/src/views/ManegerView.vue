@@ -180,7 +180,7 @@
                   v-if="user.status === 'Activo'"
                   @click="deleteUser(user)"
                 >
-                  <i class="bx bx-edit"></i>
+                <i class="bx bx-trash"></i>
                 </button>
                 <button class="btn restore-btn" v-else @click="restoreUser(user)">
                   <i class="bx bx-undo"></i>
