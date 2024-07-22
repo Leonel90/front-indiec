@@ -5,7 +5,7 @@
     <div class="content">
       <div class="header">
         <div id="capa-padre">
-          <h1>Música</h1>
+          <h1>Canción</h1>
           <div id="app">
             <button @click="showCreateModal = true">Crear Canción</button>
             <MyModal :isVisible="showCreateModal" @close="showCreateModal = false">
@@ -44,10 +44,6 @@
                   <label for="album">Álbum:</label>
                   <input type="text" v-model="formData.album" required />
                 </div>
-                <div class="form-group">
-                  <label for="url">URL:</label>
-                  <input type="url" v-model="formData.url" required />
-                </div>
                 <div class="button-container">
                   <button type="submit">Guardar</button>
                 </div>
@@ -79,20 +75,17 @@
                 </div>
                 <div class="form-group">
                   <label for="songName">Nombre de la Canción:</label>
-                  <input type="text" v-model="formData.songName" required />
+                  <input type="text" v-model="formData.songName" required  placeholder="ingrese nombre" />
                 </div>
                 <div class="form-group">
                   <label for="artistName">Nombre del Artista:</label>
-                  <input type="text" v-model="formData.artistName" required />
+                  <input type="text" v-model="formData.artistName" required placeholder="ingrese del artista" />
                 </div>
                 <div class="form-group">
                   <label for="album">Álbum:</label>
-                  <input type="text" v-model="formData.album" required />
+                  <input type="text" v-model="formData.album" required placeholder="ingrese el album" />
                 </div>
-                <div class="form-group">
-                  <label for="url">URL:</label>
-                  <input type="url" v-model="formData.url" required />
-                </div>
+
                 <div class="button-container">
                   <button type="submit">Guardar Cambios</button>
                 </div>
@@ -124,7 +117,6 @@
               <th><div class="cell">Nombre de la Canción</div></th>
               <th><div class="cell">Nombre del Artista</div></th>
               <th><div class="cell">Álbum</div></th>
-              <th><div class="cell">URL</div></th>
               <th><div class="cell">Estado</div></th>
               <th><div class="cell">Acciones</div></th>
             </tr>
@@ -148,11 +140,7 @@
               <td>
                 <div class="cell">{{ song.album }}</div>
               </td>
-              <td>
-                <div class="cell">
-                  <a :href="song.url" target="_blank">{{ song.url }}</a>
-                </div>
-              </td>
+
               <td>
                 <span :class="getSongStatusClass(song.status)">
                   {{ song.status }}
@@ -204,7 +192,6 @@ export default {
         songName: "",
         artistName: "",
         album: "",
-        url: "",
         status: "Activo",
         photo: "", // Agregado para almacenar la URL de la foto
       },
@@ -214,7 +201,6 @@ export default {
           songName: "Canción 1",
           artistName: "Artista 1",
           album: "Álbum 1",
-          url: "https://example.com/song1",
           status: "Activo",
         },
         {
@@ -222,7 +208,6 @@ export default {
           songName: "Canción 2",
           artistName: "Artista 2",
           album: "Álbum 2",
-          url: "https://example.com/song2",
           status: "Activo",
         },
         {
@@ -230,7 +215,6 @@ export default {
           songName: "Canción 3",
           artistName: "Artista 3",
           album: "Álbum 3",
-          url: "https://example.com/song3",
           status: "Eliminado",
         },
       ],
@@ -326,13 +310,13 @@ export default {
         title: `Detalles de ${song.songName}`,
         html: `
           <div>
-            <img src="${song.photo}" alt="Foto de ${song.songName}" style="max-width: 100%; height: auto;">
+            <img src="${song.photo}" alt="Foto:  ${song.songName}" style="max-width: 50%; height: auto;">
           </div>
-          <p><strong>Nombre de la Canción:</strong> ${song.songName}</p>
-          <p><strong>Nombre del Artista:</strong> ${song.artistName}</p>
-          <p><strong>Álbum:</strong> ${song.album}</p>
-          <p><strong>URL:</strong> <a href="${song.url}" target="_blank">${song.url}</a></p>
-          <p><strong>Estado:</strong> ${song.status}</p>
+          <p><strong>Nombre de la Canción:</strong> <br>${song.songName}</p>
+          <p><strong>Nombre del Artista:</strong><br> ${song.artistName}</p>
+          <p><strong>Álbum:</strong><br> ${song.album}</p>
+          <p><strong>URL:</strong><br> <a href="${song.url}" target="_blank">${song.url}</a></p>
+          <p><strong>Estado:</strong><br> ${song.status}</p>
         `,
         confirmButtonText: "Cerrar",
         customClass: {

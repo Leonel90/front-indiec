@@ -2,6 +2,9 @@
   <ProtectedNavbar />
   <div class="content">
     <div class="header">
+      <div id="inicio">
+        <h1>Perfil Artista</h1>
+      </div>
       <div id="capa-padre">
         <h1></h1>
         <div id="app">
@@ -155,6 +158,21 @@ export default {
 </script>
 
 <style scoped>
+
+#inicio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("/public/img/fondo.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  text-align: center; /* Centra el texto dentro del div */
+  padding: 5px;
+  border-radius: 20px;
+
+}
 /* Estilos del contenedor principal */
 #capa-padre {
   background-color: aliceblue;
