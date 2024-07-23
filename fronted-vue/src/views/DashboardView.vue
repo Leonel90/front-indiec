@@ -142,7 +142,7 @@ export default {
     ]);
 
     const lineChartData = ref({
-      labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo","Junio","Julio"],
+      labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"],
       datasets: [
         {
           label: "Calificación",
@@ -164,7 +164,7 @@ export default {
             {
               label: "Porcentaje",
               data: percentageData.value.map((data) => data.percentage),
-              backgroundColor: ["#FF8977", "#89A2EB", "#FFCE89","#FFCE19"],
+              backgroundColor: ["#FF8977", "#89A2EB", "#FFCE89", "#FFCE19"],
             },
           ],
         },
