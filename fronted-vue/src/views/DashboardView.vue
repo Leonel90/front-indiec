@@ -52,7 +52,7 @@
             <tr>
               <th>Nro</th>
               <th>Nombre</th>
-              <th>Dni / Cedula</th>
+              <th>Dni / Cédula</th>
               <th>Teléfono</th>
               <th>Correo</th>
             </tr>
