@@ -87,14 +87,12 @@
 <script>
 import ProtectedNavbar from "../components/ProtectedNavbar.vue";
 import MyModal from "../components/Modal.vue";
-import { Calendar } from "primevue/calendar";
 import Swal from "sweetalert2";
 
 export default {
   components: {
     ProtectedNavbar,
     MyModal,
-    Calendar
   },
   data() {
     return {

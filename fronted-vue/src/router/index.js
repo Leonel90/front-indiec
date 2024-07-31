@@ -34,20 +34,22 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: DashboardView,
-    meta: { requiresAuth: true }
+   /*  meta: { requiresAuth: true }*/
   },// perfil artista
   {
     path: '/perfil',
     name: 'perfil artista',
     component: PerfilArtistaView,
-    meta: { requiresAuth: true }
+       /*  meta: { requiresAuth: true }*/
+
   }
   ,//grupo musical
   {
     path: '/grupo',
     name: 'grupo musical',
     component: GrupoMusicalView,
-    meta: { requiresAuth: true }
+       /*  meta: { requiresAuth: true }*/
+
   }
   ,
   // genero musical
@@ -55,7 +57,8 @@ const routes = [
     path: '/genero-musical',
     name: 'genero-musical',
     component: GeneroMusicaView,
-    meta: { requiresAuth: true }
+       /*  meta: { requiresAuth: true }*/
+
   }
   ,  // Album
 
@@ -63,34 +66,39 @@ const routes = [
     path: '/album',
     name: 'album',
     component: AlbumView,
-    meta: { requiresAuth: true }
+       /*  meta: { requiresAuth: true }*/
+
   }
   ,// Maneger
   {
     path: '/maneger',
     name: 'maneger',
     component: ManegerView,
-    meta: { requiresAuth: true }
+       /*  meta: { requiresAuth: true }*/
+
   },//disqueraz
   {
     path: '/disqueraz',
     name: 'disqueraz',
     component: DisquerazView,
-    meta: { requiresAuth: true }
+       /*  meta: { requiresAuth: true }*/
+
   }
   ,//Eventos
   {
     path: '/eventos',
     name: 'eventos',
     component: EventosView,
-    meta: { requiresAuth: true }
+       /*  meta: { requiresAuth: true }*/
+
   }
   ,//musica
   {
     path: '/musica',
     name: 'musica',
     component: MusicaView,
-    meta: { requiresAuth: true }
+       /*  meta: { requiresAuth: true }*/
+
   }
 
 ]
