@@ -53,7 +53,11 @@ const evento = require("../models/evento.model");
 
 
 // alejandro  tablas unicas
-
+const plataformaModel = require('../models/plataforma.model');
+const generoPersonaModel = require('../models/genero_persona.model');
+const estadoManagerModel = require('../models/estado_manager.model');
+const generoMusicalModel = require('../models/genero_musical.model');
+const calificacionModel = require('../models/calificacion.model');
 
 
 
@@ -72,7 +76,11 @@ const eventos = evento(sequelize, Sequelize);
 
 
 // alejandro  tablas unicas
-
+const plataformas = plataformaModel(sequelize, Sequelize);
+const generoPersonas = generoPersonaModel(sequelize, Sequelize);
+const estadoManagers = estadoManagerModel(sequelize, Sequelize);
+const generoMusicales = generoMusicalModel(sequelize, Sequelize);
+const calificaciones = calificacionModel(sequelize, Sequelize);
 
 
 //relaciones
@@ -100,6 +108,10 @@ module.exports = {
 
 
 
-// alejandro  tablas unicas
-
+    // alejandro  tablas unicas
+    plataformas,
+    generoPersonas,
+    estadoManagers,
+    generoMusicales,
+    calificaciones
 };
