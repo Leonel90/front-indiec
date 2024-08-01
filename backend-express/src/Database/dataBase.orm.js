@@ -39,13 +39,46 @@ sequelize.sync({ force: false })
     });
 
 //extracionModelos
-const userModel = require('../models/user.model');
-//zincronia tablas
-const user = userModel(sequelize, Sequelize)
+const artistaModel = require('../models/artista.model');
+const grupoMusical = require("../models/grupoMusical.model");
+const album = require("../models/album.model");
+const musica = require("../models/musica.model");
+const manager = require("../models/manager.model");
+const disquera = require("../models/disquera.model");
+const genero = require("../models/genero.model");
+const evento = require("../models/evento.model");
+// david rompimiento
+
+
+
+
+// alejandro  tablas unicas
+
+
+
+
+//zincronia tablas aqui primero
+const artista = artistaModel(sequelize, Sequelize);
+const grupo_musical = grupoMusical (sequelize, Sequelize);
+const albums = album(sequelize, Sequelize);
+const musicas = musica(sequelize, Sequelize);
+const managers = manager(sequelize, Sequelize);
+const disqueras = disquera(sequelize, Sequelize);
+const generos = genero(sequelize, Sequelize);
+const eventos = evento(sequelize, Sequelize);
+// david rompimiento
+
+
+
+
+// alejandro  tablas unicas
+
+
+
 //relaciones
 sequelize.sync({ alter: true }) // alter will update the database schema to match the model
     .then(() => {
-        console.log('Database synchronized');
+        console.log('Database sincronizada PAPUCHO');
     })
     .catch((error) => {
         console.error('Error synchronizing the database:', error);
@@ -53,5 +86,20 @@ sequelize.sync({ alter: true }) // alter will update the database schema to matc
 
 // Exportar el objeto sequelize
 module.exports = {
-    
+    artista, 
+    grupo_musical,
+    albums,
+    musicas,
+    managers,
+    disqueras,
+    generos,
+    eventos,
+
+    // david rompimiento
+
+
+
+
+// alejandro  tablas unicas
+
 };
