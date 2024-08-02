@@ -1,5 +1,4 @@
-const { DataTypes } = require('sequelize'); 
-const comentarioEvento = (sequelize) => {
+const comentarioEvento = (sequelize, DataTypes) => {
     return sequelize.define('comentario_evento', {
         id_comentario: {
             type: DataTypes.INTEGER,
@@ -21,8 +20,8 @@ const comentarioEvento = (sequelize) => {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: 'eventos', // Nombre de la tabla referenciada
-                key: 'id_Album' // Clave primaria en la tabla referenciada (sin espacios extra)
+                model: 'eventos', // Verifica que esta tabla exista y tenga la columna correcta
+                key: 'id_evento'  // Asegúrate de que esta columna sea del tipo INTEGER
             },
             comment: 'Clave foránea que referencia al evento'
         }

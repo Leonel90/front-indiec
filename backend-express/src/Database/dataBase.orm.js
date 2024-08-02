@@ -102,7 +102,7 @@ const calificaciones = calificacionModel(sequelize, Sequelize);
 
 
 //relaciones
-sequelize.sync({ alter: true }) // alter will update the database schema to match the model
+sequelize.sync({ force: true }) // alter will update the database schema to match the model
     .then(() => {
         console.log('Database sincronizada PAPUCHO');
     })
