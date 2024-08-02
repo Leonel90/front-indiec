@@ -15,25 +15,6 @@
                   <label for="songName">Nombre del genero:</label>
                   <input type="text" v-model="formData.songName" required />
                 </div>
-                <div class="form-group">
-                  <label for="artistName">Fecha:</label>
-                  <input type="date" v-model="formData.artistName" min="2013-01-01" max="2048-12-31" />
-                </div>
-                <div class="button-container">
-                  <button type="submit">Guardar Cambios</button>
-                </div>
-              </form>
-
-              <form v-else @submit.prevent="handleEdit">
-                <h2>Editar Canción</h2>
-                <div class="form-group">
-                  <label for="songName">Nombre del Genero:</label>
-                  <input type="text" v-model="formData.songName" required />
-                </div>
-                <div class="form-group">
-                  <label for="artistName">Fecha:</label>
-                  <input type="date" v-model="formData.artistName" min="2013-01-01" max="2048-12-31" />
-                </div>
                 <div class="button-container">
                   <button type="submit">Guardar Cambios</button>
                 </div>
@@ -50,33 +31,27 @@
               <tr>
                 <th><div class="cell">#</div></th>
                 <th><div class="cell">Nombre del Genero</div></th>
-                <th><div class="cell">Fecha de Creacion</div></th>
                 <th><div class="cell">Acciones</div></th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(song, index) in songs" :key="index">
-                <td>
-                  <div class="cell">{{ index + 1 }}</div>
-                </td>
-                <td>
-                  <div class="cell">{{ song.songName }}</div>
-                </td>
-                <td>
-                  <div class="cell">{{ song.artistName }}</div>
-                </td>
-                <td>
-                  <div class="button-group">
-                    <button class="btn view-btn" @click="viewSongDetails(song)">
-                      <i class="bx bx-show"></i>
-                    </button>
-                    <button class="btn edit-btn" @click="startEditing(song)">
-                      <i class="bx bx-edit"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
+  <tr v-for="(song, index) in songs" :key="index">
+    <td>
+      <div class="cell">{{ index + 1 }}</div>
+    </td>
+    <td>
+      <div class="cell">{{ song.songName }}</div>
+    </td>
+    <td>
+      <div class="button-group">
+        <button id="delete" class="btn delete-btn" @click="deleteSong(song)">
+          <i class="bx bx-trash"></i> <!-- Cambia el ícono a uno de eliminar -->
+        </button>
+      </div>
+    </td>
+  </tr>
+</tbody>
+
           </table>
         </div>
       </div>
@@ -120,73 +95,89 @@ export default {
     };
   },
   methods: {
-    handleEditFileUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      this.editImagePreview = URL.createObjectURL(file);
-      this.formData.photo = this.editImagePreview;
-    },
-    handleCreate() {
-      const newSong = { ...this.formData };
-      this.songs.push(newSong);
-      this.showCreateModal = false;
-      this.resetFormData();
-      this.imagePreview = null;
-      Swal.fire("¡Éxito!", "El género ha sido creado exitosamente.", "success");
-    },
-    startEditing(song) {
-      this.isEditing = true;
-      this.formData = { ...song };
-      this.editIndex = this.songs.indexOf(song);
-      this.showCreateModal = true;
-    },
-    handleEdit() {
-      if (this.editIndex !== null) {
-        this.songs.splice(this.editIndex, 1, { ...this.formData });
-        this.showCreateModal = false;
-        this.isEditing = false;
-        this.resetFormData();
-        this.editImagePreview = null;
-        Swal.fire("¡Éxito!", "El género ha sido actualizado exitosamente.", "success");
-      }
-    },
-    resetFormData() {
-      this.formData = {
-        songName: "",
-        artistName: null,
-      };
-    },
-    deleteSong(song) {
-      song.status = "Eliminado";
-      Swal.fire("¡Éxito!", "El género ha sido eliminado exitosamente.", "success");
-    },
-    restoreSong(song) {
-      song.status = "Activo";
-      Swal.fire("¡Éxito!", "El género ha sido restaurado exitosamente.", "success");
-    },
-    viewSongDetails(song) {
-      Swal.fire({
-        title: `Detalles de ${song.songName}`,
-        html: `
-          <p><strong>Género Musical:</strong> ${song.songName}</p>
-          <p><strong>Fecha Creación:</strong> ${song.artistName}</p>
-        `,
-        confirmButtonText: "Cerrar",
-        customClass: {
-          popup: "custom-swal-popup",
-          content: "custom-swal-content",
-          closeButton: "custom-swal-close",
-          confirmButton: "custom-swal-confirm",
-        },
-      });
-    },
-    getSongStatusClass(status) {
-      return {
-        "status-active": status === "Activo",
-        "status-inactive": status === "Eliminado",
-      };
-    },
+  handleEditFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    this.editImagePreview = URL.createObjectURL(file);
+    this.formData.photo = this.editImagePreview;
   },
+  handleCreate() {
+    const newSong = { ...this.formData };
+    this.songs.push(newSong);
+    this.showCreateModal = false;
+    this.resetFormData();
+    this.imagePreview = null;
+    Swal.fire("¡Éxito!", "El género ha sido creado exitosamente.", "success");
+  },
+  startEditing(song) {
+    this.isEditing = true;
+    this.formData = { ...song };
+    this.editIndex = this.songs.indexOf(song);
+    this.showCreateModal = true;
+  },
+  handleEdit() {
+    if (this.editIndex !== null) {
+      this.songs.splice(this.editIndex, 1, { ...this.formData });
+      this.showCreateModal = false;
+      this.isEditing = false;
+      this.resetFormData();
+      this.editImagePreview = null;
+      Swal.fire("¡Éxito!", "El género ha sido actualizado exitosamente.", "success");
+    }
+  },
+  resetFormData() {
+    this.formData = {
+      songName: "",
+      artistName: null,
+    };
+  },
+  deleteSong(song) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "Una vez eliminado, no podrás recuperar este género musical.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const index = this.songs.indexOf(song);
+        if (index !== -1) {
+          this.songs.splice(index, 1); // Elimina el género de la lista
+          Swal.fire('¡Eliminado!', 'El género ha sido eliminado exitosamente.', 'success');
+        }
+      }
+    });
+  },
+  restoreSong(song) {
+    song.status = "Activo";
+    Swal.fire("¡Éxito!", "El género ha sido restaurado exitosamente.", "success");
+  },
+  viewSongDetails(song) {
+    Swal.fire({
+      title: `Detalles de ${song.songName}`,
+      html: `
+        <p><strong>Género Musical:</strong> ${song.songName}</p>
+        <p><strong>Fecha Creación:</strong> ${song.artistName}</p>
+      `,
+      confirmButtonText: "Cerrar",
+      customClass: {
+        popup: "custom-swal-popup",
+        content: "custom-swal-content",
+        closeButton: "custom-swal-close",
+        confirmButton: "custom-swal-confirm",
+      },
+    });
+  },
+  getSongStatusClass(status) {
+    return {
+      "status-active": status === "Activo",
+      "status-inactive": status === "Eliminado",
+    };
+  },
+},
 };
 </script>
 <style scoped>
@@ -210,10 +201,20 @@ button {
   padding: 10px;
   font-size: 16px;
   cursor: pointer;
-  background-color: #0aa5a9;
+  background-color: #067b80;
   color: white;
   border-radius: 13px;
   text-transform: capitalize;
+}
+
+#delete {
+  background-color: #c90000;
+  color:white !important;
+}
+
+#delete :hover {
+  background-color: #ff0202;
+  color:white;
 }
 
 button:hover {
@@ -277,12 +278,14 @@ button[type="submit"]:hover {
 
 .table-container {
   width: 80%;
-  max-width: 1000px;
+  max-width: 800px; /* Ajusta el ancho máximo si es necesario */
   background-color: aliceblue;
   padding: 20px;
   border-radius: 10px;
-  box-shadow:  2px 2px 2px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
 }
+
+
 
 table {
   width: 100%;
@@ -297,15 +300,14 @@ th, td {
 
 th {
   background-color: #f4f4f4;
-
 }
-
 
 .cell {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 
 .button-group {
   display: flex;
