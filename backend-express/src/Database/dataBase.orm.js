@@ -48,6 +48,15 @@ const disquera = require("../models/disquera.model");
 const genero = require("../models/genero.model");
 const evento = require("../models/evento.model");
 // david rompimiento
+const detalleArtistaDisquera = require("../models/detalleArtistaDisquera.model");
+const detalleArtistaGrupo = require("../models/detalleArtistaGrupo.model");
+const detalleArtistaManeger = require("../models/detalleArtistaManeger.model");
+const detalleMusicaGeneromAlbumes = require("../models/detalleMusicaGeneromAlbumes.model")
+const detalleComentarioComentarios = require("../models/detalleComentarioComentarios.model");
+const detalleGeneromAlbumes = require("../models/detalleGeneromAlbumes.model");
+const detalleUbicacion = require("../models/detalleUbicacion.model");
+const segundoComentario = require("../models/segundoComentario.model");
+const comentarioEvento = require("../models/comentarioEvento.model");
 
 
 
@@ -72,6 +81,15 @@ const generos = genero(sequelize, Sequelize);
 const eventos = evento(sequelize, Sequelize);
 // david rompimiento
 
+const detalle_artista_disquera = detalleArtistaDisquera(sequelize, Sequelize);
+const detalle_artista_grupo = detalleArtistaGrupo(sequelize, Sequelize);
+const detalle_artista_maneger = detalleArtistaManeger(sequelize, Sequelize);
+const detalle_musica_generom_albumes = detalleMusicaGeneromAlbumes(sequelize, Sequelize);
+const detalle_comentario_comentarios = detalleComentarioComentarios(sequelize, Sequelize);
+const detalle_generom_albumes = detalleGeneromAlbumes(sequelize, Sequelize);
+const detalle_ubicacion = detalleUbicacion(sequelize, Sequelize);
+const segundo_comentario = segundoComentario(sequelize, Sequelize);
+const comentario_evento = comentarioEvento(sequelize, Sequelize);
 
 
 
@@ -105,7 +123,15 @@ module.exports = {
 
     // david rompimiento
 
-
+    detalle_artista_disquera,
+    detalle_artista_grupo,
+    detalle_artista_maneger,
+    detalle_musica_generom_albumes,
+    detalle_comentario_comentarios,
+    detalle_generom_albumes,
+    detalle_ubicacion,
+    segundo_comentario,
+    comentario_evento,
 
 
     // alejandro  tablas unicas
