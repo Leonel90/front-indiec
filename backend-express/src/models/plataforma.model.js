@@ -3,7 +3,6 @@ module.exports = (sequelize, DataTypes) => {
         id_plataforma: {
             type: DataTypes.INTEGER,
             primaryKey: true,
-            autoIncrement: true
         },
         nombre_plataforma: {
             type: DataTypes.STRING,
