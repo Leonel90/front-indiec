@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         }
     }, {
-        tableName: 'genero_musical',
+        tableName: 'genero_musical_text',
         timestamps: false
     });
 
