@@ -83,10 +83,53 @@ const generoMusicales = generoMusicalModel(sequelize, Sequelize);
 const calificaciones = calificacionModel(sequelize, Sequelize);
 
 
-//relaciones
-sequelize.sync({ alter: true }) // alter will update the database schema to match the model
-    .then(() => {
+// Datos precargados
+const plataformaData = [
+    { nombre_plataforma: 'Spotify' },
+    { nombre_plataforma: 'Apple Music' },
+    { nombre_plataforma: 'YouTube Music' }
+];
+
+
+const generoPersonaData = [
+    { nombre_genero: 'Masculino' },
+    { nombre_genero: 'Femenino' },
+    { nombre_genero: 'No Binario' }
+];
+
+
+const estadoManagerData = [
+    { estado: 'Activo' },
+    { estado: 'Inactivo' }
+];
+
+const generoMusicalData = [
+    { genero_musical_text: 'Rock' },
+    { genero_musical_text: 'Pop' },
+    { genero_musical_text: 'Jazz' }
+];
+
+const calificacionData = [
+    { valor: 1 , descripcion: 'Muy Malo' },
+    { valor: 2 , descripcion: 'Malo' },
+    { valor: 3 , descripcion: 'Regular' },
+    { valor: 4 , descripcion: 'Bueno' },
+    { valor: 5 , descripcion: 'Muy Bueno' }
+];
+
+// Sincronizar la base de datos y cargar datos
+sequelize.sync({ alter: true })
+    .then(async () => {
         console.log('Database sincronizada PAPUCHO');
+        
+        // Insertar datos en tablas únicas
+        await plataformas.bulkCreate(plataformaData);
+        await generoPersonas.bulkCreate(generoPersonaData);
+        await estadoManagers.bulkCreate(estadoManagerData);
+        await generoMusicales.bulkCreate(generoMusicalData);
+        await calificaciones.bulkCreate(calificacionData);
+        
+        console.log('Datos precargados insertados');
     })
     .catch((error) => {
         console.error('Error synchronizing the database:', error);
