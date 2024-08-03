@@ -1,12 +1,11 @@
 const detalleComentarioComentarios = (sequelize, type) => {
-    return sequelize.define('detalle_comentario_comentario', {
-        
+    return sequelize.define('detalle_comentario_comentarios', {
         id_comentario_fk: {
             type: type.INTEGER,
             allowNull: false,
             references: {
-                model: 'comentario_eventos',
-                key: 'id_comentario' 
+                model: 'comentario_evento', // Nombre de la tabla referenciada
+                key: 'id_comentario'        // Clave primaria en la tabla referenciada
             },
             comment: 'Clave foránea del comentario principal'
         },
@@ -14,8 +13,8 @@ const detalleComentarioComentarios = (sequelize, type) => {
             type: type.INTEGER,
             allowNull: false,
             references: {
-                model: 'segundo_comentarios', 
-                key: 'id_comentario_s' 
+                model: 'segundo_comentarios', // Nombre de la tabla referenciada
+                key: 'id_comentario_s'         // Clave primaria en la tabla referenciada
             },
             comment: 'Clave foránea del comentario secundario'
         }
