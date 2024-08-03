@@ -4,7 +4,7 @@ const helpers = {};
 
 helpers.hashPassword = async (password) => {
     try {
-        const saltRounds = 12;
+        const saltRounds = 15;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         return hashedPassword;
     } catch (error) {

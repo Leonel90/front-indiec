@@ -35,9 +35,6 @@ const maneger = (sequelize, type) => {
             type: type.TINYINT(1),
             comment: 'estado del manager'
         }
-
-
-
     }, {
         timestamps: false,
         comment: 'Tabla de maneger'
