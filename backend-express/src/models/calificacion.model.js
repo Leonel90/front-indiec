@@ -5,12 +5,12 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
-        calificacion: {
-            type: DataTypes.STRING,
+        valor: {
+            type: DataTypes.INTEGER,
             allowNull: false
         },
-        fecha_calificacion: {
-            type: DataTypes.DATE,
+        descripcion: {
+            type: DataTypes.STRING,
             allowNull: false
         }
     }, {
@@ -20,3 +20,4 @@ module.exports = (sequelize, DataTypes) => {
 
     return Calificacion;
 };
+

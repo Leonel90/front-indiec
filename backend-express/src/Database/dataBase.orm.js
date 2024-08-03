@@ -52,11 +52,9 @@ const detalleArtistaDisquera = require("../models/detalleArtistaDisquera.model")
 const detalleArtistaGrupo = require("../models/detalleArtistaGrupo.model");
 const detalleArtistaManeger = require("../models/detalleArtistaManeger.model");
 const detalleMusicaGeneromAlbumes = require("../models/detalleMusicaGeneromAlbumes.model")
-const detalleComentarioComentarios = require("../models/detalleComentarioComentarios.model");
 const detalleGeneromAlbumes = require("../models/detalleGeneromAlbumes.model");
 const detalleUbicacion = require("../models/detalleUbicacion.model");
-const segundoComentario = require("../models/segundoComentario.model");
-const comentarioEvento = require("../models/comentarioEvento.model");
+
 
 
 
@@ -85,11 +83,9 @@ const detalle_artista_disquera = detalleArtistaDisquera(sequelize, Sequelize);
 const detalle_artista_grupo = detalleArtistaGrupo(sequelize, Sequelize);
 const detalle_artista_maneger = detalleArtistaManeger(sequelize, Sequelize);
 const detalle_musica_generom_albumes = detalleMusicaGeneromAlbumes(sequelize, Sequelize);
-const detalle_comentario_comentarios = detalleComentarioComentarios(sequelize, Sequelize);
 const detalle_generom_albumes = detalleGeneromAlbumes(sequelize, Sequelize);
 const detalle_ubicacion = detalleUbicacion(sequelize, Sequelize);
-const segundo_comentario = segundoComentario(sequelize, Sequelize);
-const comentario_evento = comentarioEvento(sequelize, Sequelize);
+
 
 
 
@@ -101,10 +97,53 @@ const generoMusicales = generoMusicalModel(sequelize, Sequelize);
 const calificaciones = calificacionModel(sequelize, Sequelize);
 
 
-//relaciones
-sequelize.sync({ alter: true }) // alter will update the database schema to match the model
-    .then(() => {
+// Datos precargados
+const plataformaData = [
+    { nombre_plataforma: 'Spotify' },
+    { nombre_plataforma: 'Apple Music' },
+    { nombre_plataforma: 'YouTube Music' }
+];
+
+
+const generoPersonaData = [
+    { nombre_genero: 'Masculino' },
+    { nombre_genero: 'Femenino' },
+    { nombre_genero: 'No Binario' }
+];
+
+
+const estadoManagerData = [
+    { estado: 'Activo' },
+    { estado: 'Inactivo' }
+];
+
+const generoMusicalData = [
+    { genero_musical_text: 'Rock' },
+    { genero_musical_text: 'Pop' },
+    { genero_musical_text: 'Jazz' }
+];
+
+const calificacionData = [
+    { valor: 1 , descripcion: 'Muy Malo' },
+    { valor: 2 , descripcion: 'Malo' },
+    { valor: 3 , descripcion: 'Regular' },
+    { valor: 4 , descripcion: 'Bueno' },
+    { valor: 5 , descripcion: 'Muy Bueno' }
+];
+
+// Sincronizar la base de datos y cargar datos
+sequelize.sync({ alter: true })
+    .then(async () => {
         console.log('Database sincronizada PAPUCHO');
+        
+        // Insertar datos en tablas únicas
+        await plataformas.bulkCreate(plataformaData);
+        await generoPersonas.bulkCreate(generoPersonaData);
+        await estadoManagers.bulkCreate(estadoManagerData);
+        await generoMusicales.bulkCreate(generoMusicalData);
+        await calificaciones.bulkCreate(calificacionData);
+        
+        console.log('Datos precargados insertados');
     })
     .catch((error) => {
         console.error('Error synchronizing the database:', error);
@@ -127,11 +166,8 @@ module.exports = {
     detalle_artista_grupo,
     detalle_artista_maneger,
     detalle_musica_generom_albumes,
-    detalle_comentario_comentarios,
     detalle_generom_albumes,
     detalle_ubicacion,
-    segundo_comentario,
-    comentario_evento,
 
 
     // alejandro  tablas unicas
