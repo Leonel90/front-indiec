@@ -16,12 +16,12 @@ const album = (sequelize, type) => {
         },
         nombre_grupo: {
             type: type.ENUM,
-            values: ['Grupo A', 'Grupo B', 'Grupo C'],
+            values: ['Grupo A', 'Grupo B', 'Grupo C'],//fk del grupo
             comment: 'Nombre del grupo'
         },
-        plataforma: {
+        integrantes: {
             type: type.STRING,
-            comment: 'Plataforma del album'
+            comment: 'numeros integrantes'
         },
         url: {
             type: type.STRING,
@@ -29,7 +29,7 @@ const album = (sequelize, type) => {
         },
         estado: {
             type: type.TINYINT,
-            comment: 'Estado del album'
+            comment: 'Estado del album' //fk del estado manager
         }
     }, {
         timestamps: false,

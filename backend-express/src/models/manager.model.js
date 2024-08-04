@@ -23,7 +23,7 @@ const maneger = (sequelize, DataTypes) => {
             comment: 'Email del manager'
         },
         
-        genero_fk: {
+        genero_fk: {    
             type: DataTypes.INTEGER,
             references: {
                 model: 'genero_persona', 

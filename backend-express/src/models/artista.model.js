@@ -34,7 +34,7 @@ const artista = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             references: {
                 model: 'genero_persona', 
-                key: 'id_genero'          
+                key: 'id_genero'             
             },
             comment: 'Clave foránea que referencia a genero_persona'
         }

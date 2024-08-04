@@ -52,7 +52,6 @@ const detalleArtistaGrupo = require("../models/detalleArtistaGrupo.model");
 const detalleArtistaManeger = require("../models/detalleArtistaManeger.model");
 const detalleMusicaGeneromAlbumes = require("../models/detalleMusicaGeneromAlbumes.model")
 const detalleGeneromAlbumes = require("../models/detalleGeneromAlbumes.model");
-const detalleUbicacion = require("../models/detalleUbicacion.model");
 
 
 
@@ -82,7 +81,6 @@ const detalle_artista_grupo = detalleArtistaGrupo(sequelize, Sequelize);
 const detalle_artista_maneger = detalleArtistaManeger(sequelize, Sequelize);
 const detalle_musica_generom_albumes = detalleMusicaGeneromAlbumes(sequelize, Sequelize);
 const detalle_generom_albumes = detalleGeneromAlbumes(sequelize, Sequelize);
-const detalle_ubicacion = detalleUbicacion(sequelize, Sequelize);
 
 
 
@@ -164,7 +162,6 @@ module.exports = {
     detalle_artista_maneger,
     detalle_musica_generom_albumes,
     detalle_generom_albumes,
-    detalle_ubicacion,
 
 
     // alejandro  tablas unicas

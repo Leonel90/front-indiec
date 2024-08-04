@@ -23,7 +23,7 @@ const evento = (sequelize, DataTypes) => {
             comment: 'Ubicación del evento'
         },
         Fecha: {
-            type: DataTypes.STRING,
+            type: DataTypes.DATE,
             comment: 'Fecha del evento'
         },
         Contacto: {
@@ -38,14 +38,7 @@ const evento = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             comment: 'Nombres de los artistas'
         },
-        Ubicacion_fk: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'detalle_ubicacions',  
-                key: 'id_ubicacion' 
-            },
-            comment: 'Clave foránea que referencia a detalle_ubicacion'
-        },
+
         estado_fk: {
             type: DataTypes.INTEGER,
             references: {
