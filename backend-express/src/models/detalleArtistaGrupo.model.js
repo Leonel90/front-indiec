@@ -1,13 +1,13 @@
-const detalleArtistaGrupo = (sequelize, type) => {
+const detalleArtistaGrupo = (sequelize, DataTypes) => {
     return sequelize.define('detalle_artista_grupo', {
         id_detalle_grupo: {
-            type: type.INTEGER,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
             comment: 'Identificador único para cada detalle del artista y grupo'
         },
-         artista_fk: {
-            type: type.INTEGER,
+        artista_fk: {
+            type: DataTypes.INTEGER,
             allowNull: false,
             references: {
                 model: 'artistas', 
@@ -16,19 +16,19 @@ const detalleArtistaGrupo = (sequelize, type) => {
             comment: 'Clave foránea del artista'
         },
         grupo_musicals_fk: {
-            type: type.INTEGER,
+            type: DataTypes.INTEGER,
             references: {
                 model: 'grupo_musicals', 
                 key: 'id_GrupoMusical' 
             },
-            comment: 'Clave foránea al  grupo_musicals'
+            comment: 'Clave foránea al grupo musical'
         },
-         generos_fk: {
-            type: type.INTEGER,
+        genero_musical_fk: {
+            type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: 'generos', 
-                key: 'id_Album'
+                model: 'genero_musical_text',  // Nombre de la tabla en la base de datos
+                key: 'id_genero'
             },
             comment: 'Clave foránea del género'
         }

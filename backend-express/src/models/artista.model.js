@@ -1,43 +1,46 @@
-const artista = (sequelize, type) => {
+const artista = (sequelize, DataTypes) => {
     return sequelize.define('artistas', {
         id_Artista: {
-            type: type.INTEGER,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
-            comment: 'Campo unico de artista'
+            comment: 'Campo único de artista'
         },
         photo_artista: {
-            type: type.STRING,
+            type: DataTypes.STRING,
             comment: 'Foto del artista'
         },
         Apellido: {
-            type: type.STRING,
-            comment: 'Apellido del usuario'
-        }
-        ,
+            type: DataTypes.STRING,
+            comment: 'Apellido del artista'
+        },
         Nombre: {
-            type: type.STRING,
-            comment: 'Nombvre de usuario'
-        }
-        ,
+            type: DataTypes.STRING,
+            comment: 'Nombre del artista'
+        },
         Email: {
-            type: type.STRING,
-            comment: 'email de usuario'
-        }
-        ,
+            type: DataTypes.STRING,
+            comment: 'Email del artista'
+        },
         Celular: {
-            type: type.STRING,
-            comment: 'numero del artista'
-        }
-        ,
+            type: DataTypes.STRING,
+            comment: 'Número de teléfono del artista'
+        },
         Contraseña: {
-            type: type.STRING,
-            comment: 'contraseña del artista'
+            type: DataTypes.STRING,
+            comment: 'Contraseña del artista'
+        },
+        genero_fk: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'genero_persona', 
+                key: 'id_genero'          
+            comment: 'Clave foránea que referencia a genero_persona'
         }
     }, {
         timestamps: false,
-        comment: 'Tabla de artista'
-    })
+        comment: 'Tabla de artistas'
+    });
 }
 
-module.exports = artista
+module.exports = artista;

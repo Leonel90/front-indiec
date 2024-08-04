@@ -1,52 +1,70 @@
-const evento = (sequelize, type) => {
+const evento = (sequelize, DataTypes) => {
     return sequelize.define('eventos', {
-        id_Album: {
-            type: type.INTEGER,
+        id_Evento: {
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
             comment: 'Campo único de eventos'
         },
         Foto_evento: {
-            type: type.STRING,
-            comment: 'Foto del eventos'
+            type: DataTypes.STRING,
+            comment: 'Foto del evento'
         },
-
         Nombre_evento: {
-            type: type.STRING,
-            comment: 'nonbre del eventos'
+            type: DataTypes.STRING,
+            comment: 'Nombre del evento'
         },
-        Discripcion: {
-            type: type.STRING,
-            comment: 'Descripcion eventos'
+        Descripcion: {
+            type: DataTypes.STRING,
+            comment: 'Descripción del evento'
         },
         Ubicacion: {
-            type: type.STRING,
-            comment: 'ubicacion eventos'
+            type: DataTypes.STRING,
+            comment: 'Ubicación del evento'
         },
         Fecha: {
-            type: type.STRING,
-            comment: 'Foto del eventos'
+            type: DataTypes.STRING,
+            comment: 'Fecha del evento'
         },
         Contacto: {
-            type: type.STRING,
-            comment: 'telf evento'
+            type: DataTypes.STRING,
+            comment: 'Teléfono del evento'
         },
         Capacidad: {
-            type: type.STRING,
-            comment: 'capacidad del evento'
+            type: DataTypes.STRING,
+            comment: 'Capacidad del evento'
         },
         Artistas: {
-            type: type.STRING,
-            comment: 'nombres de los artistas'
+            type: DataTypes.STRING,
+            comment: 'Nombres de los artistas'
         },
-
-        estado: {
-            type: type.TINYINT,
-            comment: 'Estado del eventos'
+        Ubicacion_fk: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'detalle_ubicacions',  
+                key: 'id_ubicacion' 
+            },
+            comment: 'Clave foránea que referencia a detalle_ubicacion'
+        },
+        estado_fk: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'detalle_artista_disqueras',  
+                key: 'id_detalle_disquera'  
+            },
+            comment: 'Clave foránea que referencia a detalle_artista_disquera'
+        },
+        detalle_artista_grupo_fk: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'detalle_artista_grupos', 
+                key: 'id_detalle_grupo'         
+            },
+            comment: 'Clave foránea que referencia a detalle_artista_grupo'
         }
     }, {
-        timestamps: false,
-        comment: 'Tabla de album'
+        timestamps: false,  // Configuración correcta de timestamps
+        comment: 'Tabla de eventos'
     });
 };
 

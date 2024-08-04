@@ -1,43 +1,47 @@
-const maneger = (sequelize, type) => {
+const maneger = (sequelize, DataTypes) => {
     return sequelize.define('manegers', {
         id_Manager: {
-            type: type.INTEGER,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
-            comment: 'Campo único de maneger'
+            comment: 'Campo único de manager'
         },
-
         Foto_manager: {
-            type: type.STRING,
-            comment: 'Foto del artista'
+            type: DataTypes.STRING,
+            comment: 'Foto del manager'
         },
         Apellidos: {
-            type: type.STRING,
-            comment: 'Foto del artista'
+            type: DataTypes.STRING,
+            comment: 'Apellidos del manager'
         },
         Nombres: {
-            type: type.STRING,
-            comment: 'Apellido del usuario'
-        }
-        ,
+            type: DataTypes.STRING,
+            comment: 'Nombres del manager'
+        },
         Email: {
-            type: type.STRING,
-            comment: 'Nombvre de usuario'
-        }
-        ,
-        Genero: {
-            type: type.ENUM,
-            values: ['masculino', ' femenino', ' otros'],
-            comment: 'los generos del manager'
-        }
-        , 
-        Estado: {
-            type: type.TINYINT(1),
-            comment: 'estado del manager'
+            type: DataTypes.STRING,
+            comment: 'Email del manager'
+        },
+        
+        genero_fk: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'genero_persona', 
+                key: 'id_genero'          
+            },
+            comment: 'Clave foránea que referencia a GeneroPersona'
+        },
+        estado_fk: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'estado_manager',  
+                key: 'id_estado_manager'  
+            },
+            comment: 'Clave foránea que referencia a EstadoManager'
         }
     }, {
         timestamps: false,
-        comment: 'Tabla de maneger'
+        comment: 'Tabla de managers'
     });
 };
 

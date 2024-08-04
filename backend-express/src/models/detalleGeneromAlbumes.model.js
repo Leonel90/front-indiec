@@ -1,36 +1,36 @@
-const detalleGeneromAlbumes = (sequelize, type) => {
+const detalleGeneromAlbumes = (sequelize, DataTypes) => {
     return sequelize.define('detalle_generom_albumes', {
         id_generom_album: {
-            type: type.INTEGER,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
             comment: 'Identificador único para cada detalle de género del álbum'
         },
-      generos_fk: {
-            type: type.INTEGER,
+        genero_musical_fk: {
+            type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: 'generos', 
-                key: 'id_Album'
+                model: 'genero_musical_text',  // Nombre de la tabla en la base de datos
+                key: 'id_genero'
             },
             comment: 'Clave foránea del género'
         },
         album_fk: {
-            type: type.INTEGER,
-            allowNull:false,
+            type: DataTypes.INTEGER,
+            allowNull: false,
             references: {
-                model: 'albums', 
-                key: 'id_Album' 
+                model: 'albums',  // Nombre de la tabla en la base de datos
+                key: 'id_Album'
             },
             comment: 'Clave foránea al álbum'
         },
         calificacion_fk: {
-            type: type.INTEGER,
-               references: {
-                model: 'calificacion', 
-                key: 'id_calificacion' 
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'calificacion',  // Nombre de la tabla en la base de datos
+                key: 'id_calificacion'
             },
-            comment: 'Clave foránea al calificacion'
+            comment: 'Clave foránea al calificación'
         }
     }, {
         timestamps: false,
@@ -38,4 +38,4 @@ const detalleGeneromAlbumes = (sequelize, type) => {
     });
 };
 
-module.exports = detalleGeneromAlbumes; 
+module.exports = detalleGeneromAlbumes;

@@ -1,43 +1,43 @@
-const detalleUbicacion = (sequelize, type) => {
+const detalleUbicacion = (sequelize, DataTypes) => {
     return sequelize.define('detalle_ubicacion', {
         id_ubicacion: {
-            type: type.INTEGER,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
             comment: 'Identificador único para cada ubicación'
         },
         nombre_ubicacion: {
-            type: type.STRING,
+            type: DataTypes.STRING,
             allowNull: false,
             comment: 'Nombre de la ubicación'
         },
         direccion: {
-            type: type.STRING,
+            type: DataTypes.STRING,
             allowNull: false,
             comment: 'Dirección de la ubicación'
         },
         ciudad: {
-            type: type.STRING,
+            type: DataTypes.STRING,
             allowNull: false,
             comment: 'Ciudad de la ubicación'
         },
         estado: {
-            type: type.STRING,
+            type: DataTypes.STRING,
             allowNull: false,
             comment: 'Estado de la ubicación'
         },
         pais: {
-            type: type.STRING,
+            type: DataTypes.STRING,
             allowNull: false,
             comment: 'País de la ubicación'
         },
         fecha_evento: {
-            type: type.DATEONLY,
+            type: DataTypes.DATEONLY,
             allowNull: true,
             comment: 'Fecha del evento en la ubicación'
         },
         hora_evento: {
-            type: type.TIME,
+            type: DataTypes.TIME,
             allowNull: true,
             comment: 'Hora del evento en la ubicación'
         }
@@ -47,4 +47,4 @@ const detalleUbicacion = (sequelize, type) => {
     });
 };
 
-module.exports = detalleUbicacion; 
+module.exports = detalleUbicacion;

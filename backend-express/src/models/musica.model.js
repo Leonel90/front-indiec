@@ -1,36 +1,40 @@
-const musica = (sequelize, type) => {
+const musica = (sequelize, DataTypes) => {
     return sequelize.define('musica', {
         id_Musica: {
-            type: type.INTEGER,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
-            comment: 'Campo único de musica'
+            comment: 'Campo único de música'
         },
         foto_musica: {
-            type: type.STRING,
-            comment: 'Foto del musica'
+            type: DataTypes.STRING,
+            comment: 'Foto de la música'
         },
-        nombre_cancion: {
-            type: type.STRING,
-            comment: 'Nombre del musica'
+        nombre_musica: {
+            type: DataTypes.STRING,
+            comment: 'Nombre de la música'
         },
         nombre_Artista: {
-            type: type.ENUM,
-            values: [' A', ' B', ' C'],
-            comment: 'Nombre del musica'
+            type: DataTypes.ENUM,
+            values: ['A', 'B', 'C'],
+            comment: 'Nombre del artista'
         },
         nombre_Album: {
-            type: type.ENUM,
+            type: DataTypes.ENUM,
             values: ['Grupo A', 'Grupo B', 'Grupo C'],
-            comment: 'Nombre del musica'
+            comment: 'Nombre del álbum'
         },
-        estado: {
-            type: type.TINYINT,
-            comment: 'Estado del musica'
+        estado_fk: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'estado_manager',  
+                key: 'id_estado_manager'  
+            },
+            comment: 'Clave foránea que referencia a EstadoManager'
         }
     }, {
         timestamps: false,
-        comment: 'Tabla de musica'
+        comment: 'Tabla de música'
     });
 };
 

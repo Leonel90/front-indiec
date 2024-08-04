@@ -45,7 +45,6 @@ const album = require("../models/album.model");
 const musica = require("../models/musica.model");
 const manager = require("../models/manager.model");
 const disquera = require("../models/disquera.model");
-const genero = require("../models/genero.model");
 const evento = require("../models/evento.model");
 // david rompimiento
 const detalleArtistaDisquera = require("../models/detalleArtistaDisquera.model");
@@ -75,7 +74,6 @@ const albums = album(sequelize, Sequelize);
 const musicas = musica(sequelize, Sequelize);
 const managers = manager(sequelize, Sequelize);
 const disqueras = disquera(sequelize, Sequelize);
-const generos = genero(sequelize, Sequelize);
 const eventos = evento(sequelize, Sequelize);
 // david rompimiento
 
@@ -157,7 +155,6 @@ module.exports = {
     musicas,
     managers,
     disqueras,
-    generos,
     eventos,
 
     // david rompimiento
