@@ -18,10 +18,14 @@ const musica = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             comment: 'Nombre del artista'
         },
-        nombre_Album: {
-            type: DataTypes.ENUM,
-            values: ['Grupo A', 'Grupo B', 'Grupo C'], // traer la fk album 
-            comment: 'Nombre del álbum'
+        album_fk: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'albums',  // Nombre de la tabla en la base de datos
+                key: 'id_Album'
+            },
+            comment: 'Clave foránea al álbum'
         },
         estado_fk: {
             type: DataTypes.INTEGER,

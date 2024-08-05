@@ -1,35 +1,44 @@
-const album = (sequelize, type) => {
+const { DataTypes } = require('sequelize');
+
+const album = (sequelize) => {
     return sequelize.define('album', {
         id_Album: {
-            type: type.INTEGER,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
             comment: 'Campo único de album'
         },
         foto_album: {
-            type: type.STRING,
+            type: DataTypes.STRING,
             comment: 'Foto del album'
         },
         nombre_album: {
-            type: type.STRING,
+            type: DataTypes.STRING,
             comment: 'Nombre del album'
         },
-        nombre_grupo: {
-            type: type.ENUM,
-            values: ['Grupo A', 'Grupo B', 'Grupo C'],//fk del grupo
-            comment: 'Nombre del grupo'
+        grupo_musicals_fk: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'grupo_musicals', 
+                key: 'id_GrupoMusical' 
+            },
+            comment: 'Clave foránea al grupo musical'
         },
         integrantes: {
-            type: type.STRING,
-            comment: 'numeros integrantes'
+            type: DataTypes.STRING,
+            comment: 'Número de integrantes'
         },
         url: {
-            type: type.STRING,
+            type: DataTypes.STRING,
             comment: 'URL del album'
         },
-        estado: {
-            type: type.TINYINT,
-            comment: 'Estado del album' //fk del estado manager
+        estado_fk: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'estado_manager',  
+                key: 'id_estado_manager'  
+            },
+            comment: 'Clave foránea que referencia a EstadoManager'
         }
     }, {
         timestamps: false,

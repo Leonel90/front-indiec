@@ -39,13 +39,13 @@ const evento = (sequelize, DataTypes) => {
             comment: 'Nombres de los artistas'
         },
 
-        estado_fk: {
+           estado_fk: {
             type: DataTypes.INTEGER,
             references: {
-                model: 'detalle_artista_disqueras',  
-                key: 'id_detalle_disquera'  
+                model: 'estado_manager',  
+                key: 'id_estado_manager'  
             },
-            comment: 'Clave foránea que referencia a detalle_artista_disquera'
+            comment: 'Clave foránea que referencia a EstadoManager'
         },
         detalle_artista_grupo_fk: {
             type: DataTypes.INTEGER,
@@ -56,7 +56,7 @@ const evento = (sequelize, DataTypes) => {
             comment: 'Clave foránea que referencia a detalle_artista_grupo'
         }
     }, {
-        timestamps: false,  // Configuración correcta de timestamps
+        timestamps: false,  
         comment: 'Tabla de eventos'
     });
 };

@@ -26,16 +26,16 @@ const disquera = (sequelize, DataTypes) => {
         estado_fk: {
             type: DataTypes.INTEGER,
             references: {
-                model: 'estado_manager',  // Nombre de la tabla referenciada
-                key: 'id_estado_manager'  // Clave primaria de la tabla referenciada
+                model: 'estado_manager',  
+                key: 'id_estado_manager' 
             },
             comment: 'Clave foránea que referencia a EstadoManager'
         },
         plataforma_fk: {
             type: DataTypes.INTEGER,
             references: {
-                model: 'plataforma',  // Nombre de la tabla referenciada
-                key: 'id_plataforma'   // Clave primaria de la tabla referenciada
+                model: 'plataforma',  
+                key: 'id_plataforma'   
             },
             comment: 'Clave foránea que referencia a plataformas'
         }
