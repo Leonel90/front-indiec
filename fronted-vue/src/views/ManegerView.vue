@@ -24,18 +24,15 @@
                   <input type="email" v-model="formData.email" required />
                 </div>
                 <div class="form-group">
-                  <label for="genero">Género:</label>
-                  <input type="text" v-model="formData.gender" required />
+                  <label for="plataforma">Genero:</label>
+                  <select v-model="formData.platform">
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                  </select>
                 </div>
                 <div class="form-group">
                   <label for="estado">Estado:</label>
-                  <input
-                    type="text"
-                    v-model="formData.status"
-                    required
-                    disabled
-                    style="background-color: #0000002a"
-                  />
+                  <input type="text" v-model="formData.status" required disabled style="background-color: #0000002a" />
                 </div>
                 <div class="form-group">
                   <label for="foto">Foto:</label>
@@ -53,49 +50,27 @@
                 <h2>Editar Manager</h2>
                 <div class="form-group">
                   <label for="edit-nombre">Nombres:</label>
-                  <input
-                    type="text"
-                    id="edit-nombre"
-                    v-model="editFormData.firstName"
-                    required
-                  />
+                  <input type="text" id="edit-nombre" v-model="editFormData.firstName" required />
                 </div>
                 <div class="form-group">
                   <label for="edit-apellido">Apellidos:</label>
-                  <input
-                    type="text"
-                    id="edit-apellido"
-                    v-model="editFormData.lastName"
-                    required
-                  />
+                  <input type="text" id="edit-apellido" v-model="editFormData.lastName" required />
                 </div>
                 <div class="form-group">
                   <label for="edit-correo">Correo:</label>
-                  <input
-                    type="email"
-                    id="edit-correo"
-                    v-model="editFormData.email"
-                    required
-                  />
+                  <input type="email" id="edit-correo" v-model="editFormData.email" required />
                 </div>
                 <div class="form-group">
-                  <label for="edit-genero">Género:</label>
-                  <input
-                    type="text"
-                    id="edit-genero"
-                    v-model="editFormData.gender"
-                    required
-                  />
+                  <label for="edit-plataforma">Genero:</label>
+                  <select v-model="editFormData.platform">
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                  </select>
                 </div>
                 <div class="form-group">
-                  <label for="estado">Estado:</label>
-                  <input
-                    type="text"
-                    v-model="editFormData.status"
-                    required
-                    disabled
-                    style="background-color: #0000002a"
-                  />
+                  <label for="edit-estado">Estado:</label>
+                  <input type="text" id="edit-estado" v-model="editFormData.status" required disabled
+                    style="background-color: #0000002a" />
                 </div>
                 <div class="form-group">
                   <label for="edit-foto">Foto:</label>
@@ -114,12 +89,7 @@
       <div class="button-container">
         <button class="pdf">PDF</button>
         <button class="excel">EXCEL</button>
-        <input
-          type="text"
-          placeholder="Buscar . . ."
-          class="buscar"
-          v-model="searchQuery"
-        />
+        <input type="text" placeholder="Buscar . . ." class="buscar" v-model="searchQuery" />
       </div>
 
       <!-- Tabla de Managers -->
@@ -127,14 +97,30 @@
         <table>
           <thead>
             <tr>
-              <th><div class="cell">#</div></th>
-              <th><div class="cell">Foto</div></th>
-              <th><div class="cell">Apellidos</div></th>
-              <th><div class="cell">Nombres</div></th>
-              <th><div class="cell">Correo</div></th>
-              <th><div class="cell">Género</div></th>
-              <th><div class="cell">Estado</div></th>
-              <th><div class="cell">Acciones</div></th>
+              <th>
+                <div class="cell">#</div>
+              </th>
+              <th>
+                <div class="cell">Foto</div>
+              </th>
+              <th>
+                <div class="cell">Apellidos</div>
+              </th>
+              <th>
+                <div class="cell">Nombres</div>
+              </th>
+              <th>
+                <div class="cell">Correo</div>
+              </th>
+              <th>
+                <div class="cell">Genero</div>
+              </th>
+              <th>
+                <div class="cell">Estado</div>
+              </th>
+              <th>
+                <div class="cell">Acciones</div>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -156,17 +142,15 @@
               <td>
                 <div class="cell">{{ user.email }}</div>
               </td>
+
               <td>
-                <div class="cell">{{ user.gender }}</div>
+                <div class="cell">{{ user.platform }}</div>
               </td>
               <td>
-                <span
-                  :class="{
-                    'status-active': user.status === 'Activo',
-                    'status-inactive': user.status === 'Inactivo',
-                  }"
-                  >{{ user.status }}</span
-                >
+                <span :class="{
+                  'status-active': user.status === 'Activo',
+                  'status-inactive': user.status === 'Inactivo',
+                }">{{ user.status }}</span>
               </td>
               <td>
                 <button class="btn view-btn" @click="viewUser(user)">
@@ -175,11 +159,7 @@
                 <button class="btn edit-btn" @click="editUser(user)">
                   <i class="bx bx-edit"></i>
                 </button>
-                <button
-                  class="btn delete-btn"
-                  v-if="user.status === 'Activo'"
-                  @click="deleteUser(user)"
-                >
+                <button class="btn delete-btn" v-if="user.status === 'Activo'" @click="deleteUser(user)">
                   <i class="bx bx-trash"></i>
                 </button>
                 <button class="btn restore-btn" v-else @click="restoreUser(user)">
@@ -205,47 +185,51 @@ export default {
     MyModal,
   },
   data() {
-    return {
-      showCreateModal: false,
-      showEditModal: false,
-      searchQuery: "",
-      formData: {
-        firstName: "",
-        lastName: "",
-        email: "",
-        gender: "",
+  return {
+    showCreateModal: false,
+    showEditModal: false,
+    searchQuery: "",
+    formData: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      status: "Activo",
+      platform: "Masculino", // Valor por defecto para la plataforma
+      photo: "path/to/default/photo.png",
+    },
+    editFormData: {}, // Para almacenar los datos del manager que se está editando
+    users: [
+      {
+        id: 1, // Identificador único
+        firstName: "John",
+        lastName: "Doe",
+        email: "Alexander@ya.ed",
         status: "Activo",
-        photo: "path/to/default/photo.png", // Ejemplo de valor por defecto para la foto
+        platform: "Femenino",
+        photo: "https://i.pinimg.com/736x/a2/56/51/a256518753a01a4fe95d1bfd35b63317.jpg",
       },
-      editFormData: {}, // Para almacenar los datos del manager que se está editando
-      users: [
-        {
-          firstName: "John",
-          lastName: "Doe",
-          email: "Alexander@ya.ed",
-          gender: "Masculino",
-          status: "Activo",
-          photo: "https://i.pinimg.com/736x/a2/56/51/a256518753a01a4fe95d1bfd35b63317.jpg",
-        },
-        {
-          firstName: "Jane",
-          lastName: "Smith",
-          email: "Alexander@ya.ed",
-          gender: "Femenino",
-          status: "Inactivo",
-          photo: "https://i.pinimg.com/736x/a2/56/51/a256518753a01a4fe95d1bfd35b63317.jpg",
-        },
-        {
-          firstName: "Alexander",
-          lastName: "Narvaez",
-          email: "Alexander@ya.ed",
-          gender: "Masculino",
-          status: "Activo",
-          photo: "https://i.pinimg.com/736x/a2/56/51/a256518753a01a4fe95d1bfd35b63317.jpg",
-        },
-      ],
-    };
-  },
+      {
+        id: 2, // Identificador único
+        firstName: "Jane",
+        lastName: "Smith",
+        email: "Alexander@ya.ed",
+        status: "Inactivo",
+        platform: "Masculino",
+        photo: "https://i.pinimg.com/736x/a2/56/51/a256518753a01a4fe95d1bfd35b63317.jpg",
+      },
+      {
+        id: 3, // Identificador único
+        firstName: "Alexander",
+        lastName: "Narvaez",
+        email: "Alexander@ya.ed",
+        status: "Activo",
+        platform: "Masculino",
+        photo: "https://i.pinimg.com/736x/a2/56/51/a256518753a01a4fe95d1bfd35b63317.jpg",
+      },
+    ],
+  };
+},
+
   computed: {
     filteredUsers() {
       const query = this.searchQuery.toLowerCase();
@@ -254,30 +238,30 @@ export default {
           user.firstName.toLowerCase().includes(query) ||
           user.lastName.toLowerCase().includes(query) ||
           user.email.toLowerCase().includes(query) ||
-          user.gender.toLowerCase().includes(query) ||
-          user.status.toLowerCase().includes(query)
+          user.status.toLowerCase().includes(query) ||
+          user.platform.toLowerCase().includes(query)
       );
     },
   },
   methods: {
     handleCreate() {
-      const newUser = { ...this.formData };
-      this.users.push(newUser);
-      this.showCreateModal = false;
-      this.resetFormData();
-      Swal.fire({
-        title: "¡Manager creado!",
-        text: "El nuevo manager ha sido creado con éxito.",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-    },
+    const newUser = { ...this.formData, id: this.users.length + 1 };
+    this.users.push(newUser);
+    this.showCreateModal = false;
+    this.resetFormData();
+    Swal.fire({
+      title: "¡Manager creado!",
+      text: "El nuevo manager ha sido creado con éxito.",
+      icon: "success",
+      confirmButtonText: "OK",
+    });
+  },
     handleEdit() {
-      // Encontrar el usuario en el array y actualizar sus datos
       const index = this.users.findIndex(
-        (user) => user.email === this.editFormData.email
+        (user) => user.id === this.editFormData.id
       );
       if (index !== -1) {
+        // Actualiza el objeto en el índice correcto sin usar this.$set
         this.users[index] = { ...this.editFormData };
         this.showEditModal = false;
         this.editFormData = {};
@@ -289,13 +273,12 @@ export default {
         });
       }
     },
+
     editUser(user) {
-      // Mostrar el modal de edición y cargar los datos del usuario seleccionado
-      this.editFormData = { ...user };
-      this.showEditModal = true;
-    },
+    this.editFormData = { ...user }; // Asigna una copia del objeto
+    this.showEditModal = true;
+  },
     deleteUser(user) {
-      // Cambiar el estado del usuario a "Inactivo"
       user.status = "Inactivo";
       Swal.fire({
         title: "¡Manager eliminado!",
@@ -305,7 +288,6 @@ export default {
       });
     },
     restoreUser(user) {
-      // Restaurar el estado del usuario a "Activo"
       user.status = "Activo";
       Swal.fire({
         title: "¡Manager restaurado!",
@@ -315,20 +297,18 @@ export default {
       });
     },
     closeModals() {
-      // Cerrar todos los modales y limpiar datos de edición
       this.showCreateModal = false;
       this.showEditModal = false;
       this.resetFormData();
       this.editFormData = {};
     },
     resetFormData() {
-      // Reiniciar los datos del formulario de creación
       this.formData = {
         firstName: "",
         lastName: "",
         email: "",
-        gender: "",
         status: "Activo",
+        platform: "Genero",
         photo: "path/to/default/photo.png",
       };
     },
@@ -340,7 +320,8 @@ export default {
             <p><strong>Nombres:</strong> ${user.firstName}</p>
             <p><strong>Apellidos:</strong> ${user.lastName}</p>
             <p><strong>Correo:</strong> ${user.email}</p>
-            <p><strong>Género:</strong> ${user.gender}</p>
+            <p><strong>Género:</strong> ${user.platform}</p>
+            <p><strong>Plataforma:</strong> ${user.platform}</p>
             <p><strong>Estado:</strong> ${user.status}</p>
             <img src="${user.photo}" alt="Foto del Manager" class="modal-photo">
           </div>
@@ -351,6 +332,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 /* Estilos para el contenedor principal */
@@ -419,7 +401,7 @@ form {
   margin-top: 20px;
   background-color: aliceblue;
   padding: 10px;
-  border-radius:12px;
+  border-radius: 12px;
 }
 
 button[type="submit"] {
@@ -442,8 +424,10 @@ button[type="submit"]:hover {
   background-color: aliceblue;
   border-radius: 10px;
   box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
-  margin-top: 20px; /*con esto  puedo   bajar mas la tabla   para que haya espacio  entre el modal de crear y el cuadro */
+  margin-top: 20px;
+  /*con esto  puedo   bajar mas la tabla   para que haya espacio  entre el modal de crear y el cuadro */
 }
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -466,6 +450,7 @@ th {
   border-radius: 5px;
   display: inline-block;
 }
+
 .cell:hover {
   background-color: white;
 }
@@ -501,28 +486,28 @@ th {
 .view-btn {
   background-color: #6c757d;
   color: #fff;
-  box-shadow:  2px 2px 2px 2px rgba(0, 0, 0, 0.137);
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.137);
 
 }
 
 .edit-btn {
   background-color: #ffc107;
   color: #fff;
-  box-shadow:  2px 2px 2px 2px rgba(0, 0, 0, 0.137);
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.137);
 
 }
 
 .delete-btn {
   background-color: #dc3545;
   color: #fff;
-    box-shadow:  2px 2px 2px 2px rgba(0, 0, 0, 0.137);
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.137);
 
 }
 
 .restore-btn {
   background-color: #17a2b8;
   color: #fff;
-    box-shadow:  2px 2px 2px 2px rgba(0, 0, 0, 0.137);
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.137);
 
 }
 
@@ -539,7 +524,7 @@ th {
 .pdf {
   background-color: #dc3545;
   color: #fff;
-  box-shadow:  2px 2px 2px 2px rgba(0, 0, 0, 0.137);
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.137);
 
 }
 
@@ -547,7 +532,7 @@ th {
   background-color: #28a745;
   color: #fff;
   margin-left: 10px;
-  box-shadow:  2px 2px 2px 2px rgba(0, 0, 0, 0.137);
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.137);
 
 }
 
@@ -567,12 +552,14 @@ th {
 .image-preview {
   margin: 80px;
 }
+
 .image-preview img {
   max-width: 50%;
   height: auto;
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
 }
+
 /* Estilos del botón para subir imagen */
 .form-group1 {
   display: inline-block;
@@ -585,6 +572,5 @@ th {
 }
 
 
-.buscar {
-}
+.buscar {}
 </style>

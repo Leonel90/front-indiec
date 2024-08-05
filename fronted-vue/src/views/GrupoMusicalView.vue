@@ -12,6 +12,7 @@
               <form v-if="!isEditing" @submit.prevent="handleCreate">
                 <h2>Crear Grupo</h2>
                 
+                <!-- Imagen Upload Section (unchanged) -->
                 <div class="form-group custom-form-group">
                   <label for="imagen" class="upload-label custom-upload-label">
                     <i class="bx bx-check"></i> Subir Imagen
@@ -32,31 +33,37 @@
                     class="custom-preview-img"
                   />
                 </div>
+
                 <div class="form-group">
                   <label for="recordlabelName">Grupo:</label>
-                  <input type="text" v-model="formData.recordlabelName" required placeholder="ingrese el nombre" />
+                  <input type="text" v-model="formData.recordlabelName" required placeholder="Ingrese el nombre" />
                 </div>
                 <div class="form-group">
-                  <label for="descriptiontName">Descripcion:</label>
-                  <input type="text" v-model="formData.descriptiontName" required placeholder="Ingrese descripcion" />
+                  <label for="descriptiontName">Descripción:</label>
+                  <input type="text" v-model="formData.descriptiontName" required placeholder="Ingrese descripción" />
                 </div>
                 <div class="form-group">
                   <label for="platform">Plataforma:</label>
-                  <input type="text" v-model="formData.platform" requiredplaceholder=""  />
+                  <select v-model="formData.platform" required>
+                    <option value="" disabled>Selecciona una plataforma</option>
+                    <option value="Plataforma 1">Plataforma 1</option>
+                    <option value="Plataforma 2">Plataforma 2</option>
+                    <option value="Plataforma 3">Plataforma 3</option>
+                  </select>
                 </div>
                 <div class="form-group">
                   <label for="url">URL:</label>
-                  <input type="url" v-model="formData.url" required placeholder="ingrese la url " />
+                  <input type="url" v-model="formData.url" required placeholder="Ingrese la url" />
                 </div>
                 <div class="button-container">
                   <button type="submit">Guardar</button>
                 </div>
               </form>
 
-              
               <form v-else @submit.prevent="handleEdit">
                 <h2>Editar Grupo Musical</h2>
                 
+                <!-- Imagen Upload Section (unchanged) -->
                 <div class="form-group custom-form-group">
                   <label for="edit-imagen" class="upload-label custom-upload-label">
                     <i class="bx bx-check"></i> Cambiar Imagen
@@ -77,21 +84,26 @@
                     class="custom-preview-img"
                   />
                 </div>
+                
                 <div class="form-group">
                   <label for="recordlabelName">Grupo:</label>
-                  <input type="text" v-model="formData.recordlabelName" required placeholder="ingrese el nombre" />
+                  <input type="text" v-model="formData.recordlabelName" required placeholder="Ingrese el nombre" />
                 </div>
                 <div class="form-group">
-                  <label for="descriptiontName">Descripcion:</label>
-                  <input type="text" v-model="formData.descriptiontName" required  placeholder="Ingrese descripcion" />
+                  <label for="descriptiontName">Descripción:</label>
+                  <input type="text" v-model="formData.descriptiontName" required placeholder="Ingrese descripción" />
                 </div>
                 <div class="form-group">
                   <label for="platform">Plataforma:</label>
-                  <input type="text" v-model="formData.platform" required />
+                  <select v-model="formData.platform" required>
+                    <option value="Plataforma 1">Plataforma 1</option>
+                    <option value="Plataforma 2">Plataforma 2</option>
+                    <option value="Plataforma 3">Plataforma 3</option>
+                  </select>
                 </div>
                 <div class="form-group">
                   <label for="url">URL:</label>
-                  <input type="url" v-model="formData.url" required placeholder="Ingrese la url"  />
+                  <input type="url" v-model="formData.url" required placeholder="Ingrese la url" />
                 </div>
                 <div class="button-container">
                   <button type="submit">Guardar Cambios</button>
@@ -102,7 +114,6 @@
         </div>
       </div>
 
-      
       <div class="button-container">
         <button class="pdf">PDF</button>
         <button class="excel">EXCEL</button>
@@ -114,7 +125,6 @@
         />
       </div>
 
-      
       <div class="table-container">
         <table>
           <thead>
@@ -235,13 +245,11 @@ export default {
   computed: {
     filteredSongs() {
       const query = this.searchQuery.toLowerCase();
-      return this.songs.filter(
-        (song) =>
-          song.recordlabelName.toLowerCase().includes(query) ||
-          song.descriptiontName.toLowerCase().includes(query) ||
-          song.platform.toLowerCase().includes(query) ||
-          song.url.toLowerCase().includes(query) ||
-          song.status.toLowerCase().includes(query)
+      return this.songs.filter(song => 
+        song.recordlabelName.toLowerCase().includes(query) ||
+        song.descriptiontName.toLowerCase().includes(query) ||
+        song.platform.toLowerCase().includes(query) ||
+        song.url.toLowerCase().includes(query)
       );
     },
   },
@@ -250,47 +258,74 @@ export default {
       const file = event.target.files[0];
       if (!file) return;
 
-      
       this.imagePreview = URL.createObjectURL(file);
-
-      
       this.formData.photo = this.imagePreview;
     },
     handleEditFileUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
 
-      
       this.editImagePreview = URL.createObjectURL(file);
-
-     
-      this.formData.photo = this.editImagePreview;
+      if (this.editIndex !== null) {
+        this.songs[this.editIndex].photo = this.editImagePreview;
+      }
     },
     handleCreate() {
-      const newSong = { ...this.formData };
-      this.songs.push(newSong);
+      this.songs.push({ ...this.formData });
       this.showCreateModal = false;
-      this.resetFormData();
-      this.imagePreview = null; 
-      Swal.fire("¡Éxito!", "El Grupo Musical ha sido creado exitosamente.", "success");
+      this.resetForm();
     },
     startEditing(song) {
       this.isEditing = true;
       this.formData = { ...song };
+      this.editImagePreview = song.photo;
       this.editIndex = this.songs.indexOf(song);
       this.showCreateModal = true;
     },
     handleEdit() {
-      if (this.editIndex !== null) {
-        this.songs.splice(this.editIndex, 1, { ...this.formData });
-        this.showCreateModal = false;
-        this.isEditing = false;
-        this.resetFormData();
-        this.editImagePreview = null; 
-        Swal.fire("¡Éxito!", "El Grupo Musical ha sido creado exitosamente.", "success");
-      }
+  if (this.editIndex !== null) {
+    Object.assign(this.songs[this.editIndex], this.formData);
+  }
+  this.isEditing = false;
+  this.showCreateModal = false;
+  this.resetForm();
+},
+    deleteSong(song) {
+      Swal.fire({
+        title: "¿Estás seguro?",
+        text: "¡No podrás recuperar este registro!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, eliminarlo",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          song.status = "Eliminado";
+          Swal.fire("Eliminado!", "El registro ha sido eliminado.", "success");
+        }
+      });
     },
-    resetFormData() {
+    restoreSong(song) {
+      Swal.fire({
+        title: "¿Estás seguro?",
+        text: "¡Este registro será restaurado!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, restaurar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          song.status = "Activo";
+          Swal.fire("Restaurado!", "El registro ha sido restaurado.", "success");
+        }
+      });
+    },
+    viewSongDetails(song) {
+      // Implement the view details logic
+    },
+    resetForm() {
       this.formData = {
         recordlabelName: "",
         descriptiontName: "",
@@ -299,47 +334,18 @@ export default {
         status: "Activo",
         photo: "", 
       };
-    },
-    deleteSong(song) {
-      song.status = "Eliminado";
-      Swal.fire("¡Éxito!", "El Grupo Musical ha sido eliminado exitosamente.", "success");
-    },
-    restoreSong(song) {
-      song.status = "Activo";
-      Swal.fire("¡Éxito!", "El Grupo Musical ha sido eliminado exitosamente.", "success");
-    },
-    viewSongDetails(song) {
-      
-      Swal.fire({
-        title: `Detalles de ${song.recordlabelName}`,
-        html: `
-          <div>
-            <img src="${song.photo}" alt="Foto de ${song.recordlabelName}" style="max-width: 100%; height: auto; ">
-          </div>
-          <p><strong>Nombre del Grupo Musical:</strong><br> ${song.recordlabelName}</p>
-          <p><strong>Descripcion:</strong><br> ${song.descriptiontName}</p>
-          <p><strong>Plataforma:</strong><br> ${song.platform}</p>
-          <p><strong>URL:</strong><br> <a href="${song.url}" target="_blank">${song.url}</a></p>
-          <p><strong>Estado:</strong> <br>${song.status}</p>
-        `,
-        confirmButtonText: "Cerrar",
-        customClass: {
-          popup: "custom-swal-popup",
-          content: "custom-swal-content",
-          closeButton: "custom-swal-close",
-          confirmButton: "custom-swal-confirm",
-        },
-      });
+      this.imagePreview = null;
+      this.editImagePreview = null;
     },
     getSongStatusClass(status) {
-      return {
-        "status-active": status === "Activo",
-        "status-inactive": status === "Eliminado",
-      };
+      return status === "Activo" ? "status-active" : "status-deleted";
     },
   },
 };
 </script>
+
+
+
 <style scoped>
 #capa-padre {
   background-color: aliceblue;
@@ -463,19 +469,20 @@ th {
 }
 
 .status-active,
-.status-inactive {
+.status-deleted {
   color: #fff;
   padding: 5px 10px;
   border-radius: 15px;
 }
 
 .status-active {
-  background-color: #28a745;
+  background-color: #28a745; /* Verde */
 }
 
-.status-inactive {
-  background-color: #dc3545;
+.status-deleted {
+  background-color: #dc3545; /* Rojo */
 }
+
 
 .button-group {
   display: flex;

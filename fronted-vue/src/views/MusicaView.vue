@@ -9,40 +9,36 @@
           <div id="app">
             <button @click="showCreateModal = true">Crear Canción</button>
             <MyModal :isVisible="showCreateModal" @close="showCreateModal = false">
+              <!-- Formulario para crear una canción -->
               <form v-if="!isEditing" @submit.prevent="handleCreate">
                 <h2>Crear Canción</h2>
-                <!-- Subir Imagen -->
                 <div class="form-group custom-form-group">
                   <label for="imagen" class="upload-label custom-upload-label">
                     <i class="bx bx-check"></i> Subir Imagen
                   </label>
-                  <input
-                    type="file"
-                    id="imagen"
-                    class="custom-upload-input"
-                    @change="handleFileUpload"
-                    accept="image/*"
-                  />
+                  <input type="file" id="imagen" class="custom-upload-input" @change="handleFileUpload"
+                    accept="image/*" />
                 </div>
-                <!-- Vista previa de la imagen seleccionada -->
                 <div v-if="imagePreview" class="image-preview custom-image-preview">
-                  <img
-                    :src="imagePreview"
-                    alt="Vista previa de la imagen"
-                    class="custom-preview-img"
-                  />
+                  <img :src="imagePreview" alt="Vista previa de la imagen" class="custom-preview-img" />
                 </div>
                 <div class="form-group">
                   <label for="songName">Nombre de la Canción:</label>
-                  <input type="text" v-model="formData.songName" required />
+                  <input type="text" v-model="formData.songName" required placeholder="Ingrese nombre" />
                 </div>
                 <div class="form-group">
                   <label for="artistName">Nombre del Artista:</label>
-                  <input type="text" v-model="formData.artistName" required />
+                  <input type="text" v-model="formData.artistName" required placeholder="Ingrese nombre del artista" />
                 </div>
                 <div class="form-group">
-                  <label for="album">Álbum:</label>
-                  <input type="text" v-model="formData.album" required />
+                  <label for="platform">Album:</label>
+                  <div class="container">
+                    <select v-model="formData.platform" class="custom-select">
+                      <option value="1">Album 1</option>
+                      <option value="2">Album 2</option>
+                      <option value="3">Album 3</option>
+                    </select>
+                  </div>
                 </div>
                 <div class="button-container">
                   <button type="submit">Guardar</button>
@@ -52,40 +48,34 @@
               <!-- Formulario para editar una canción -->
               <form v-else @submit.prevent="handleEdit">
                 <h2>Editar Canción</h2>
-                <!-- Subir Imagen en edición -->
                 <div class="form-group custom-form-group">
                   <label for="edit-imagen" class="upload-label custom-upload-label">
                     <i class="bx bx-check"></i> Cambiar Imagen
                   </label>
-                  <input
-                    type="file"
-                    id="edit-imagen"
-                    class="custom-upload-input"
-                    @change="handleEditFileUpload"
-                    accept="image/*"
-                  />
+                  <input type="file" id="edit-imagen" class="custom-upload-input" @change="handleEditFileUpload"
+                    accept="image/*" />
                 </div>
-                <!-- Vista previa de la imagen seleccionada en edición -->
                 <div v-if="editImagePreview" class="image-preview custom-image-preview">
-                  <img
-                    :src="editImagePreview"
-                    alt="Vista previa de la imagen"
-                    class="custom-preview-img"
-                  />
+                  <img :src="editImagePreview" alt="Vista previa de la imagen" class="custom-preview-img" />
                 </div>
                 <div class="form-group">
                   <label for="songName">Nombre de la Canción:</label>
-                  <input type="text" v-model="formData.songName" required  placeholder="ingrese nombre" />
+                  <input type="text" v-model="formData.songName" required placeholder="Ingrese nombre" />
                 </div>
                 <div class="form-group">
                   <label for="artistName">Nombre del Artista:</label>
-                  <input type="text" v-model="formData.artistName" required placeholder="ingrese del artista" />
+                  <input type="text" v-model="formData.artistName" required placeholder="Ingrese nombre del artista" />
                 </div>
                 <div class="form-group">
-                  <label for="album">Álbum:</label>
-                  <input type="text" v-model="formData.album" required placeholder="ingrese el album" />
+                  <label for="platform">Album:</label>
+                  <div class="container">
+                    <select v-model="formData.platform" class="custom-select">
+                      <option value="1">Album 1</option>
+                      <option value="2">Album 2</option>
+                      <option value="3">Album 3</option>
+                    </select>
+                  </div>
                 </div>
-
                 <div class="button-container">
                   <button type="submit">Guardar Cambios</button>
                 </div>
@@ -99,12 +89,7 @@
       <div class="button-container">
         <button class="pdf">PDF</button>
         <button class="excel">EXCEL</button>
-        <input
-          type="text"
-          placeholder="Buscar . . ."
-          class="buscar"
-          v-model="searchQuery"
-        />
+        <input type="text" placeholder="Buscar . . ." class="buscar" v-model="searchQuery" />
       </div>
 
       <!-- Tabla de Canciones -->
@@ -112,13 +97,27 @@
         <table>
           <thead>
             <tr>
-              <th><div class="cell">#</div></th>
-              <th><div class="cell">Foto</div></th>
-              <th><div class="cell">Nombre de la Canción</div></th>
-              <th><div class="cell">Nombre del Artista</div></th>
-              <th><div class="cell">Álbum</div></th>
-              <th><div class="cell">Estado</div></th>
-              <th><div class="cell">Acciones</div></th>
+              <th>
+                <div class="cell">#</div>
+              </th>
+              <th>
+                <div class="cell">Foto</div>
+              </th>
+              <th>
+                <div class="cell">Nombre de la Canción</div>
+              </th>
+              <th>
+                <div class="cell">Nombre del Artista</div>
+              </th>
+              <th>
+                <div class="cell">Album</div>
+              </th>
+              <th>
+                <div class="cell">Estado</div>
+              </th>
+              <th>
+                <div class="cell">Acciones</div>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -138,9 +137,8 @@
                 <div class="cell">{{ song.artistName }}</div>
               </td>
               <td>
-                <div class="cell">{{ song.album }}</div>
+                <div class="cell">{{ getGroupLabel(song.platform) }}</div>
               </td>
-
               <td>
                 <span :class="getSongStatusClass(song.status)">
                   {{ song.status }}
@@ -154,11 +152,7 @@
                   <button class="btn edit-btn" @click="startEditing(song)">
                     <i class="bx bx-edit"></i>
                   </button>
-                  <button
-                    class="btn delete-btn"
-                    v-if="song.status === 'Activo'"
-                    @click="deleteSong(song)"
-                  >
+                  <button class="btn delete-btn" v-if="song.status === 'Activo'" @click="deleteSong(song)">
                     <i class="bx bx-trash"></i>
                   </button>
                   <button class="btn restore-btn" v-else @click="restoreSong(song)">
@@ -191,7 +185,7 @@ export default {
       formData: {
         songName: "",
         artistName: "",
-        album: "",
+        platform: "1", // Valor por defecto para "Grupo"
         status: "Activo",
         photo: "", // Agregado para almacenar la URL de la foto
       },
@@ -200,142 +194,134 @@ export default {
           photo: "https://i.pinimg.com/736x/48/22/bf/4822bf54ee339f9e3842192de95a906e.jpg",
           songName: "Canción 1",
           artistName: "Artista 1",
-          album: "Álbum 1",
+          platform: "1", // Valor por defecto para "Grupo"
           status: "Activo",
         },
         {
           photo: "https://i.pinimg.com/736x/48/22/bf/4822bf54ee339f9e3842192de95a906e.jpg",
           songName: "Canción 2",
           artistName: "Artista 2",
-          album: "Álbum 2",
+          platform: "2",
           status: "Activo",
         },
-        {
-          photo: "https://i.pinimg.com/736x/48/22/bf/4822bf54ee339f9e3842192de95a906e.jpg",
-          songName: "Canción 3",
-          artistName: "Artista 3",
-          album: "Álbum 3",
-          status: "Eliminado",
-        },
+        // Otros datos de canciones...
       ],
+      imagePreview: null,
+      editImagePreview: null,
       isEditing: false,
-      editIndex: null,
-      imagePreview: null, // Para previsualización de imagen en creación
-      editImagePreview: null, // Para previsualización de imagen en edición
+      editingSongIndex: null,
     };
   },
   computed: {
     filteredSongs() {
       const query = this.searchQuery.toLowerCase();
-      return this.songs.filter(
-        (song) =>
-          song.songName.toLowerCase().includes(query) ||
-          song.artistName.toLowerCase().includes(query) ||
-          song.album.toLowerCase().includes(query) ||
-          song.url.toLowerCase().includes(query) ||
-          song.status.toLowerCase().includes(query)
+      return this.songs.filter(song =>
+        song.songName.toLowerCase().includes(query) ||
+        song.artistName.toLowerCase().includes(query) ||
+        this.getGroupLabel(song.platform).toLowerCase().includes(query)
       );
     },
   },
   methods: {
+    handleCreate() {
+      this.songs.push({
+        ...this.formData,
+        photo: this.imagePreview,
+        platform: this.formData.platform // Usa el ID del álbum directamente
+      });
+      this.showCreateModal = false;
+      this.resetForm();
+    },
+    startEditing(song) {
+      this.formData = { ...song };
+      this.editImagePreview = song.photo;
+      this.isEditing = true;
+      this.showCreateModal = true;
+      this.editingSongIndex = this.songs.indexOf(song); // Guarda el índice de la canción editada
+    },
+    handleEdit() {
+      if (this.editingSongIndex !== null) {
+        this.songs[this.editingSongIndex] = {
+          ...this.formData,
+          photo: this.editImagePreview,
+          platform: this.formData.platform // Usa el ID del álbum directamente
+        };
+        this.isEditing = false;
+        this.showCreateModal = false;
+        this.resetForm();
+      }
+    },
     handleFileUpload(event) {
       const file = event.target.files[0];
-      if (!file) return;
-
-      // Validar el tipo de archivo si es necesario
-
-      // Crear un objeto URL para la previsualización de la imagen
-      this.imagePreview = URL.createObjectURL(file);
-
-      // Asignar la imagen al formulario de datos
-      this.formData.photo = this.imagePreview;
+      this.previewImage(file, 'imagePreview');
     },
     handleEditFileUpload(event) {
       const file = event.target.files[0];
-      if (!file) return;
+      this.previewImage(file, 'editImagePreview');
+    },
+    previewImage(file, previewKey) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this[previewKey] = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+    deleteSong(song) {
+      song.status = 'Eliminado';
+    },
+    restoreSong(song) {
+      song.status = 'Activo';
+    },
+    getGroupLabel(platform) {
+      const groups = {
+        "1": "Album 1",
+        "2": "Album 2",
+        "3": "Album 3"
+      };
+      return groups[platform] || "Desconocido";
+    },
 
-      // Validar el tipo de archivo si es necesario
-
-      // Crear un objeto URL para la previsualización de la imagen
-      this.editImagePreview = URL.createObjectURL(file);
-
-      // Asignar la imagen al formulario de datos
-      this.formData.photo = this.editImagePreview;
+    getSongStatusClass(status) {
+      return {
+        'status-active': status === 'Activo',
+        'status-deleted': status === 'Eliminado',
+      };
     },
-    handleCreate() {
-      const newSong = { ...this.formData };
-      this.songs.push(newSong);
-      this.showCreateModal = false;
-      this.resetFormData();
-      this.imagePreview = null; // Limpiar la previsualización de la imagen
-      Swal.fire("¡Éxito!", "La canción ha sido creada exitosamente.", "success");
+    viewSongDetails(song) {
+      Swal.fire({
+        title: `Detalles de la Canción: ${song.songName}`,
+        html: `
+          <p><strong>Artista:</strong> ${song.artistName}</p>
+          <p><strong>Album:</strong> ${this.getGroupLabel(song.platform)}</p>
+          <p><strong>Estado:</strong> ${song.status}</p>
+          <img src="${song.photo}" alt="Foto" class="swal-image">
+        `,
+        imageUrl: song.photo,
+        imageWidth: 400,
+        imageHeight: 200,
+        imageAlt: 'Foto de la Canción',
+      });
     },
-    startEditing(song) {
-      this.isEditing = true;
-      this.formData = { ...song };
-      this.editIndex = this.songs.indexOf(song);
-      this.showCreateModal = true;
-    },
-    handleEdit() {
-      if (this.editIndex !== null) {
-        this.songs.splice(this.editIndex, 1, { ...this.formData });
-        this.showCreateModal = false;
-        this.isEditing = false;
-        this.resetFormData();
-        this.editImagePreview = null; // Limpiar la previsualización de la imagen
-        Swal.fire("¡Éxito!", "La canción ha sido actualizada exitosamente.", "success");
-      }
-    },
-    resetFormData() {
+    resetForm() {
       this.formData = {
         songName: "",
         artistName: "",
-        album: "",
-        url: "",
+        platform: "1",
         status: "Activo",
-        photo: "", // Limpiar el campo de la foto
+        photo: "",
       };
-    },
-    deleteSong(song) {
-      song.status = "Eliminado";
-      Swal.fire("¡Éxito!", "La canción ha sido eliminada exitosamente.", "success");
-    },
-    restoreSong(song) {
-      song.status = "Activo";
-      Swal.fire("¡Éxito!", "La canción ha sido restaurada exitosamente.", "success");
-    },
-    viewSongDetails(song) {
-      // Mostrar los detalles de la canción y la imagen usando SweetAlert2
-      Swal.fire({
-        title: `Detalles de ${song.songName}`,
-        html: `
-          <div>
-            <img src="${song.photo}" alt="Foto:  ${song.songName}" style="max-width: 50%; height: auto;">
-          </div>
-          <p><strong>Nombre de la Canción:</strong> <br>${song.songName}</p>
-          <p><strong>Nombre del Artista:</strong><br> ${song.artistName}</p>
-          <p><strong>Álbum:</strong><br> ${song.album}</p>
-          <p><strong>URL:</strong><br> <a href="${song.url}" target="_blank">${song.url}</a></p>
-          <p><strong>Estado:</strong><br> ${song.status}</p>
-        `,
-        confirmButtonText: "Cerrar",
-        customClass: {
-          popup: "custom-swal-popup",
-          content: "custom-swal-content",
-          closeButton: "custom-swal-close",
-          confirmButton: "custom-swal-confirm",
-        },
-      });
-    },
-    getSongStatusClass(status) {
-      return {
-        "status-active": status === "Activo",
-        "status-inactive": status === "Eliminado",
-      };
-    },
-  },
+      this.imagePreview = null;
+      this.editImagePreview = null;
+      this.isEditing = false;
+      this.editingSongIndex = null;
+    }
+  }
 };
 </script>
+
+
+
+
 <style scoped>
 #capa-padre {
   background-color: aliceblue;
@@ -401,7 +387,7 @@ form {
   margin-top: 20px;
   background-color: aliceblue;
   padding: 10px;
-  border-radius:12px;
+  border-radius: 12px;
 }
 
 button[type="submit"] {
@@ -423,7 +409,8 @@ button[type="submit"]:hover {
   background-color: aliceblue;
   border-radius: 10px;
   box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
-  margin-top: 20px; /*con esto  puedo   bajar mas la tabla   para que haya espacio  entre el modal de crear y el cuadro */
+  margin-top: 20px;
+  /*con esto  puedo   bajar mas la tabla   para que haya espacio  entre el modal de crear y el cuadro */
 }
 
 table {
@@ -448,6 +435,7 @@ th {
   border-radius: 5px;
   display: inline-block;
 }
+
 .cell:hover {
   background-color: white;
 }
@@ -582,6 +570,6 @@ th {
   border-radius: 4px;
   object-fit: cover;
 }
-.buscar {
-}
+
+.buscar {}
 </style>

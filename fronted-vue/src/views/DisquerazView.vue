@@ -1,36 +1,27 @@
 <template>
   <div>
     <ProtectedNavbar />
-    
+
     <div class="content">
       <div class="header">
         <div id="capa-padre">
           <h1>Disquera</h1>
           <div id="app">
-            <button @click="showCreateModal = true">Crear Disquera</button>
-            <MyModal :isVisible="showCreateModal" @close="showCreateModal = false">
+            <button @click="openCreateModal">Crear Disquera</button>
+            <MyModal :isVisible="showCreateModal" @close="closeModal">
               <form v-if="!isEditing" @submit.prevent="handleCreate">
                 <h2>Crear Disquera</h2>
-                
+
                 <div class="form-group custom-form-group">
                   <label for="imagen" class="upload-label custom-upload-label">
                     <i class="bx bx-check"></i> Subir Imagen
                   </label>
-                  <input
-                    type="file"
-                    id="imagen"
-                    class="custom-upload-input"
-                    @change="handleFileUpload"
-                    accept="image/*"
-                  />
+                  <input type="file" id="imagen" class="custom-upload-input" @change="handleFileUpload"
+                    accept="image/*" />
                 </div>
-                
+
                 <div v-if="imagePreview" class="image-preview custom-image-preview">
-                  <img
-                    :src="imagePreview"
-                    alt="Vista previa de la imagen"
-                    class="custom-preview-img"
-                  />
+                  <img :src="imagePreview" alt="Vista previa de la imagen" class="custom-preview-img" />
                 </div>
                 <div class="form-group">
                   <label for="recordlabelName">Disquera:</label>
@@ -42,7 +33,12 @@
                 </div>
                 <div class="form-group">
                   <label for="platform">Plataforma:</label>
-                  <input type="text" v-model="formData.platform" required />
+                  <select v-model="formData.platform" required>
+                    <option value="" disabled>Selecciona una plataforma</option>
+                    <option value="Plataforma 1">Plataforma 1</option>
+                    <option value="Plataforma 2">Plataforma 2</option>
+                    <option value="Plataforma 3">Plataforma 3</option>
+                  </select>
                 </div>
                 <div class="form-group">
                   <label for="url">URL:</label>
@@ -53,29 +49,19 @@
                 </div>
               </form>
 
-              
               <form v-else @submit.prevent="handleEdit">
                 <h2>Editar Disquera</h2>
-                
+
                 <div class="form-group custom-form-group">
                   <label for="edit-imagen" class="upload-label custom-upload-label">
                     <i class="bx bx-check"></i> Cambiar Imagen
                   </label>
-                  <input
-                    type="file"
-                    id="edit-imagen"
-                    class="custom-upload-input"
-                    @change="handleEditFileUpload"
-                    accept="image/*"
-                  />
+                  <input type="file" id="edit-imagen" class="custom-upload-input" @change="handleEditFileUpload"
+                    accept="image/*" />
                 </div>
-                
+
                 <div v-if="editImagePreview" class="image-preview custom-image-preview">
-                  <img
-                    :src="editImagePreview"
-                    alt="Vista previa de la imagen"
-                    class="custom-preview-img"
-                  />
+                  <img :src="editImagePreview" alt="Vista previa de la imagen" class="custom-preview-img" />
                 </div>
                 <div class="form-group">
                   <label for="recordlabelName">Nombre de la Disquera:</label>
@@ -87,7 +73,12 @@
                 </div>
                 <div class="form-group">
                   <label for="platform">Plataforma:</label>
-                  <input type="text" v-model="formData.platform" required />
+                  <select v-model="formData.platform" required>
+                    <option value="" disabled>Selecciona una plataforma</option>
+                    <option value="Plataforma 1">Plataforma 1</option>
+                    <option value="Plataforma 2">Plataforma 2</option>
+                    <option value="Plataforma 3">Plataforma 3</option>
+                  </select>
                 </div>
                 <div class="form-group">
                   <label for="url">URL:</label>
@@ -102,31 +93,40 @@
         </div>
       </div>
 
-      
       <div class="button-container">
         <button class="pdf">PDF</button>
         <button class="excel">EXCEL</button>
-        <input
-          type="text"
-          placeholder="Buscar . . ."
-          class="buscar"
-          v-model="searchQuery"
-        />
+        <input type="text" placeholder="Buscar . . ." class="buscar" v-model="searchQuery" />
       </div>
 
-      
       <div class="table-container">
         <table>
           <thead>
             <tr>
-              <th><div class="cell">#</div></th>
-              <th><div class="cell">Foto</div></th>
-              <th><div class="cell">Nombre de la Disquera</div></th>
-              <th><div class="cell">Descripcion</div></th>
-              <th><div class="cell">Plataforma</div></th>
-              <th><div class="cell">URL</div></th>
-              <th><div class="cell">Estado</div></th>
-              <th><div class="cell">Acciones</div></th>
+              <th>
+                <div class="cell">#</div>
+              </th>
+              <th>
+                <div class="cell">Foto</div>
+              </th>
+              <th>
+                <div class="cell">Nombre de la Disquera</div>
+              </th>
+              <th>
+                <div class="cell">Descripcion</div>
+              </th>
+              <th>
+                <div class="cell">Plataforma</div>
+              </th>
+              <th>
+                <div class="cell">URL</div>
+              </th>
+              <th>
+                <div class="cell">Estado</div>
+              </th>
+              <th>
+                <div class="cell">Acciones</div>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -166,11 +166,7 @@
                   <button class="btn edit-btn" @click="startEditing(song)">
                     <i class="bx bx-edit"></i>
                   </button>
-                  <button
-                    class="btn delete-btn"
-                    v-if="song.status === 'Activo'"
-                    @click="deleteSong(song)"
-                  >
+                  <button class="btn delete-btn" v-if="song.status === 'Activo'" @click="deleteSong(song)">
                     <i class="bx bx-trash"></i>
                   </button>
                   <button class="btn restore-btn" v-else @click="restoreSong(song)">
@@ -206,7 +202,7 @@ export default {
         platform: "",
         url: "",
         status: "Activo",
-        photo: "", 
+        photo: "",
       },
       songs: [
         {
@@ -234,120 +230,122 @@ export default {
           status: "Activo",
         },
       ],
+      imagePreview: null,
+      editImagePreview: null,
       isEditing: false,
-      editIndex: null,
-      imagePreview: null, 
-      editImagePreview: null, 
     };
   },
-  computed: {
-    filteredSongs() {
-      const query = this.searchQuery.toLowerCase();
-      return this.songs.filter(
-        (song) =>
-          song.recordlabelName.toLowerCase().includes(query) ||
-          song.descriptiontName.toLowerCase().includes(query) ||
-          song.platform.toLowerCase().includes(query) ||
-          song.url.toLowerCase().includes(query) ||
-          song.status.toLowerCase().includes(query)
-      );
-    },
-  },
   methods: {
+    openCreateModal() {
+      this.showCreateModal = true;
+      this.isEditing = false;
+      this.resetForm();
+    },
+    closeModal() {
+      this.showCreateModal = false;
+    },
+    handleCreate() {
+      // Lógica para guardar los datos de la nueva disquera
+      this.songs.push({ ...this.formData, photo: this.imagePreview || "" });
+      this.closeModal();
+    },
+    handleEdit() {
+      const index = this.songs.findIndex((song) => song.recordlabelName === this.formData.recordlabelName);
+      if (index !== -1) {
+        // Actualiza el objeto directamente en el array
+        this.songs[index] = { ...this.formData, photo: this.editImagePreview || "" };
+      }
+      this.closeModal();
+    },
+
     handleFileUpload(event) {
       const file = event.target.files[0];
-      if (!file) return;
-
-      
-      this.imagePreview = URL.createObjectURL(file);
-
-      
-      this.formData.photo = this.imagePreview;
+      if (file) {
+        this.formData.photo = URL.createObjectURL(file);
+        this.imagePreview = this.formData.photo;
+      }
     },
     handleEditFileUpload(event) {
       const file = event.target.files[0];
-      if (!file) return;
-
-      
-      this.editImagePreview = URL.createObjectURL(file);
-
-     
-      this.formData.photo = this.editImagePreview;
-    },
-    handleCreate() {
-      const newSong = { ...this.formData };
-      this.songs.push(newSong);
-      this.showCreateModal = false;
-      this.resetFormData();
-      this.imagePreview = null; 
-      Swal.fire("¡Éxito!", "La Discografia ha sido creada exitosamente.", "success");
+      if (file) {
+        this.formData.photo = URL.createObjectURL(file);
+        this.editImagePreview = this.formData.photo;
+      }
     },
     startEditing(song) {
       this.isEditing = true;
       this.formData = { ...song };
-      this.editIndex = this.songs.indexOf(song);
+      this.editImagePreview = song.photo;
       this.showCreateModal = true;
     },
-    handleEdit() {
-      if (this.editIndex !== null) {
-        this.songs.splice(this.editIndex, 1, { ...this.formData });
-        this.showCreateModal = false;
-        this.isEditing = false;
-        this.resetFormData();
-        this.editImagePreview = null; 
-        Swal.fire("¡Éxito!", "La Discografia ha sido actualizada exitosamente.", "success");
-      }
-    },
-    resetFormData() {
+    resetForm() {
       this.formData = {
         recordlabelName: "",
         descriptiontName: "",
         platform: "",
         url: "",
         status: "Activo",
-        photo: "", 
+        photo: "",
       };
+      this.imagePreview = null;
     },
     deleteSong(song) {
-      song.status = "Eliminado";
-      Swal.fire("¡Éxito!", "La Discografia ha sido eliminada exitosamente.", "success");
+      Swal.fire({
+        title: "¿Estás seguro?",
+        text: "¡No podrás recuperar esta disquera!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, eliminar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          song.status = "Eliminado";
+          Swal.fire("Eliminado", "La disquera ha sido eliminada.", "success");
+        }
+      });
     },
     restoreSong(song) {
-      song.status = "Activo";
-      Swal.fire("¡Éxito!", "La Discografia ha sido restaurada exitosamente.", "success");
+      Swal.fire({
+        title: "¿Estás seguro?",
+        text: "¡Recuperarás esta disquera!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, recuperar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          song.status = "Activo";
+          Swal.fire("Recuperado", "La disquera ha sido recuperada.", "success");
+        }
+      });
     },
     viewSongDetails(song) {
-      
       Swal.fire({
-        title: `Detalles de ${song.recordlabelName}`,
-        html: `
-          <div>
-            <img src="${song.photo}" alt="Foto de ${song.recordlabelName}" style="max-width: 100%; height: auto;">
-          </div>
-          <p><strong>Nombre de la Disquera:</strong> ${song.recordlabelName}</p>
-          <p><strong>Descripcion:</strong> ${song.descriptiontName}</p>
-          <p><strong>Plataforma:</strong> ${song.platform}</p>
-          <p><strong>URL:</strong> <a href="${song.url}" target="_blank">${song.url}</a></p>
-          <p><strong>Estado:</strong> ${song.status}</p>
-        `,
-        confirmButtonText: "Cerrar",
-        customClass: {
-          popup: "custom-swal-popup",
-          content: "custom-swal-content",
-          closeButton: "custom-swal-close",
-          confirmButton: "custom-swal-confirm",
-        },
+        title: song.recordlabelName,
+        text: `Descripcion: ${song.descriptiontName}\nPlataforma: ${song.platform}\nURL: ${song.url}`,
+        imageUrl: song.photo,
+        imageAlt: "Imagen de la disquera",
       });
     },
     getSongStatusClass(status) {
-      return {
-        "status-active": status === "Activo",
-        "status-inactive": status === "Eliminado",
-      };
+      return status === "Activo" ? "status-active" : "status-delete"; // Cambia 'status-inactive' por 'status-delete'
+    },
+
+  },
+  computed: {
+    filteredSongs() {
+      return this.songs.filter((song) =>
+        song.recordlabelName.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
     },
   },
 };
 </script>
+
+
+
 <style scoped>
 #capa-padre {
   background-color: aliceblue;
@@ -413,7 +411,7 @@ form {
   margin-top: 20px;
   background-color: aliceblue;
   padding: 10px;
-  border-radius:12px;
+  border-radius: 12px;
 }
 
 button[type="submit"] {
@@ -435,7 +433,7 @@ button[type="submit"]:hover {
   background-color: aliceblue;
   border-radius: 10px;
   box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
-  margin-top: 20px; 
+  margin-top: 20px;
 }
 
 table {
@@ -460,6 +458,7 @@ th {
   border-radius: 5px;
   display: inline-block;
 }
+
 .cell:hover {
   background-color: white;
 }
@@ -471,7 +470,7 @@ th {
 }
 
 .status-active,
-.status-inactive {
+.status-delete {
   color: #fff;
   padding: 5px 10px;
   border-radius: 15px;
@@ -481,7 +480,7 @@ th {
   background-color: #28a745;
 }
 
-.status-inactive {
+.status-delete {
   background-color: #dc3545;
 }
 
@@ -594,5 +593,4 @@ th {
   border-radius: 4px;
   object-fit: cover;
 }
-
 </style>

@@ -5,103 +5,91 @@
       <div id="inicio">
         <h1>Inicio</h1>
       </div>
-
       <div id="capa-padre">
         <div>
-
           <!-- Gráficos -->
           <div class="chart-container">
-
             <!-- Barras -->
             <div class="chart-item">
               <canvas id="barChart"></canvas>
             </div>
-
             <!-- Líneas -->
             <div class="chart-item larger-chart">
               <canvas id="lineChart"></canvas>
             </div>
-                
           </div>
-
-          <!-- Tabla de % -->
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Id</th>
-                  <th>Nombre</th>
-                  <th>Calificación</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="data in percentageData" :key="data.id">
-                  <td>{{ data.id }}</td>
-                  <td>{{ data.name }}</td>
-                  <td>{{ data.percentage }}%</td>
-                </tr>
-              </tbody>
-            </table>
-             
+          <!-- Cartas combinadas -->
+          <div class="cards-container">
+            <div v-for="(data, index) in percentageData" :key="data.id" class="card">
+              <img
+                class="hero-image"
+                src="https://i.postimg.cc/NfR2yhNs/image-equilibrium.jpg"
+                alt="Spinning glass cube"
+              />
+              <div class="main-content">
+                <h2 class="percentage">{{ data.percentage }}%</h2>
+                <p>{{ data.name }}</p>
+                <div class="rating-container">
+                  <div class="coin-base">
+                    <img
+                      src="https://i.postimg.cc/T1F1K0bW/Ethereum.png"
+                      alt="Ethereum"
+                      class="small-image"
+                    />
+                  </div>
+                  <div class="star-rating">
+                    <input
+                      type="radio"
+                      :id="'star5-' + data.id"
+                      :name="'rating-' + data.id"
+                      value="5"
+                      v-model="ratings[index]"
+                    />
+                    <label :for="'star5-' + data.id" title="5 stars">&#9733;</label>
+                    <input
+                      type="radio"
+                      :id="'star4-' + data.id"
+                      :name="'rating-' + data.id"
+                      value="4"
+                      v-model="ratings[index]"
+                    />
+                    <label :for="'star4-' + data.id" title="4 stars">&#9733;</label>
+                    <input
+                      type="radio"
+                      :id="'star3-' + data.id"
+                      :name="'rating-' + data.id"
+                      value="3"
+                      v-model="ratings[index]"
+                    />
+                    <label :for="'star3-' + data.id" title="3 stars">&#9733;</label>
+                    <input
+                      type="radio"
+                      :id="'star2-' + data.id"
+                      :name="'rating-' + data.id"
+                      value="2"
+                      v-model="ratings[index]"
+                    />
+                    <label :for="'star2-' + data.id" title="2 stars">&#9733;</label>
+                    <input
+                      type="radio"
+                      :id="'star1-' + data.id"
+                      :name="'rating-' + data.id"
+                      value="1"
+                      v-model="ratings[index]"
+                    />
+                    <label :for="'star1-' + data.id" title="1 star">&#9733;</label>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-            
         </div>
-
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>Nro</th>
-              <th>Nombre</th>
-              <th>Dni / Cédula</th>
-              <th>Teléfono</th>
-              <th>Correo</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>1</th>
-              <td>Sin Banderas</td>
-              <td>48459</td>
-              <td>0985478652</td>
-              <td>sinb@gmail.com</td>
-            </tr>
-            <tr>
-              <th>2</th>
-              <td>Carlos Vives</td>
-              <td>74589</td>
-              <td>0958962365</td>
-              <td>Cvives@gmail.com</td>
-            </tr>
-            <tr>
-              <th>3</th>
-              <td>Reik</td>
-              <td>78549</td>
-              <td>0985321456</td>
-              <td>rky@gmail.com</td>
-            </tr>
-            <tr>
-              <th>4</th>
-              <td>Camilo</td>
-              <td>65238</td>
-              <td>0985123624</td>
-              <td>Cam@gmail.com</td>
-            </tr>
-          </tbody>
-        </table>
-
       </div>
     </div>
     <div id="app-2">
-
-      <div class="contenedor">
-        <ejs-calendar :value="dateValue" min="minDate" :is-multi-selection="isMultiSelection">
-        </ejs-calendar>
-      </div>
-
-
       <ejs-chart>
         <e-series-collection>
-          <e-series type="Column"> </e-series>
+          <e-series type="Column"></e-series>
         </e-series-collection>
       </ejs-chart>
     </div>
@@ -111,13 +99,8 @@
 <script>
 import ProtectedNavbar from "../components/ProtectedNavbar.vue";
 import { CalendarComponent } from "@syncfusion/ej2-vue-calendars";
-import { Vue } from "vue-class-component";
-
 import { ref, onMounted } from "vue";
 import Chart from "chart.js/auto";
-//import ProtectedNavbar from "../components/ProtectedNavbar.vue";
-
-//Vue.use(ChartPlugin);
 
 export default {
   name: "Dashboard",
@@ -125,21 +108,16 @@ export default {
     ProtectedNavbar,
     "ejs-calendar": CalendarComponent,
   },
-
-  methods: {
-    logout() {
-      localStorage.removeItem("token");
-      this.$router.push("/login");
-    },
-  },
-
   setup() {
     const percentageData = ref([
-      { id: 1, name: "Cantante 1", percentage: 15 },
-      { id: 2, name: "Cantante 2", percentage: 70 },
-      { id: 3, name: "Cantante 3", percentage: 45 },
-      { id: 4, name: "Cantante 4", percentage: 10 },
+      { id: 1, name: "Cantante 1", percentage: 10 },
+      { id: 2, name: "Cantante 2", percentage: 20 },
+      { id: 3, name: "Cantante 3", percentage: 30 },
+      { id: 4, name: "Cantante 4", percentage: 40 },
+      { id: 5, name: "Cantante 5", percentage: 50 },
     ]);
+
+    const ratings = ref(Array(percentageData.value.length).fill(null));
 
     const lineChartData = ref({
       labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"],
@@ -199,7 +177,7 @@ export default {
       });
     });
 
-    return { percentageData, lineChartData };
+    return { percentageData, lineChartData, ratings };
   },
   methods: {
     logout() {
@@ -207,19 +185,17 @@ export default {
       this.$router.push("/login");
     },
   },
-}
+};
 </script>
 
 <style scoped>
-/*estilos del dasboard*/
 @import "../../node_modules/@syncfusion/ej2-base/styles/material.css";
-@import "../../node_modules//@syncfusion//ej2-buttons/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-buttons/styles/material.css";
 @import "../../node_modules/@syncfusion/ej2-vue-calendars/styles/material.css";
 
-/*Estilos Calendar*/
+/* Estilos del dashboard */
 .contenedor {
   height: 40vh;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -235,10 +211,8 @@ export default {
   background-repeat: no-repeat;
   color: white;
   text-align: center;
-  /* Centra el texto dentro del div */
   padding: 5px;
   border-radius: 20px;
-
 }
 
 #capa-padre {
@@ -250,6 +224,7 @@ export default {
   box-shadow: 5px 2px 3px 1px rgba(0, 0, 0, 0.164);
   font-size: 16px;
   color: black;
+  overflow: hidden; /* Evita el desbordamiento */
 }
 
 #app-2 {
@@ -259,25 +234,23 @@ export default {
 .chart-container {
   margin-top: 20px;
   display: flex;
-  justify-content: space-around;
-  /* Alineación de los gráficos */
+  justify-content: space-between;
+  gap: 10px;
+  /* Espacio entre gráficos */
 }
 
 .chart-item {
-  width: 50%;
-  /* Ajusta el tamaño de cada gráfico */
+  width: 48%;
+  /* Tamaño fijo para evitar movimiento */
 }
 
 .larger-chart {
-  width: 50%;
-  /* Ajusta el tamaño del gráfico de líneas para que sea más grande */
+  width: 48%;
 }
 
 canvas {
   width: 100% !important;
-  /* Asegura que el canvas llene su contenedor */
   height: auto !important;
-  /* Asegura que el canvas mantenga la proporción */
 }
 
 .table-container {
@@ -287,12 +260,10 @@ canvas {
   background-color: #f9f9f9;
   padding: 10px;
   width: 80%;
-  /* Ajusta el tamaño de la tabla */
   max-width: 800px;
-  /* Ajusta el tamaño máximo de la tabla */
   margin-left: auto;
   margin-right: auto;
-  /* Centra horizontalmente */
+  overflow: hidden; /* Evita el desbordamiento */
 }
 
 table {
@@ -309,5 +280,120 @@ td {
 
 th {
   background-color: #f2f2f2;
+}
+
+/* Estilos para las cartas */
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.card {
+  width: 1000px;
+  height: 250px;
+  /* Tamaño más pequeño de las cartas */
+  background-color: #00033c;
+  border-radius: 15px;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  overflow: hidden; /* Evita el desbordamiento */
+  text-align: center; /* Centrar contenido */
+}
+
+.hero-image {
+  width: 130px;
+  height: 100px;
+  height: auto; /* Asegura que la imagen no distorsione */
+  border-radius: 100px;
+  display: block;
+  margin: 0 auto; /* Centrar la imagen */
+}
+
+.main-content {
+  text-align: center;
+  color: #ddd;
+}
+
+.percentage {
+  font-size: 1.5em; /* Tamaño del porcentaje */
+  margin-bottom: 0.5em; /* Añadir espacio debajo del porcentaje */
+}
+
+.rating-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 0.95em; /* Tamaño pequeño del texto */
+}
+
+.coin-base {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.small-image {
+  width: 1em;
+  margin-right: 0.5em;
+}
+
+.star-rating {
+  direction: rtl;
+  display: inline-block;
+  font-size: 0.95em; /* Tamaño pequeño de las estrellas */
+}
+
+.star-rating input[type="radio"] {
+  display: none;
+}
+
+.star-rating label {
+  font-size: 15px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.star-rating label,
+.star-rating label~label {
+  color: #ccc; /* Color de las estrellas no seleccionadas */
+}
+
+.star-rating input[type="radio"]:checked~label {
+  color: #d9ff00; /* Color de las estrellas seleccionadas */
+}
+
+#rating-message {
+  margin-top: 1em;
+  color: var(--var-soft-blue);
+}
+
+/* Responsive */
+@media (min-width: 600px) {
+  .card {
+    max-width: 140px;
+  }
+}
+
+@media (min-width: 768px) {
+  .card {
+    max-width: 160px;
+  }
+}
+
+@media (min-width: 992px) {
+  .card {
+    max-width: 180px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .cards-container {
+    justify-content: space-around;
+  }
 }
 </style>
