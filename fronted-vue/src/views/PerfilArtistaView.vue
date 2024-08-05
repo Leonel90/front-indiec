@@ -70,6 +70,20 @@
                 placeholder="Celular "
               />
             </div>
+            <div class="form-group">
+              <label for="genero"></label>
+              <select
+                id="genero"
+                v-model="formData.genero"
+                disabled
+                class="select-field"
+              >
+                <option value="" disabled>Seleccione Género</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
             <div class="barra">
               <button class="boton" type="button" @click="showModal = true">
                 <i class="bx bx-edit"></i> Editar
@@ -101,44 +115,58 @@
                 <img :src="editImagePreview" alt="Vista previa de la imagen" />
               </div>
               <div class="form-group2">
-                <label for="nombre">Nombre:</label>
+                <label for="edit-nombre">Nombre:</label>
                 <input
                   type="text"
-                  id="nombre"
+                  id="edit-nombre"
                   v-model="editData.nombre"
                   required
                   placeholder="Nombre"
                 />
               </div>
               <div class="form-group2">
-                <label for="apellido">Apellido:</label>
+                <label for="edit-apellido">Apellido:</label>
                 <input
                   type="text"
-                  id="apellido"
+                  id="edit-apellido"
                   v-model="editData.apellido"
                   required
                   placeholder="Apellido"
                 />
               </div>
               <div class="form-group2">
-                <label for="email">Correo :</label>
+                <label for="edit-email">Correo :</label>
                 <input
                   type="email"
-                  id="email"
+                  id="edit-email"
                   v-model="editData.email"
                   required
                   placeholder="Correo "
                 />
               </div>
               <div class="form-group2">
-                <label for="telefono1"> Celular :</label>
+                <label for="edit-telefono1">Celular :</label>
                 <input
                   type="tel"
-                  id="telefono1"
+                  id="edit-telefono1"
                   v-model="editData.telefono1"
                   required
                   placeholder="Celular "
                 />
+              </div>
+              <div class="form-group2">
+                <label for="edit-genero">Género:</label>
+                <select
+                  id="edit-genero"
+                  v-model="editData.genero"
+                  required
+                  class="select-field"
+                >
+                  <option value="" disabled>Seleccione Género</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                  <option value="Otro">Otro</option>
+                </select>
               </div>
               <div class="button-container">
                 <button type="submit">Guardar</button>
@@ -150,7 +178,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import ProtectedNavbar from "../components/ProtectedNavbar.vue";
 import MyModal from "../components/Modal.vue";
@@ -169,6 +196,7 @@ export default {
         apellido: "",
         email: "",
         telefono1: "",
+        genero: "",
         imagen: null,
       },
       editData: {
@@ -176,6 +204,7 @@ export default {
         apellido: "",
         email: "",
         telefono1: "",
+        genero: "",
         imagen: null,
       },
       imagePreview: "",
@@ -227,6 +256,7 @@ export default {
           apellido: "",
           email: "",
           telefono1: "",
+          genero: "",
           imagen: null,
         };
       });
@@ -245,6 +275,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 #inicio {
@@ -411,6 +442,21 @@ export default {
 .form-group2 input::placeholder {
   color: white;
 }
+
+.select-field {
+  flex: 2;
+  border-radius: 5px;
+  background-color: #495057;
+  color: white;
+  text-align: center;
+  width: calc(130% - 150px);
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  position: relative;
+  margin:9px;
+}
+
 .button-container {
   text-align: center;
   margin-top: 20px;

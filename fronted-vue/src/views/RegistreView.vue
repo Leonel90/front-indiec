@@ -6,9 +6,16 @@
         <h4 class="animation a1">
           ¡Por favor, complete el formulario para el Administrador!
         </h4>
-        <br>
+        <br />
       </div>
       <div class="form">
+        <input
+          type="file"
+          class="form-field animation a3 file-field"
+          @change="onImageChange"
+          accept="image/*"
+          required
+        />
         <input
           v-model="nombre"
           type="text"
@@ -44,6 +51,14 @@
           class="form-field animation a4"
           placeholder="Contraseña"
         />
+
+        <select v-model="genero" class="form-field animation a3 select-field" required> 
+          <option value="" disabled selected>Seleccione Género</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Femenino">Femenino</option>
+          <option value="Otro">Otro</option>
+        </select>
+
         <button @click="register" class="animation a6">Registrate</button>
         <p class="animation a5">
           ¿Sí tengo una cuenta?
@@ -66,46 +81,56 @@ export default {
       correo: "",
       celular1: "",
       password: "",
+      genero: "",
+      image: null,
       emailError: "",
       celularError: "",
     };
   },
   methods: {
     validateEmail() {
-      // Regex to match email ending with @yavirac.edu.ec
       const emailPattern = /^[a-zA-Z0-9._%+-]+@yavirac\.edu\.ec$/;
       this.emailError = emailPattern.test(this.correo)
         ? ""
         : "El correo debe terminar en @yavirac.edu.ec";
     },
     validateCelular() {
-      // Regex to match 10 digit numbers
       const celularPattern = /^\d{0,10}$/;
-      this.celularError = celularPattern.test(this.celular1) && this.celular1.length === 10
-        ? ""
-        : "El celular debe contener solo números y tener exactamente 10 dígitos";
+      this.celularError =
+        celularPattern.test(this.celular1) && this.celular1.length === 10
+          ? ""
+          : "El celular debe contener solo números y tener exactamente 10 dígitos";
+    },
+    onImageChange(event) {
+      this.image = event.target.files[0];
     },
     async register() {
-      // Validate email and celular before proceeding
       this.validateEmail();
       this.validateCelular();
 
       if (this.emailError || this.celularError) {
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: this.emailError || this.celularError
+          icon: "error",
+          title: "Error",
+          text: this.emailError || this.celularError,
         });
         return;
       }
 
+      const formData = new FormData();
+      formData.append("nombre", this.nombre);
+      formData.append("apellido", this.apellido);
+      formData.append("correo", this.correo);
+      formData.append("celular1", this.celular1);
+      formData.append("password", this.password);
+      formData.append("genero", this.genero);
+      formData.append("image", this.image);
+
       try {
-        const response = await axios.post("http://localhost:3000/register", {
-          nombre: this.nombre,
-          apellido: this.apellido,
-          correo: this.correo,
-          celular1: this.celular1,
-          password: this.password,
+        const response = await axios.post("http://localhost:3000/register", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         });
         Swal.fire({
           icon: "success",
@@ -115,7 +140,7 @@ export default {
           showConfirmButton: false,
         });
         setTimeout(() => {
-          this.$router.push("/login"); // Redirige a la vista de inicio de sesión
+          this.$router.push("/login");
         }, 2000);
       } catch (error) {
         const errorMessage =
@@ -132,10 +157,7 @@ export default {
 };
 </script>
 <style scoped>
-
 @import url("https://fonts.googleapis.com/css?family=Rubik:400,500&display=swap");
-
-
 
 .container {
   display: flex;
@@ -166,7 +188,7 @@ export default {
 
 .header > h4 {
   color: #4f46a5;
-text-align: center;
+  text-align: center;
 }
 
 .form {
@@ -193,6 +215,45 @@ text-align: center;
 }
 
 .form-field:focus {
+  border-color: #0f7ef1;
+}
+
+.select-field {
+  height: 50px;
+  padding: 10px;
+  background-color: #fff;
+  color: #838383c0;
+  border: 2px solid #656ed3;
+  border-radius: 15px;
+  outline: 0;
+  transition: 0.2s;
+  margin: 13px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5'%3E%3Cpath fill='%23666' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 10px 5px;
+}
+
+.select-field:focus {
+  border-color: #0f7ef1;
+}
+
+.file-field {
+  height: 50px;
+  padding: 10px;
+  background-color: #fff;
+  color: #000;
+  border: 2px solid #656ed3;
+  border-radius: 15px;
+  outline: 0;
+  transition: 0.2s;
+  margin: 13px;
+}
+
+.file-field:focus {
   border-color: #0f7ef1;
 }
 
