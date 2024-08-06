@@ -10,23 +10,23 @@ const artista = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             comment: 'Foto del artista'
         },
-        Apellido: {
+        apellido: {
             type: DataTypes.STRING,
             comment: 'Apellido del artista'
         },
-        Nombre: {
+        nombre: {
             type: DataTypes.STRING,
             comment: 'Nombre del artista'
         },
-        Email: {
+        email: {
             type: DataTypes.STRING,
             comment: 'Email del artista'
         },
-        Celular: {
+        celular: {
             type: DataTypes.STRING,
             comment: 'Número de teléfono del artista'
         },
-        Contraseña: {
+        contrasena: {
             type: DataTypes.STRING,
             comment: 'Contraseña del artista'
         },

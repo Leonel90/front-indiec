@@ -17,6 +17,13 @@
           required
         />
         <input
+          v-model="apellido"
+          type="text"
+          class="form-field animation a3"
+          placeholder="Ingrese Apellido"
+          required
+        />
+        <input
           v-model="nombre"
           type="text"
           class="form-field animation a3"
@@ -24,13 +31,7 @@
           required
         />
         <input
-          v-model="apellido"
-          type="text"
-          class="form-field animation a3"
-          placeholder="Ingrese Apellido"
-        />
-        <input
-          v-model="correo"
+          v-model="email"
           type="email"
           class="form-field animation a3"
           placeholder="example@yavirac.edu.ec"
@@ -38,7 +39,7 @@
           required
         />
         <input
-          v-model="celular1"
+          v-model="celular"
           type="text"
           class="form-field animation a3"
           placeholder="Ingrese Celular"
@@ -46,13 +47,14 @@
           required
         />
         <input
-          v-model="password"
+          v-model="contrasena"
           type="password"
           class="form-field animation a4"
           placeholder="Contraseña"
+          required
         />
 
-        <select v-model="genero" class="form-field animation a3 select-field" required> 
+        <select v-model="genero_fk" class="form-field animation a3 select-field" required>
           <option value="" disabled selected>Seleccione Género</option>
           <option value="Masculino">Masculino</option>
           <option value="Femenino">Femenino</option>
@@ -76,13 +78,13 @@ import Swal from "sweetalert2";
 export default {
   data() {
     return {
+      image: null,
       nombre: "",
       apellido: "",
-      correo: "",
-      celular1: "",
-      password: "",
-      genero: "",
-      image: null,
+      email: "",
+      celular: "",
+      contrasena: "",
+      genero_fk: "",
       emailError: "",
       celularError: "",
     };
@@ -90,14 +92,14 @@ export default {
   methods: {
     validateEmail() {
       const emailPattern = /^[a-zA-Z0-9._%+-]+@yavirac\.edu\.ec$/;
-      this.emailError = emailPattern.test(this.correo)
+      this.emailError = emailPattern.test(this.email)
         ? ""
-        : "El correo debe terminar en @yavirac.edu.ec";
+        : "El email debe terminar en @yavirac.edu.ec";
     },
     validateCelular() {
       const celularPattern = /^\d{0,10}$/;
       this.celularError =
-        celularPattern.test(this.celular1) && this.celular1.length === 10
+        celularPattern.test(this.celular) && this.celular.length === 10
           ? ""
           : "El celular debe contener solo números y tener exactamente 10 dígitos";
     },
@@ -118,13 +120,13 @@ export default {
       }
 
       const formData = new FormData();
+      formData.append("image", this.image);
       formData.append("nombre", this.nombre);
       formData.append("apellido", this.apellido);
-      formData.append("correo", this.correo);
-      formData.append("celular1", this.celular1);
-      formData.append("password", this.password);
-      formData.append("genero", this.genero);
-      formData.append("image", this.image);
+      formData.append("email", this.email);
+      formData.append("celular", this.celular);
+      formData.append("contrasena", this.contrasena);
+      formData.append("genero_fk", this.genero_fk);
 
       try {
         const response = await axios.post("http://localhost:3000/register", formData, {
@@ -156,6 +158,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 @import url("https://fonts.googleapis.com/css?family=Rubik:400,500&display=swap");
 

@@ -7,7 +7,7 @@
       </div>
       <div class="form">
         <input
-          v-model="correo"
+          v-model="email"
           type="email"
           class="form-field animation a3"
           placeholder="example@yavirac.edu.ec"
@@ -15,7 +15,7 @@
           required
         />
         <input
-          v-model="password"
+          v-model="contrasena"
           type="password"
           class="form-field animation a4"
           placeholder="Contraseña"
@@ -39,8 +39,8 @@ import Swal from "sweetalert2";
 export default {
   data() {
     return {
-      correo: "",
-      password: "",
+      email: "",
+      contrasena: "",
       emailError: "", // Add this to store email validation error message
     };
   },
@@ -48,9 +48,9 @@ export default {
     validateEmail() {
       // Regex to match email ending with @yavirac.edu.ec
       const emailPattern = /^[a-zA-Z0-9._%+-]+@yavirac\.edu\.ec$/;
-      this.emailError = emailPattern.test(this.correo)
+      this.emailError = emailPattern.test(this.email)
         ? ""
-        : "El correo debe terminar en @yavirac.edu.ec";
+        : "El email debe terminar en @yavirac.edu.ec";
     },
     async login() {
       // Validate email before proceeding
@@ -67,8 +67,8 @@ export default {
 
       try {
         const response = await axios.post("http://localhost:3000/login", {
-          correo: this.correo,
-          password: this.password,
+          email: this.email,
+          contrasena: this.contrasena,
         });
         localStorage.setItem("token", response.data.token); // Guarda el token en el almacenamiento local
         Swal.fire({
