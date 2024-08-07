@@ -11,7 +11,6 @@
           type="email"
           class="form-field animation a3"
           placeholder="example@yavirac.edu.ec"
-          @input="validateEmail"
           required
         />
         <input
@@ -22,10 +21,10 @@
         />
         <button @click="login" class="animation a6">Ingresar</button>
         <p class="animation a5">
-          Si no tienes cuenta?<router-link to="/register"
-            ><strong> Registrate </strong></router-link
-          >
+          Si no tienes cuenta?
+          <router-link to="/register"><strong> Registrate </strong></router-link>
         </p>
+        <p v-if="error" class="error-message">{{ errorMessage }}</p>
       </div>
     </div>
     <div class="right"></div>
@@ -33,68 +32,45 @@
 </template>
 
 <script>
-import axios from "axios";
-import Swal from "sweetalert2";
+import instance from '@/pluggins/axios';
 
 export default {
+  name: 'Login',
   data() {
     return {
-      email: "",
-      contrasena: "",
-      emailError: "", // Add this to store email validation error message
+      email: '',
+      contrasena: '',
+      error: false,
+      errorMessage: ''
     };
   },
   methods: {
-    validateEmail() {
-      // Regex to match email ending with @yavirac.edu.ec
-      const emailPattern = /^[a-zA-Z0-9._%+-]+@yavirac\.edu\.ec$/;
-      this.emailError = emailPattern.test(this.email)
-        ? ""
-        : "El email debe terminar en @yavirac.edu.ec";
-    },
     async login() {
-      // Validate email before proceeding
-      this.validateEmail();
-
-      if (this.emailError) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: this.emailError
-        });
-        return;
-      }
-
       try {
-        const response = await axios.post("http://localhost:3000/login", {
-          email: this.email,
-          contrasena: this.contrasena,
-        });
-        localStorage.setItem("token", response.data.token); // Guarda el token en el almacenamiento local
-        Swal.fire({
-          icon: "success",
-          title: "¡Ingreso exitoso!",
-          text: "Redirigiendo al dashboard...",
-          timer: 2000,
-          showConfirmButton: false,
-        });
-        setTimeout(() => {
-          this.$router.push("/dashboard"); // Redirige a la vista protegida
-        }, 2000);
-      } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "Error al iniciar sesión",
-          text:
-            error.response.data.message ||
-            "Ha ocurrido un error, por favor intenta nuevamente.",
-        });
-      }
-    },
-  },
-};
-</script>
+        // Obtener el token CSRF
+        const csrfResponse = await instance.get('/');
+        const csrfToken = csrfResponse.data.csrfToken;
 
+        // Enviar la solicitud de login
+        const response = await instance.post('/login', {
+          email: this.email,
+          contrasena: this.contrasena
+        }, {
+          headers: {
+            'X-CSRF-Token': csrfToken // Incluir el token CSRF en los encabezados
+          }
+        });
+
+        // Redirigir si la autenticación es exitosa
+        this.$router.push(response.data.redirect || '/');
+      } catch (error) {
+        this.error = true;
+        this.errorMessage = error.response.data.message || 'Error en el inicio de sesión.';
+      }
+    }
+  }
+}
+</script>
 <style scoped>
 
 @import url("https://fonts.googleapis.com/css?family=Rubik:400,500&display=swap");

@@ -40,11 +40,7 @@ const artista = (sequelize, DataTypes) => {
             allowNull: false,
             comment: 'Contraseña del artista'
         },
-        genero: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            comment: 'creacion del genero'
-        },
+        
     }, {
         timestamps: false,
         tableName: 'artistas',

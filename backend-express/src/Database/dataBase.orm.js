@@ -54,9 +54,6 @@ const detalleMusicaGeneromAlbumes = require("../models/detalleMusicaGeneromAlbum
 const detalleGeneromAlbumes = require("../models/detalleGeneromAlbumes.model");
 
 
-
-
-
 // alejandro  tablas unicas
 const plataformaModel = require('../models/plataforma.model');
 const generoPersonaModel = require('../models/genero_persona.model');

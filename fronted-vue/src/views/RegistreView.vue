@@ -63,12 +63,10 @@
 
 <script>
 import Swal from "sweetalert2";
-import axios from "axios";
+import instance from "@/pluggins/axios";
 
-const instance = axios.create({
-  baseURL: 'http://localhost:3000', // Asegúrate de ajustar la URL base según tu configuración
-  withCredentials: true, // Necesario para enviar cookies (incluyendo el token CSRF)
-});
+
+
 
 export default {
   data() {

@@ -1,6 +1,7 @@
 const passport = require('passport');
 const sql = require('../Database/dataBase.sql');
 
+
 const indexCtl = {};
 
 // Generar y enviar el token CSRF
@@ -16,9 +17,9 @@ indexCtl.mostrar = async (req, res) => {
 // Mostrar formulario de registro si no hay usuarios, o redirigir si ya existen
 indexCtl.mostrarRegistro = async (req, res) => {
     try {
-        const [usuario] = await sql.promise().query('SELECT COUNT(*) AS total FROM usuarios');
-        if (usuario[0].total === 0) {
-            const [rows] = await sql.promise().query('SELECT MAX(id) AS Maximo FROM usuarios');
+        const [artista] = await sql.promise().query('SELECT COUNT(*) AS total FROM artistas');
+        if (artista[0].total === 0) {
+            const [rows] = await sql.promise().query('SELECT MAX(id) AS Maximo FROM artistas');
             res.json({ maxUserId: rows[0].Maximo, csrfToken: req.csrfToken() });
         } else {
             res.json({ redirect: '/' });
@@ -31,34 +32,34 @@ indexCtl.mostrarRegistro = async (req, res) => {
 
 // Registro de usuarios
 indexCtl.registro = (req, res, next) => {
-    passport.authenticate('local.signup', (err, usuario, info) => {
+    passport.authenticate('local.signup', (err, artista, info) => {
         if (err) {
             console.error('Error en el registro:', err);
             return next(err);
         }
-        if (!usuario) {
+        if (!artista) {
             return res.status(400).json({ message: info ? info.message : 'Correo ya registrado' });
         }
-        req.logIn(usuario, (err) => {
+        req.logIn(artista, (err) => {
             if (err) {
                 console.error('Error al iniciar sesión después del registro:', err);
                 return next(err);
             }
-            return res.json({ message: 'Registro exitoso', redirect: '/' });
+            return res.json({ message: 'Registro exitoso', redirect: '/dashboard' });
         });
     })(req, res, next);
 };
 
 // Inicio de sesión de usuarios
 indexCtl.login = (req, res, next) => {
-    passport.authenticate('local.signin', (err, usuario, info) => {
+    passport.authenticate('local.signin', (err, artista, info) => {
         if (err) {
             return next(err);
         }
-        if (!usuario) {
+        if (!artista) {
             return res.status(400).json({ message: info ? info.message : 'Credenciales incorrectas' });
         }
-        req.logIn(usuario, (err) => {
+        req.logIn(artista, (err) => {
             if (err) {
                 return next(err);
             }
