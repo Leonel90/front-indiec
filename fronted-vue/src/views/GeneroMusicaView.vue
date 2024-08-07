@@ -102,7 +102,7 @@ export default {
       console.error('Error al obtener el token CSRF:', error);
     }
   },
-  methods: {
+  methods: {  
     fetchGenerosMusicales() {
       instance.get('/generos')
         .then(response => {
@@ -124,10 +124,10 @@ export default {
           console.error('Error al crear género musical:', error);
         });
     },
-    editGeneroMusical(genero) {
+    editGeneroMusical(generos) {
       this.isEditing = true;
-      this.editGeneroId = genero.id_genero;
-      this.formData.songName = genero.genero_musical_text;
+      this.editGeneroId = generos.id_genero;
+      this.formData.songName = generos.genero_musical_text;
       this.showCreateModal = true;
     },
     updateGeneroMusical() {

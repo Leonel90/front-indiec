@@ -185,11 +185,17 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use(morgan('combined', { stream: { write: message => logger.info(message.trim()) } }));
 
-// Rutas - Definir tus rutas aquí
+// Rutas - Definir tus rutas aquí - prohibido
 app.use(require('./router/index.router'));
 app.use(require('./router/envio.router'));
+
+
+
+// ruta de genero musical
 app.use(require('./router/genero_musical.router'));
 
+
+// login 
 app.use('/register', require('./router/index.router'));
 
 // Manejo de errores y otros middlewares
