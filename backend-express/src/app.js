@@ -17,15 +17,24 @@ const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const { minify } = require('html-minifier-terser');
 const winston = require('winston');
-
+const cors = require('cors');
 const { Loader } = require('@googlemaps/js-api-loader')
-
+const registerRouter = require('./router/index.router');
 // Importar módulos locales
 const { MYSQLHOST, MYSQLUSER, MYSQLPASSWORD, MYSQLDATABASE, MYSQLPORT } = require('./keys');
+const generoMusicalRoutes = require('./router/genero_musical.router');  
+
 require('./lib/passport');
 
 // Crear aplicación Express
 const app = express();
+// Configurar CORS
+app.use(cors({
+    origin: 'http://localhost:8080', // Cambia esto al origen de tu frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
+    credentials:true
+}));
 
 // Configurar helmet y Content Security Policy
 app.use(helmet({
@@ -173,11 +182,21 @@ if (process.env.NODE_ENV !== 'production') {
     }));
 }
 
+
 app.use(morgan('combined', { stream: { write: message => logger.info(message.trim()) } }));
 
 // Rutas - Definir tus rutas aquí
 app.use(require('./router/index.router'));
 app.use(require('./router/envio.router'));
+app.use(require('./router/genero_musical.router'));
+
+app.use('/register', require('./router/index.router'));
+
+// Manejo de errores y otros middlewares
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Algo salió mal');
+});
 
 // Exportar la aplicación
 module.exports = app;

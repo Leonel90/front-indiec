@@ -10,10 +10,10 @@
       </div>
       <div class="form">
         <input
-          type="file"
-          class="form-field animation a3 file-field"
-          @change="onImageChange"
-          accept="image/*"
+          v-model="foto_artista"
+          type="text"
+          class="form-field animation a3"
+          placeholder="Ingrese Foto"
           required
         />
         <input
@@ -35,16 +35,14 @@
           type="email"
           class="form-field animation a3"
           placeholder="example@yavirac.edu.ec"
-          @input="validateEmail"
-          required
+
         />
         <input
           v-model="celular"
           type="text"
           class="form-field animation a3"
           placeholder="Ingrese Celular"
-          @input="validateCelular"
-          required
+
         />
         <input
           v-model="contrasena"
@@ -53,15 +51,7 @@
           placeholder="Contraseña"
           required
         />
-
-        <select v-model="genero_fk" class="form-field animation a3 select-field" required>
-          <option value="" disabled selected>Seleccione Género</option>
-          <option value="Masculino">Masculino</option>
-          <option value="Femenino">Femenino</option>
-          <option value="Otro">Otro</option>
-        </select>
-
-        <button @click="register" class="animation a6">Registrate</button>
+        <button type="button" @click="registro">Registrarse</button>
         <p class="animation a5">
           ¿Sí tengo una cuenta?
           <router-link to="/login"><strong>Inicia Sesión</strong></router-link>
@@ -72,89 +62,74 @@
 </template>
 
 <script>
-import axios from "axios";
 import Swal from "sweetalert2";
+import axios from "axios";
+
+const instance = axios.create({
+  baseURL: 'http://localhost:3000', // Asegúrate de ajustar la URL base según tu configuración
+  withCredentials: true, // Necesario para enviar cookies (incluyendo el token CSRF)
+});
 
 export default {
   data() {
     return {
-      image: null,
       nombre: "",
       apellido: "",
       email: "",
       celular: "",
       contrasena: "",
-      genero_fk: "",
-      emailError: "",
-      celularError: "",
+      foto_artista: "",
     };
   },
   methods: {
-    validateEmail() {
-      const emailPattern = /^[a-zA-Z0-9._%+-]+@yavirac\.edu\.ec$/;
-      this.emailError = emailPattern.test(this.email)
-        ? ""
-        : "El email debe terminar en @yavirac.edu.ec";
-    },
-    validateCelular() {
-      const celularPattern = /^\d{0,10}$/;
-      this.celularError =
-        celularPattern.test(this.celular) && this.celular.length === 10
-          ? ""
-          : "El celular debe contener solo números y tener exactamente 10 dígitos";
-    },
-    onImageChange(event) {
-      this.image = event.target.files[0];
-    },
-    async register() {
-      this.validateEmail();
-      this.validateCelular();
-
-      if (this.emailError || this.celularError) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: this.emailError || this.celularError,
-        });
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("image", this.image);
-      formData.append("nombre", this.nombre);
-      formData.append("apellido", this.apellido);
-      formData.append("email", this.email);
-      formData.append("celular", this.celular);
-      formData.append("contrasena", this.contrasena);
-      formData.append("genero_fk", this.genero_fk);
-
+    async registro() {
       try {
-        const response = await axios.post("http://localhost:3000/register", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
+        const csrfToken = await this.obtenerCsrfToken(); // Obtén el token CSRF
+        const response = await instance.post(
+          "/Register",
+          {
+            nombre: this.nombre,
+            apellido: this.apellido,
+            email: this.email,
+            celular: this.celular,
+            contrasena: this.contrasena,
+            foto_artista: this.foto_artista,
           },
-        });
+          {
+            headers: {
+              "X-CSRF-Token": csrfToken, // Incluye el token CSRF en el header
+            },
+          }
+        );
+
+        if (response.data.redirect) {
+          this.$router.push(response.data.redirect);
+        }
+
         Swal.fire({
           icon: "success",
-          title: "¡Registro exitoso!",
-          text: "Redirigiendo al inicio de sesión...",
-          timer: 2000,
+          title: response.data.message,
           showConfirmButton: false,
+          timer: 1500,
         });
-        setTimeout(() => {
-          this.$router.push("/login");
-        }, 2000);
       } catch (error) {
-        const errorMessage =
-          error.response?.data?.message ||
-          "Ha ocurrido un error, por favor intenta nuevamente.";
         Swal.fire({
           icon: "error",
-          title: "Error al registrarse",
-          text: errorMessage,
+          title: "Error al registrar",
+          text: error.response ? error.response.data.message : error.message,
         });
       }
     },
+    async obtenerCsrfToken() {
+      try {
+        const response = await instance.get("/"); // Endpoint para obtener el token CSRF
+        return response.data.csrfToken;
+      } catch (error) {
+        console.error("Error al obtener el token CSRF:", error.message);
+        throw new Error("No se pudo obtener el token CSRF");
+      }
+    },
+    
   },
 };
 </script>

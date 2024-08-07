@@ -7,10 +7,19 @@
           <h1>Genero Musical</h1>
           <div id="app">
             <button @click="showCreateModal = true">Crear Genero</button>
-            <MyModal :isVisible="showCreateModal" @close="showCreateModal = false">
-              <form v-if="!isEditing" @submit.prevent="handleCreate">
+            <MyModal :isVisible="showCreateModal" @close="closeModal">
+              <form v-if="!isEditing" @submit.prevent="createGeneroMusical">
                 <h2>Crear Genero</h2>
-
+                <div class="form-group">
+                  <label for="songName">Nombre del genero:</label>
+                  <input type="text" v-model="formData.songName" required />
+                </div>
+                <div class="button-container">
+                  <button type="submit">Guardar Cambios</button>
+                </div>
+              </form>
+              <form v-else @submit.prevent="updateGeneroMusical">
+                <h2>Editar Genero</h2>
                 <div class="form-group">
                   <label for="songName">Nombre del genero:</label>
                   <input type="text" v-model="formData.songName" required />
@@ -35,23 +44,21 @@
               </tr>
             </thead>
             <tbody>
-  <tr v-for="(song, index) in songs" :key="index">
-    <td>
-      <div class="cell">{{ index + 1 }}</div>
-    </td>
-    <td>
-      <div class="cell">{{ song.songName }}</div>
-    </td>
-    <td>
-      <div class="button-group">
-        <button id="delete" class="btn delete-btn" @click="deleteSong(song)">
-          <i class="bx bx-trash"></i> <!-- Cambia el ícono a uno de eliminar -->
-        </button>
-      </div>
-    </td>
-  </tr>
-</tbody>
-
+              <tr v-for="(genero, index) in generos" :key="genero.id_genero">
+                <td><div class="cell">{{ index + 1 }}</div></td>
+                <td><div class="cell">{{ genero.genero_musical_text }}</div></td>
+                <td>
+                  <div class="button-group">
+                    <button class="btn delete-btn" @click="deleteGeneroMusical(genero)">
+                      <i class="bx bx-trash"></i> Eliminar
+                    </button>
+                    <button class="btn edit-btn" @click="editGeneroMusical(genero)">
+                      <i class="bx bx-edit"></i> Editar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -60,6 +67,7 @@
 </template>
 
 <script>
+import instance from "@/pluggins/axios";
 import ProtectedNavbar from "../components/ProtectedNavbar.vue";
 import MyModal from "../components/Modal.vue";
 import Swal from "sweetalert2";
@@ -74,110 +82,106 @@ export default {
       showCreateModal: false,
       formData: {
         songName: "",
-        artistName: "",
       },
-      songs: [
-        {
-          songName: "Salsa",
-          artistName: "2024-07-18",
-        },
-        {
-          songName: "Rock",
-          artistName: "2024-07-18",
-        },
-        {
-          songName: "Punk",
-          artistName: "2024-07-18",
-        },
-      ],
+      generos: [],
+      csrfToken: '',
       isEditing: false,
-      editIndex: null,
+      editGeneroId: null,
     };
   },
+  async mounted() {
+    try {
+      // Obtén el token CSRF del backend
+      const response = await instance.get('/');
+      this.csrfToken = response.data.csrfToken;
+      // Configura el token CSRF en Axios
+      instance.defaults.headers['X-CSRF-Token'] = this.csrfToken;
+      this.fetchGenerosMusicales(); //metodo
+
+    } catch (error) {
+      console.error('Error al obtener el token CSRF:', error);
+    }
+  },
   methods: {
-  handleEditFileUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    this.editImagePreview = URL.createObjectURL(file);
-    this.formData.photo = this.editImagePreview;
-  },
-  handleCreate() {
-    const newSong = { ...this.formData };
-    this.songs.push(newSong);
-    this.showCreateModal = false;
-    this.resetFormData();
-    this.imagePreview = null;
-    Swal.fire("¡Éxito!", "El género ha sido creado exitosamente.", "success");
-  },
-  startEditing(song) {
-    this.isEditing = true;
-    this.formData = { ...song };
-    this.editIndex = this.songs.indexOf(song);
-    this.showCreateModal = true;
-  },
-  handleEdit() {
-    if (this.editIndex !== null) {
-      this.songs.splice(this.editIndex, 1, { ...this.formData });
+    fetchGenerosMusicales() {
+      instance.get('/generos')
+        .then(response => {
+          this.generos = response.data;
+        })
+        .catch(error => {
+          console.error('Error al obtener géneros musicales:', error);
+        });
+    },
+    createGeneroMusical() {
+      instance.post('/generos', { genero_musical_text: this.formData.songName })
+        .then(response => {
+          this.generos.push(response.data);
+          this.showCreateModal = false;
+          this.resetFormData();
+          Swal.fire("¡Éxito!", "El género ha sido creado exitosamente.", "success");
+        })
+        .catch(error => {
+          console.error('Error al crear género musical:', error);
+        });
+    },
+    editGeneroMusical(genero) {
+      this.isEditing = true;
+      this.editGeneroId = genero.id_genero;
+      this.formData.songName = genero.genero_musical_text;
+      this.showCreateModal = true;
+    },
+    updateGeneroMusical() {
+      instance.put(`/generos${this.editGeneroId}`, { genero_musical_text: this.formData.songName })
+        .then(response => {
+          const updatedGenero = response.data;
+          const index = this.generos.findIndex(g => g.id_genero === updatedGenero.id_genero);
+          if (index !== -1) {
+            this.generos.splice(index, 1, updatedGenero);
+          }
+          this.showCreateModal = false;
+          this.isEditing = false;
+          this.resetFormData();
+          Swal.fire("¡Éxito!", "El género ha sido actualizado exitosamente.", "success");
+        })
+        .catch(error => {
+          console.error('Error al actualizar género musical:', error);
+        });
+    },
+    deleteGeneroMusical(genero) {
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Una vez eliminado, no podrás recuperar este género musical.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios.delete(`/api/generos/${genero.id_genero}`)
+            .then(() => {
+              const index = this.generos.indexOf(genero);
+              if (index !== -1) {
+                this.generos.splice(index, 1);
+                Swal.fire('¡Eliminado!', 'El género ha sido eliminado exitosamente.', 'success');
+              }
+            })
+            .catch(error => {
+              console.error('Error al eliminar género musical:', error);
+            });
+        }
+      });
+    },
+    closeModal() {
       this.showCreateModal = false;
       this.isEditing = false;
       this.resetFormData();
-      this.editImagePreview = null;
-      Swal.fire("¡Éxito!", "El género ha sido actualizado exitosamente.", "success");
-    }
+    },
+    resetFormData() {
+      this.formData.songName = "";
+    },
   },
-  resetFormData() {
-    this.formData = {
-      songName: "",
-      artistName: null,
-    };
-  },
-  deleteSong(song) {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: "Una vez eliminado, no podrás recuperar este género musical.",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const index = this.songs.indexOf(song);
-        if (index !== -1) {
-          this.songs.splice(index, 1); // Elimina el género de la lista
-          Swal.fire('¡Eliminado!', 'El género ha sido eliminado exitosamente.', 'success');
-        }
-      }
-    });
-  },
-  restoreSong(song) {
-    song.status = "Activo";
-    Swal.fire("¡Éxito!", "El género ha sido restaurado exitosamente.", "success");
-  },
-  viewSongDetails(song) {
-    Swal.fire({
-      title: `Detalles de ${song.songName}`,
-      html: `
-        <p><strong>Género Musical:</strong> ${song.songName}</p>
-        <p><strong>Fecha Creación:</strong> ${song.artistName}</p>
-      `,
-      confirmButtonText: "Cerrar",
-      customClass: {
-        popup: "custom-swal-popup",
-        content: "custom-swal-content",
-        closeButton: "custom-swal-close",
-        confirmButton: "custom-swal-confirm",
-      },
-    });
-  },
-  getSongStatusClass(status) {
-    return {
-      "status-active": status === "Activo",
-      "status-inactive": status === "Eliminado",
-    };
-  },
-},
 };
 </script>
 <style scoped>
@@ -209,12 +213,12 @@ button {
 
 #delete {
   background-color: #c90000;
-  color:white !important;
+  color: white !important;
 }
 
 #delete :hover {
   background-color: #ff0202;
-  color:white;
+  color: white;
 }
 
 button:hover {
@@ -285,14 +289,13 @@ button[type="submit"]:hover {
   box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
 }
 
-
-
 table {
   width: 100%;
   border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
   padding: 10px;
   text-align: center;
   border-bottom: 1px solid #ddd;
@@ -308,10 +311,9 @@ th {
   align-items: center;
 }
 
-
 .button-group {
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   gap: 5px;
 }
 
@@ -325,17 +327,15 @@ th {
 }
 
 .view-btn {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
-  box-shadow:  2px 2px 2px 2px rgba(0, 0, 0, 0.137);
-
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.137);
 }
 
 .edit-btn {
-  background-color: #FFA500;
+  background-color: #ffa500;
   color: white;
-  box-shadow:  2px 2px 2px 2px rgba(0, 0, 0, 0.137);
-
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.137);
 }
 
 .restore-btn {

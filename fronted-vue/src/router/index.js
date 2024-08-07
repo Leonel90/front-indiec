@@ -15,7 +15,7 @@ import MusicaView from '@/views/MusicaView.vue'
 const routes = [
 
   {
-    path: '/registro',
+    path: '/register',
     name: 'registre',
     component: RegistreView
   },

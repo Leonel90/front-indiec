@@ -22,7 +22,7 @@
         />
         <button @click="login" class="animation a6">Ingresar</button>
         <p class="animation a5">
-          Si no tienes cuenta?<router-link to="/registro"
+          Si no tienes cuenta?<router-link to="/register"
             ><strong> Registrate </strong></router-link
           >
         </p>

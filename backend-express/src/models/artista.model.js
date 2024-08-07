@@ -1,45 +1,53 @@
 const artista = (sequelize, DataTypes) => {
     return sequelize.define('artistas', {
-        id_Artista: {
+        id_artista: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
             comment: 'Campo único de artista'
         },
-        photo_artista: {
+        foto_artista: {
             type: DataTypes.STRING,
+            allowNull: true,
             comment: 'Foto del artista'
         },
         apellido: {
             type: DataTypes.STRING,
+            allowNull: false,
             comment: 'Apellido del artista'
         },
         nombre: {
             type: DataTypes.STRING,
+            allowNull: false,
             comment: 'Nombre del artista'
         },
         email: {
             type: DataTypes.STRING,
+            allowNull: false,
+            unique: true,
+            validate: {
+                isEmail: true
+            },
             comment: 'Email del artista'
         },
         celular: {
             type: DataTypes.STRING,
+            allowNull: false,
             comment: 'Número de teléfono del artista'
         },
         contrasena: {
             type: DataTypes.STRING,
+            allowNull: false,
             comment: 'Contraseña del artista'
         },
-        genero_fk: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'genero_persona', 
-                key: 'id_genero'             
-            },
-            comment: 'Clave foránea que referencia a genero_persona'
-        }
+        genero: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            comment: 'creacion del genero'
+        },
     }, {
         timestamps: false,
+        tableName: 'artistas',
         comment: 'Tabla de artistas'
     });
 }
