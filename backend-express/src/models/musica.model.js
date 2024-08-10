@@ -18,15 +18,7 @@ const musica = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             comment: 'Nombre del artista'
         },
-        album_fk: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'albums',  // Nombre de la tabla en la base de datos
-                key: 'id_Album'
-            },
-            comment: 'Clave foránea al álbum'
-        },
+        
         estado_fk: {
             type: DataTypes.INTEGER,
             references: {

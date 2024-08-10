@@ -22,7 +22,7 @@ const artista = (sequelize, DataTypes) => {
             comment: 'Nombre del artista'
         },
         email: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(99),
             allowNull: false,
             unique: true,
             validate: {

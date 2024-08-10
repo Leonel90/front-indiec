@@ -31,24 +31,12 @@ indexCtl.mostrarRegistro = async (req, res) => {
 };
 
 // Registro de usuarios
-indexCtl.registro = (req, res, next) => {
-    passport.authenticate('local.signup', (err, artista, info) => {
-        if (err) {
-            console.error('Error en el registro:', err);
-            return next(err);
-        }
-        if (!artista) {
-            return res.status(400).json({ message: info ? info.message : 'Correo ya registrado' });
-        }
-        req.logIn(artista, (err) => {
-            if (err) {
-                console.error('Error al iniciar sesión después del registro:', err);
-                return next(err);
-            }
-            return res.json({ message: 'Registro exitoso', redirect: '/dashboard' });
-        });
-    })(req, res, next);
-};
+indexCtl.registro = passport.authenticate('local.signup', {
+    successRedirect: "/closeSection",
+    failureRedirect: "/Register",
+    failureFlash: true,
+    failureMessage: true
+})
 
 // Inicio de sesión de usuarios
 indexCtl.login = (req, res, next) => {
@@ -74,7 +62,7 @@ indexCtl.CerrarSesion = (req, res, next) => {
         if (err) {
             return next(err);
         }
-        res.json({ message: 'Sesión cerrada con éxito', redirect: '/' });
+        res.json({ message: 'Sesión cerrada con éxito', redirect: '/login' });
     });
 };
 

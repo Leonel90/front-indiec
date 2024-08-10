@@ -96,50 +96,63 @@ const plataformaData = [
     { nombre_plataforma: 'YouTube Music' }
 ];
 
-
 const generoPersonaData = [
     { nombre_genero: 'Masculino' },
     { nombre_genero: 'Femenino' },
     { nombre_genero: 'No Binario' }
 ];
 
-
 const estadoManagerData = [
     { estado: 'Activo' },
     { estado: 'Inactivo' }
 ];
 
-const generoMusicalData = [
-    { genero_musical_text: 'Rock' },
-    { genero_musical_text: 'Pop' },
-    { genero_musical_text: 'Jazz' }
+const calificacionData = [
+    { valor: 1, descripcion: 'Muy Malo' },
+    { valor: 2, descripcion: 'Malo' },
+    { valor: 3, descripcion: 'Regular' },
+    { valor: 4, descripcion: 'Bueno' },
+    { valor: 5, descripcion: 'Muy Bueno' }
 ];
 
-const calificacionData = [
-    { valor: 1 , descripcion: 'Muy Malo' },
-    { valor: 2 , descripcion: 'Malo' },
-    { valor: 3 , descripcion: 'Regular' },
-    { valor: 4 , descripcion: 'Bueno' },
-    { valor: 5 , descripcion: 'Muy Bueno' }
-];
+// Función para insertar datos si no existen
+const insertIfNotExists = async (model, data) => {
+    for (const item of data) {
+        const [record, created] = await model.findOrCreate({
+            where: item,
+            defaults: item
+        });
+        if (created) {
+            console.log(`Inserted: ${JSON.stringify(item)}`);
+        } else {
+            console.log(`Already exists: ${JSON.stringify(item)}`);
+        }
+    }
+};
 
 // Sincronizar la base de datos y cargar datos
 sequelize.sync({ alter: true })
     .then(async () => {
         console.log('Database sincronizada PAPUCHO');
-        
+
+        // Eliminar datos existentes (opcional)
+        await plataformas.destroy({ where: {} });
+        await generoPersonas.destroy({ where: {} });
+        await estadoManagers.destroy({ where: {} });
+        await calificaciones.destroy({ where: {} });
+
         // Insertar datos en tablas únicas
-        await plataformas.bulkCreate(plataformaData);
-        await generoPersonas.bulkCreate(generoPersonaData);
-        await estadoManagers.bulkCreate(estadoManagerData);
-        await generoMusicales.bulkCreate(generoMusicalData);
-        await calificaciones.bulkCreate(calificacionData);
-        
+        await insertIfNotExists(plataformas, plataformaData);
+        await insertIfNotExists(generoPersonas, generoPersonaData);
+        await insertIfNotExists(estadoManagers, estadoManagerData);
+        await insertIfNotExists(calificaciones, calificacionData);
+
         console.log('Datos precargados insertados');
     })
     .catch((error) => {
         console.error('Error synchronizing the database:', error);
     });
+
 
 // Exportar el objeto sequelize
 module.exports = {

@@ -12,38 +12,48 @@
               <form v-if="!isEditing" @submit.prevent="handleCreate">
                 <h2>Crear Disquera</h2>
 
-                <div class="form-group custom-form-group">
-                  <label for="imagen" class="upload-label custom-upload-label">
-                    <i class="bx bx-check"></i> Subir Imagen
-                  </label>
-                  <input type="file" id="imagen" class="custom-upload-input" @change="handleFileUpload"
-                    accept="image/*" />
+                <div class="form-group">
+                  <label for="foto">Foto (URL):</label>
+                  <input type="text" id="foto" v-model="formData.Foto_disquera" placeholder="URL de la foto" />
                 </div>
 
-                <div v-if="imagePreview" class="image-preview custom-image-preview">
-                  <img :src="imagePreview" alt="Vista previa de la imagen" class="custom-preview-img" />
+                <div v-if="formData.Foto_disquera" class="image-preview">
+                  <img :src="formData.Foto_disquera" alt="Vista previa de la imagen" class="preview-img" />
                 </div>
+
                 <div class="form-group">
-                  <label for="recordlabelName">Disquera:</label>
-                  <input type="text" v-model="formData.recordlabelName" required />
+                  <label for="Nombre_disquera">Nombre de la Disquera:</label>
+                  <input type="text" v-model="formData.Nombre_disquera" required />
                 </div>
+
                 <div class="form-group">
-                  <label for="descriptiontName">Descripcion:</label>
-                  <input type="text" v-model="formData.descriptiontName" required />
+                  <label for="Descripcion_disquera">Descripción:</label>
+                  <input type="text" v-model="formData.Descripcion_disquera" required />
                 </div>
+
                 <div class="form-group">
-                  <label for="platform">Plataforma:</label>
-                  <select v-model="formData.platform" required>
-                    <option value="" disabled>Selecciona una plataforma</option>
-                    <option value="Plataforma 1">Plataforma 1</option>
-                    <option value="Plataforma 2">Plataforma 2</option>
-                    <option value="Plataforma 3">Plataforma 3</option>
+                  <label for="plataforma_fk">Plataforma:</label>
+                  <select v-model="formData.plataforma_fk" required>
+                    <option v-for="plataforma in plataformas" :key="plataforma.id_plataforma" :value="plataforma.id_plataforma">
+                      {{ plataforma.nombre_plataforma }}
+                    </option>
                   </select>
                 </div>
+
                 <div class="form-group">
-                  <label for="url">URL:</label>
-                  <input type="url" v-model="formData.url" required />
+                  <label for="estado_fk">Estado:</label>
+                  <select v-model="formData.estado_fk" required>
+                    <option v-for="estado in estados" :key="estado.id_estado_manager" :value="estado.id_estado_manager">
+                      {{ estado.estado }}
+                    </option>
+                  </select>
                 </div>
+
+                <div class="form-group">
+                  <label for="Url">URL:</label>
+                  <input type="url" v-model="formData.Url" required />
+                </div>
+
                 <div class="button-container">
                   <button type="submit">Guardar</button>
                 </div>
@@ -52,38 +62,48 @@
               <form v-else @submit.prevent="handleEdit">
                 <h2>Editar Disquera</h2>
 
-                <div class="form-group custom-form-group">
-                  <label for="edit-imagen" class="upload-label custom-upload-label">
-                    <i class="bx bx-check"></i> Cambiar Imagen
-                  </label>
-                  <input type="file" id="edit-imagen" class="custom-upload-input" @change="handleEditFileUpload"
-                    accept="image/*" />
+                <div class="form-group">
+                  <label for="edit-foto">Foto (URL):</label>
+                  <input type="text" id="edit-foto" v-model="formData.Foto_disquera" placeholder="URL de la foto" />
                 </div>
 
-                <div v-if="editImagePreview" class="image-preview custom-image-preview">
-                  <img :src="editImagePreview" alt="Vista previa de la imagen" class="custom-preview-img" />
+                <div v-if="formData.Foto_disquera" class="image-preview">
+                  <img :src="formData.Foto_disquera" alt="Vista previa de la imagen" class="preview-img" />
                 </div>
+
                 <div class="form-group">
-                  <label for="recordlabelName">Nombre de la Disquera:</label>
-                  <input type="text" v-model="formData.recordlabelName" required />
+                  <label for="edit-Nombre_disquera">Nombre de la Disquera:</label>
+                  <input type="text" id="edit-Nombre_disquera" v-model="formData.Nombre_disquera" required />
                 </div>
+
                 <div class="form-group">
-                  <label for="descriptiontName">Descripcion:</label>
-                  <input type="text" v-model="formData.descriptiontName" required />
+                  <label for="edit-Descripcion_disquera">Descripción:</label>
+                  <input type="text" id="edit-Descripcion_disquera" v-model="formData.Descripcion_disquera" required />
                 </div>
+
                 <div class="form-group">
-                  <label for="platform">Plataforma:</label>
-                  <select v-model="formData.platform" required>
-                    <option value="" disabled>Selecciona una plataforma</option>
-                    <option value="Plataforma 1">Plataforma 1</option>
-                    <option value="Plataforma 2">Plataforma 2</option>
-                    <option value="Plataforma 3">Plataforma 3</option>
+                  <label for="edit-plataforma_fk">Plataforma:</label>
+                  <select id="edit-plataforma_fk" v-model="formData.plataforma_fk" required>
+                    <option v-for="plataforma in plataformas" :key="plataforma.id_plataforma" :value="plataforma.id_plataforma">
+                      {{ plataforma.nombre_plataforma }}
+                    </option>
                   </select>
                 </div>
+
                 <div class="form-group">
-                  <label for="url">URL:</label>
-                  <input type="url" v-model="formData.url" required />
+                  <label for="edit-estado_fk">Estado:</label>
+                  <select id="edit-estado_fk" v-model="formData.estado_fk" required>
+                    <option v-for="estado in estados" :key="estado.id_estado_manager" :value="estado.id_estado_manager">
+                      {{ estado.estado }}
+                    </option>
+                  </select>
                 </div>
+
+                <div class="form-group">
+                  <label for="edit-Url">URL:</label>
+                  <input type="url" id="edit-Url" v-model="formData.Url" required />
+                </div>
+
                 <div class="button-container">
                   <button type="submit">Guardar Cambios</button>
                 </div>
@@ -94,8 +114,8 @@
       </div>
 
       <div class="button-container">
-        <button class="pdf">PDF</button>
-        <button class="excel">EXCEL</button>
+        <button class="pdf" @click="exportToPDF">PDF</button>
+        <button class="excel" @click="exportToExcel">EXCEL</button>
         <input type="text" placeholder="Buscar . . ." class="buscar" v-model="searchQuery" />
       </div>
 
@@ -103,73 +123,39 @@
         <table>
           <thead>
             <tr>
-              <th>
-                <div class="cell">#</div>
-              </th>
-              <th>
-                <div class="cell">Foto</div>
-              </th>
-              <th>
-                <div class="cell">Nombre de la Disquera</div>
-              </th>
-              <th>
-                <div class="cell">Descripcion</div>
-              </th>
-              <th>
-                <div class="cell">Plataforma</div>
-              </th>
-              <th>
-                <div class="cell">URL</div>
-              </th>
-              <th>
-                <div class="cell">Estado</div>
-              </th>
-              <th>
-                <div class="cell">Acciones</div>
-              </th>
+              <th>#</th>
+              <th>Foto</th>
+              <th>Nombre de la Disquera</th>
+              <th>Descripción</th>
+              <th>Plataforma</th>
+              <th>URL</th>
+              <th>Estado</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(song, index) in filteredSongs" :key="index">
+            <tr v-for="(disquera, index) in filteredDisqueras" :key="index">
+              <td>{{ index + 1 }}</td>
               <td>
-                <div class="cell">{{ index + 1 }}</div>
+                <img :src="disquera.Foto_disquera" alt="Foto" class="disquera-photo" />
               </td>
-              <td>
-                <div class="cell">
-                  <img :src="song.photo" alt="Foto" class="song-photo" />
-                </div>
-              </td>
-              <td>
-                <div class="cell">{{ song.recordlabelName }}</div>
-              </td>
-              <td>
-                <div class="cell">{{ song.descriptiontName }}</div>
-              </td>
-              <td>
-                <div class="cell">{{ song.platform }}</div>
-              </td>
-              <td>
-                <div class="cell">
-                  <a :href="song.url" target="_blank">{{ song.url }}</a>
-                </div>
-              </td>
-              <td>
-                <span :class="getSongStatusClass(song.status)">
-                  {{ song.status }}
-                </span>
-              </td>
+              <td>{{ disquera.Nombre_disquera }}</td>
+              <td>{{ disquera.Descripcion_disquera }}</td>
+              <td>{{ plataformas.find(p => p.id_plataforma === disquera.plataforma_fk)?.nombre_plataforma || 'No disponible' }}</td>
+              <td><a :href="disquera.Url" target="_blank">{{ disquera.Url }}</a></td>
+              <td><span :class="getDisqueraStatusClass(disquera.estado_fk)">{{ getStatusName(disquera.estado_fk) }}</span></td>
               <td>
                 <div class="button-group">
-                  <button class="btn view-btn" @click="viewSongDetails(song)">
+                  <button class="btn view-btn" @click="viewDisqueraDetails(disquera)">
                     <i class="bx bx-show"></i>
                   </button>
-                  <button class="btn edit-btn" @click="startEditing(song)">
+                  <button class="btn edit-btn" @click="startEditing(disquera)">
                     <i class="bx bx-edit"></i>
                   </button>
-                  <button class="btn delete-btn" v-if="song.status === 'Activo'" @click="deleteSong(song)">
+                  <button class="btn delete-btn" v-if="disquera.estado_fk === 1" @click="deleteDisquera(disquera)">
                     <i class="bx bx-trash"></i>
                   </button>
-                  <button class="btn restore-btn" v-else @click="restoreSong(song)">
+                  <button class="btn restore-btn" v-else @click="restoreDisquera(disquera)">
                     <i class="bx bx-undo"></i>
                   </button>
                 </div>
@@ -183,6 +169,7 @@
 </template>
 
 <script>
+import instance from "@/pluggins/axios";
 import ProtectedNavbar from "../components/ProtectedNavbar.vue";
 import MyModal from "../components/Modal.vue";
 import Swal from "sweetalert2";
@@ -197,153 +184,199 @@ export default {
       showCreateModal: false,
       searchQuery: "",
       formData: {
-        recordlabelName: "",
-        descriptiontName: "",
-        platform: "",
-        url: "",
-        status: "Activo",
-        photo: "",
+        Nombre_disquera: "",
+        Descripcion_disquera: "",
+        Url: "",
+        plataforma_fk: "",
+        estado_fk: "", // Activo por defecto
+        Foto_disquera: "",
       },
-      songs: [
-        {
-          photo: "https://cdn.icon-icons.com/icons2/1029/PNG/256/Luffys_flag_icon-icons.com_76118.png",
-          recordlabelName: "Disquera 1",
-          descriptiontName: "Descripcion 1",
-          platform: "Plataforma 1",
-          url: "https://youtube.com/song1",
-          status: "Activo",
-        },
-        {
-          photo: "https://cdn.icon-icons.com/icons2/1029/PNG/256/Luffys_flag_icon-icons.com_76118.png",
-          recordlabelName: "Disquera 2",
-          descriptiontName: "Descripcion 2",
-          platform: "Plataforma 2",
-          url: "https://youtube.com/song2",
-          status: "Eliminado",
-        },
-        {
-          photo: "https://cdn.icon-icons.com/icons2/1029/PNG/256/Luffys_flag_icon-icons.com_76118.png",
-          recordlabelName: "Disquera 3",
-          descriptiontName: "Descripcion 3",
-          platform: "Plataforma 3",
-          url: "https://youtube.com/song3",
-          status: "Activo",
-        },
-      ],
+      disqueras: [],
+      plataformas: [],
+      estados: [],
       imagePreview: null,
       editImagePreview: null,
       isEditing: false,
+      csrfToken: "", // Añadido para el token CSRF
     };
   },
+  async mounted() {
+    try {
+      // Obtén el token CSRF del backend
+      const response = await instance.get('/');
+      this.csrfToken = response.data.csrfToken;
+      // Configura el token CSRF en Axios
+      instance.defaults.headers['X-CSRF-Token'] = this.csrfToken;
+      this.fetchDisqueras();
+      this.fetchPlataformas();
+      this.fetchEstados();
+    } catch (error) {
+      console.error('Error al obtener el token CSRF:', error);
+    }
+  },
   methods: {
+    async fetchDisqueras() {
+      try {
+        const response = await instance.get('/disqueras');
+        this.disqueras = response.data;
+      } catch (error) {
+        console.error('Error fetching disqueras:', error);
+      }
+    },
+    async fetchPlataformas() {
+      try {
+        const response = await instance.get('/plataformas');
+        this.plataformas = response.data;
+      } catch (error) {
+        console.error('Error fetching plataformas:', error);
+      }
+    },
+    async fetchEstados() {
+      try {
+        const response = await instance.get('/estadoManager');
+        this.estados = response.data;
+      } catch (error) {
+        console.error('Error fetching estados:', error);
+      }
+    },
     openCreateModal() {
       this.showCreateModal = true;
-      this.isEditing = false;
       this.resetForm();
+      this.isEditing = false;
     },
     closeModal() {
       this.showCreateModal = false;
+      this.resetForm();
     },
-    handleCreate() {
-      // Lógica para guardar los datos de la nueva disquera
-      this.songs.push({ ...this.formData, photo: this.imagePreview || "" });
-      this.closeModal();
+    resetForm() {
+      this.formData = {
+        Nombre_disquera: "",
+        Descripcion_disquera: "",
+        Url: "",
+        plataforma_fk: "",
+        estado_fk: "", // Activo por defecto
+        Foto_disquera: "",
+      };
+      this.imagePreview = null;
+      this.editImagePreview = null;
     },
-    handleEdit() {
-      const index = this.songs.findIndex((song) => song.recordlabelName === this.formData.recordlabelName);
-      if (index !== -1) {
-        // Actualiza el objeto directamente en el array
-        this.songs[index] = { ...this.formData, photo: this.editImagePreview || "" };
-      }
-      this.closeModal();
-    },
-
     handleFileUpload(event) {
       const file = event.target.files[0];
       if (file) {
-        this.formData.photo = URL.createObjectURL(file);
-        this.imagePreview = this.formData.photo;
+        this.formData.Foto_disquera = file;
+        this.imagePreview = URL.createObjectURL(file);
       }
     },
     handleEditFileUpload(event) {
       const file = event.target.files[0];
       if (file) {
-        this.formData.photo = URL.createObjectURL(file);
-        this.editImagePreview = this.formData.photo;
+        this.formData.Foto_disquera = file;
+        this.editImagePreview = URL.createObjectURL(file);
       }
     },
-    startEditing(song) {
-      this.isEditing = true;
-      this.formData = { ...song };
-      this.editImagePreview = song.photo;
-      this.showCreateModal = true;
-    },
-    resetForm() {
-      this.formData = {
-        recordlabelName: "",
-        descriptiontName: "",
-        platform: "",
-        url: "",
-        status: "Activo",
-        photo: "",
-      };
-      this.imagePreview = null;
-    },
-    deleteSong(song) {
-      Swal.fire({
-        title: "¿Estás seguro?",
-        text: "¡No podrás recuperar esta disquera!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Sí, eliminar",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          song.status = "Eliminado";
-          Swal.fire("Eliminado", "La disquera ha sido eliminada.", "success");
-        }
-      });
-    },
-    restoreSong(song) {
-      Swal.fire({
-        title: "¿Estás seguro?",
-        text: "¡Recuperarás esta disquera!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Sí, recuperar",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          song.status = "Activo";
-          Swal.fire("Recuperado", "La disquera ha sido recuperada.", "success");
-        }
-      });
-    },
-    viewSongDetails(song) {
-      Swal.fire({
-        title: song.recordlabelName,
-        text: `Descripcion: ${song.descriptiontName}\nPlataforma: ${song.platform}\nURL: ${song.url}`,
-        imageUrl: song.photo,
-        imageAlt: "Imagen de la disquera",
-      });
-    },
-    getSongStatusClass(status) {
-      return status === "Activo" ? "status-active" : "status-delete"; // Cambia 'status-inactive' por 'status-delete'
-    },
+    async handleCreate() {
+      // Verifica que los datos necesarios estén presentes
+      if (!this.formData.Nombre_disquera || !this.formData.plataforma_fk) {
+        Swal.fire('Advertencia', 'Nombre de disquera y plataforma son obligatorios', 'warning');
+        return;
+      }
 
+      // Crea un FormData para enviar el archivo y otros datos
+      const formData = new FormData();
+      for (const key in this.formData) {
+        formData.append(key, this.formData[key]);
+      }
+
+      try {
+        // Realiza la solicitud POST al servidor
+        await instance.post('/disqueras', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        // Muestra un mensaje de éxito
+        Swal.fire('Éxito', 'Disquera creada correctamente', 'success');
+        // Actualiza la lista de disqueras
+        this.fetchDisqueras();
+        // Cierra el modal y reinicia el formulario
+        this.closeModal();
+      } catch (error) {
+        // Muestra un mensaje de error
+        Swal.fire('Error', 'Error al crear disquera: ' + error.response?.data?.message || 'Error desconocido', 'error');
+      }
+    },
+    startEditing(disquera) {
+  this.isEditing = true;
+  this.formData = { ...disquera };
+  this.editImagePreview = disquera.Foto_disquera;
+  this.openCreateModal();
+},
+async handleSave() {
+  if (this.isEditing) {
+    // Llamar al método de edición
+    await this.handleEdit();
+  } else {
+    // Llamar al método de creación
+    await this.handleCreate();
+  }
+},
+
+    
+async handleEdit() {
+  const formData = new FormData();
+  for (const key in this.formData) {
+    formData.append(key, this.formData[key]);
+  }
+
+  try {
+    await instance.put(`/disqueras/${this.formData.id_Disquera}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    Swal.fire('Éxito', 'Disquera actualizada correctamente', 'success');
+    this.fetchDisqueras();
+    this.closeModal();
+  } catch (error) {
+    Swal.fire('Error', 'Error al actualizar disquera: ' + error.response?.data?.message || 'Error desconocido', 'error');
+  }
+},
+    async deleteDisquera(disquera) {
+      try {
+        await instance.delete(`/disqueras/${disquera.id_Disquera}`);
+        Swal.fire('Éxito', 'Disquera eliminada correctamente', 'success');
+        this.fetchDisqueras();
+      } catch (error) {
+        Swal.fire('Error', 'Error al eliminar disquera: ' + error.response?.data?.message || 'Error desconocido', 'error');
+      }
+    },
+    viewDisqueraDetails(disquera) {
+      // Implementa la lógica para ver detalles si es necesario
+    },
+    getPlataformaName(plataformaId) {
+      const plataforma = this.plataformas.find(p => p.id_plataforma === plataformaId);
+      return plataforma ? plataforma.nombre_plataforma : 'Desconocida';
+    },
+    getStatusName(statusId) {
+      const estado = this.estados.find(e => e.id_estado_manager === statusId);
+      return estado ? estado.nombre_estado : 'Desconocido';
+    },
+    getDisqueraStatusClass(statusId) {
+      // Implementa clases según el estado si es necesario
+    }
   },
   computed: {
-    filteredSongs() {
-      return this.songs.filter((song) =>
-        song.recordlabelName.toLowerCase().includes(this.searchQuery.toLowerCase())
+    filteredDisqueras() {
+      if (!this.searchQuery) return this.disqueras;
+      const query = this.searchQuery.toLowerCase();
+      return this.disqueras.filter(disquera =>
+        disquera.Nombre_disquera.toLowerCase().includes(query) ||
+        disquera.Descripcion_disquera.toLowerCase().includes(query)
       );
-    },
-  },
+    }
+  }
 };
 </script>
-
 
 
 <style scoped>
@@ -591,6 +624,16 @@ th {
   max-width: 70px;
   max-height: 50px;
   border-radius: 4px;
+  object-fit: cover;
+}
+
+.custom-image-preview {
+  margin-top: 10px;
+}
+
+.preview-img {
+  max-width: 150px; /* Tamaño máximo ajustado */
+  max-height: 150px; /* Tamaño máximo ajustado */
   object-fit: cover;
 }
 </style>

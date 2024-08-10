@@ -20,7 +20,7 @@ const routes = [
     component: RegistreView
   },
   {
-    path: '/login',
+    path: '/Login',
     name: 'login',
     component: LoginViev
   },

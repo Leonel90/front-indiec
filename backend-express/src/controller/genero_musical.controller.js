@@ -1,5 +1,4 @@
-const {generoMusicales} = require('../Database/dataBase.orm.js');
-
+const { generoMusicales } = require('../Database/dataBase.orm.js');
 
 // Crear un nuevo género musical
 const createGeneroMusical = async (req, res) => {
@@ -26,7 +25,7 @@ const getGenerosMusicales = async (req, res) => {
 const getGeneroMusicalById = async (req, res) => {
     try {
         const { id } = req.params;
-        const genero = await GeneroMusical.findByPk(id);
+        const genero = await generoMusicales.findByPk(id);
         if (!genero) return res.status(404).json({ error: 'Género musical no encontrado' });
         res.status(200).json(genero);
     } catch (error) {
@@ -39,7 +38,7 @@ const updateGeneroMusical = async (req, res) => {
     try {
         const { id } = req.params;
         const { genero_musical_text } = req.body;
-        const genero = await GeneroMusical.findByPk(id);
+        const genero = await generoMusicales.findByPk(id);
         if (!genero) return res.status(404).json({ error: 'Género musical no encontrado' });
 
         genero.genero_musical_text = genero_musical_text;
@@ -50,14 +49,14 @@ const updateGeneroMusical = async (req, res) => {
     }
 };
 
-// Eliminar un género musical por ID
+// Eliminar un género musical por ID (eliminación física)
 const deleteGeneroMusical = async (req, res) => {
     try {
         const { id } = req.params;
-        const genero = await GeneroMusical.findByPk(id);
+        const genero = await generoMusicales.findByPk(id);
         if (!genero) return res.status(404).json({ error: 'Género musical no encontrado' });
 
-        await genero.destroy();
+        await genero.destroy(); // Eliminación física
         res.status(200).json({ message: 'Género musical eliminado' });
     } catch (error) {
         res.status(500).json({ error: error.message });

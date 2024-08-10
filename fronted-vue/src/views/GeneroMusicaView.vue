@@ -96,13 +96,12 @@ export default {
       this.csrfToken = response.data.csrfToken;
       // Configura el token CSRF en Axios
       instance.defaults.headers['X-CSRF-Token'] = this.csrfToken;
-      this.fetchGenerosMusicales(); //metodo
-
+      this.fetchGenerosMusicales();
     } catch (error) {
       console.error('Error al obtener el token CSRF:', error);
     }
   },
-  methods: {  
+  methods: {
     fetchGenerosMusicales() {
       instance.get('/generos')
         .then(response => {
@@ -124,14 +123,14 @@ export default {
           console.error('Error al crear género musical:', error);
         });
     },
-    editGeneroMusical(generos) {
+    editGeneroMusical(genero) {
       this.isEditing = true;
-      this.editGeneroId = generos.id_genero;
-      this.formData.songName = generos.genero_musical_text;
+      this.editGeneroId = genero.id_genero;
+      this.formData.songName = genero.genero_musical_text;
       this.showCreateModal = true;
     },
     updateGeneroMusical() {
-      instance.put(`/generos${this.editGeneroId}`, { genero_musical_text: this.formData.songName })
+      instance.put(`/generos/${this.editGeneroId}`, { genero_musical_text: this.formData.songName })
         .then(response => {
           const updatedGenero = response.data;
           const index = this.generos.findIndex(g => g.id_genero === updatedGenero.id_genero);
@@ -159,7 +158,7 @@ export default {
         cancelButtonText: 'Cancelar',
       }).then((result) => {
         if (result.isConfirmed) {
-          axios.delete(`/api/generos/${genero.id_genero}`)
+          instance.delete(`/generos/${genero.id_genero}`)
             .then(() => {
               const index = this.generos.indexOf(genero);
               if (index !== -1) {
@@ -184,6 +183,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 #capa-padre {
   background-color: aliceblue;

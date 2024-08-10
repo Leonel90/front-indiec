@@ -191,12 +191,15 @@ app.use(require('./router/envio.router'));
 
 
 
-// ruta de genero musical
+// rutas
 app.use(require('./router/genero_musical.router'));
+app.use(require('./router/disquera.router'))
+app.use(require('./router/plataforma.router'));
+app.use(require('./router/estado_manager.router'));
+app.use(require('./router/musica.router'));
 
 
-// login 
-app.use('/register', require('./router/index.router'));
+
 
 // Manejo de errores y otros middlewares
 app.use((err, req, res, next) => {

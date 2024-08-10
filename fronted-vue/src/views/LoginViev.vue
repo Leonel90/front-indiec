@@ -35,7 +35,7 @@
 import instance from '@/pluggins/axios';
 
 export default {
-  name: 'Login',
+  
   data() {
     return {
       email: '',
@@ -52,7 +52,7 @@ export default {
         const csrfToken = csrfResponse.data.csrfToken;
 
         // Enviar la solicitud de login
-        const response = await instance.post('/login', {
+        const response = await instance.post('/Login', {
           email: this.email,
           contrasena: this.contrasena
         }, {
