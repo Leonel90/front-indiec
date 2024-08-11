@@ -397,4 +397,6 @@ th {
 .custom-calendar .p-datepicker .p-datepicker-next {
   height: 1em; /* Ajusta la altura de los botones de navegación */
 }
+
+.buscar {}
 </style>

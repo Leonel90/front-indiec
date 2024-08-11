@@ -1,85 +1,141 @@
 <template>
   <div>
     <ProtectedNavbar />
-    <!-- Modal Crear Manager -->
+
     <div class="content">
       <div class="header">
         <div id="capa-padre">
           <h1>Manager</h1>
           <div id="app">
-            <button @click="showCreateModal = true">Crear Manager</button>
-            <MyModal :isVisible="showCreateModal" @close="closeModals">
-              <form @submit.prevent="handleCreate">
-                <h2>Crear Manager</h2>
+            <button @click="openCreateModal">Crear Manager</button>
+            <MyModal :isVisible="showCreateModal" @close="closeModal">
+              <!-- Formulario para crear o editar un manager -->
+              <form @submit.prevent="isEditing ? handleEdit() : handleCreate()">
+                <h2>{{ isEditing ? "Editar Manager" : "Crear Manager" }}</h2>
+
                 <div class="form-group">
-                  <label for="nombre">Nombres:</label>
-                  <input type="text" v-model="formData.firstName" required />
+                  <label for="foto_manager">Foto (URL):</label>
+                  <input
+                    type="text"
+                    id="foto_manager"
+                    v-model="formData.Foto_manager"
+                    placeholder="URL de la foto"
+                  />
                 </div>
-                <div class="form-group">
-                  <label for="apellido">Apellidos:</label>
-                  <input type="text" v-model="formData.lastName" required />
+
+                <div v-if="formData.Foto_manager" class="image-preview">
+                  <img
+                    :src="formData.Foto_manager"
+                    alt="Vista previa de la foto"
+                    class="preview-img"
+                  />
                 </div>
+
                 <div class="form-group">
-                  <label for="correo">Correo:</label>
-                  <input type="email" v-model="formData.email" required />
+                  <label for="apellidos">Apellidos:</label>
+                  <input
+                    type="text"
+                    id="apellidos"
+                    v-model="formData.Apellidos"
+                    required
+                    placeholder="Ingrese apellidos"
+                  />
                 </div>
+
                 <div class="form-group">
-                  <label for="plataforma">Genero:</label>
-                  <select v-model="formData.platform">
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
+                  <label for="nombres">Nombres:</label>
+                  <input
+                    type="text"
+                    id="nombres"
+                    v-model="formData.Nombres"
+                    required
+                    placeholder="Ingrese nombres"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="email">Email:</label>
+                  <input
+                    type="email"
+                    id="email"
+                    v-model="formData.Email"
+                    required
+                    placeholder="Ingrese email"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="genero_fk">Género:</label>
+                  <select v-model="formData.genero_fk" required>
+                    <option
+                      v-for="genero in generos"
+                      :key="genero.id_genero"
+                      :value="genero.id_genero"
+                    >
+                      {{ genero.nombre_genero }}
+                    </option>
                   </select>
                 </div>
+
                 <div class="form-group">
-                  <label for="estado">Estado:</label>
-                  <input type="text" v-model="formData.status" required disabled style="background-color: #0000002a" />
+                  <label for="estado_fk">Estado:</label>
+                  <select v-model="formData.estado_fk" required>
+                    <option
+                      v-for="estado in estados"
+                      :key="estado.id_estado_manager"
+                      :value="estado.id_estado_manager"
+                    >
+                      {{ estado.estado }}
+                    </option>
+                  </select>
                 </div>
-                <div class="form-group">
-                  <label for="foto">Foto:</label>
-                  <input type="text" v-model="formData.photo" />
-                </div>
+
                 <div class="button-container">
-                  <button type="submit">Guardar</button>
+                  <button type="submit">
+                    {{ isEditing ? "Guardar Cambios" : "Guardar" }}
+                  </button>
                 </div>
               </form>
             </MyModal>
 
-            <!-- Modal Editar Manager -->
-            <MyModal :isVisible="showEditModal" @close="closeModals">
-              <form @submit.prevent="handleEdit">
-                <h2>Editar Manager</h2>
+            <MyModal :isVisible="showViewModal" @close="closeViewModal">
+              <!-- Información detallada del manager -->
+              <div v-if="selectedManager">
+                <h2>Detalles del Manager</h2>
                 <div class="form-group">
-                  <label for="edit-nombre">Nombres:</label>
-                  <input type="text" id="edit-nombre" v-model="editFormData.firstName" required />
+                  <label>Foto:</label>
+                  <img
+                    :src="selectedManager.Foto_manager"
+                    alt="Foto del manager"
+                    class="preview-img"
+                  />
                 </div>
+
                 <div class="form-group">
-                  <label for="edit-apellido">Apellidos:</label>
-                  <input type="text" id="edit-apellido" v-model="editFormData.lastName" required />
+                  <label>Apellidos:</label>
+                  <p>{{ selectedManager.Apellidos }}</p>
                 </div>
+
                 <div class="form-group">
-                  <label for="edit-correo">Correo:</label>
-                  <input type="email" id="edit-correo" v-model="editFormData.email" required />
+                  <label>Nombres:</label>
+                  <p>{{ selectedManager.Nombres }}</p>
                 </div>
+
                 <div class="form-group">
-                  <label for="edit-plataforma">Genero:</label>
-                  <select v-model="editFormData.platform">
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </select>
+                  <label>Email:</label>
+                  <p>{{ selectedManager.Email }}</p>
                 </div>
+
                 <div class="form-group">
-                  <label for="edit-estado">Estado:</label>
-                  <input type="text" id="edit-estado" v-model="editFormData.status" required disabled
-                    style="background-color: #0000002a" />
+                  <label>Género:</label>
+                  <p>{{ getGeneroLabel(selectedManager.genero_fk) }}</p>
                 </div>
+
                 <div class="form-group">
-                  <label for="edit-foto">Foto:</label>
-                  <input type="text" id="edit-foto" v-model="editFormData.photo" />
+                  <label>Estado:</label>
+                  <p>{{ getStatusLabel(selectedManager.estado_fk) }}</p>
                 </div>
-                <div class="button-container">
-                  <button type="submit">Guardar Cambios</button>
-                </div>
-              </form>
+              </div>
             </MyModal>
           </div>
         </div>
@@ -87,9 +143,14 @@
 
       <!-- Botones para exportar y buscar -->
       <div class="button-container">
-        <button class="pdf">PDF</button>
-        <button class="excel">EXCEL</button>
-        <input type="text" placeholder="Buscar . . ." class="buscar" v-model="searchQuery" />
+        <button class="pdf" @click="exportToPDF">PDF</button>
+        <button class="excel" @click="exportToExcel">EXCEL</button>
+        <input
+          type="text"
+          placeholder="Buscar . . ."
+          class="buscar"
+          v-model="searchQuery"
+        />
       </div>
 
       <!-- Tabla de Managers -->
@@ -97,74 +158,54 @@
         <table>
           <thead>
             <tr>
-              <th>
-                <div class="cell">#</div>
-              </th>
-              <th>
-                <div class="cell">Foto</div>
-              </th>
-              <th>
-                <div class="cell">Apellidos</div>
-              </th>
-              <th>
-                <div class="cell">Nombres</div>
-              </th>
-              <th>
-                <div class="cell">Correo</div>
-              </th>
-              <th>
-                <div class="cell">Genero</div>
-              </th>
-              <th>
-                <div class="cell">Estado</div>
-              </th>
-              <th>
-                <div class="cell">Acciones</div>
-              </th>
+              <th>#</th>
+              <th>Foto</th>
+              <th>Apellidos</th>
+              <th>Nombres</th>
+              <th>Email</th>
+              <th>Género</th>
+              <th>Estado</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(user, index) in filteredUsers" :key="index">
+            <tr v-for="(manager, index) in filteredManagers" :key="manager.id_Manager">
+              <td>{{ index + 1 }}</td>
               <td>
-                <div class="cell">{{ index + 1 }}</div>
+                <img :src="manager.Foto_manager" alt="Foto" class="manager-photo" />
+              </td>
+              <td>{{ manager.Apellidos }}</td>
+              <td>{{ manager.Nombres }}</td>
+              <td>{{ manager.Email }}</td>
+              <td>
+                <span :class="getGeneroClass(manager.genero_fk)">
+                  {{ getGeneroLabel(manager.genero_fk) }}
+                </span>
               </td>
               <td>
-                <div class="cell">
-                  <img :src="user.photo" alt="" class="user-photo" />
+                <span :class="getStatusClass(manager.estado_fk)">
+                  {{ getStatusLabel(manager.estado_fk) }}
+                </span>
+              </td>
+              <td>
+                <div class="button-group">
+                  <button class="btn view-btn" @click="viewManagerDetails(manager)">
+                    <i class="bx bx-show"></i>
+                  </button>
+                  <button class="btn edit-btn" @click="startEditing(manager)">
+                    <i class="bx bx-edit"></i>
+                  </button>
+                  <button
+                    class="btn delete-btn"
+                    v-if="manager.estado_fk === 1"
+                    @click="deleteManager(manager)"
+                  >
+                    <i class="bx bx-trash"></i>
+                  </button>
+                  <button class="btn restore-btn" v-else @click="restoreManager(manager)">
+                    <i class="bx bx-undo"></i>
+                  </button>
                 </div>
-              </td>
-              <td>
-                <div class="cell">{{ user.lastName }}</div>
-              </td>
-              <td>
-                <div class="cell">{{ user.firstName }}</div>
-              </td>
-              <td>
-                <div class="cell">{{ user.email }}</div>
-              </td>
-
-              <td>
-                <div class="cell">{{ user.platform }}</div>
-              </td>
-              <td>
-                <span :class="{
-                  'status-active': user.status === 'Activo',
-                  'status-inactive': user.status === 'Inactivo',
-                }">{{ user.status }}</span>
-              </td>
-              <td>
-                <button class="btn view-btn" @click="viewUser(user)">
-                  <i class="bx bx-show"></i>
-                </button>
-                <button class="btn edit-btn" @click="editUser(user)">
-                  <i class="bx bx-edit"></i>
-                </button>
-                <button class="btn delete-btn" v-if="user.status === 'Activo'" @click="deleteUser(user)">
-                  <i class="bx bx-trash"></i>
-                </button>
-                <button class="btn restore-btn" v-else @click="restoreUser(user)">
-                  <i class="bx bx-undo"></i>
-                </button>
               </td>
             </tr>
           </tbody>
@@ -175,6 +216,7 @@
 </template>
 
 <script>
+import instance from "@/pluggins/axios";
 import ProtectedNavbar from "../components/ProtectedNavbar.vue";
 import MyModal from "../components/Modal.vue";
 import Swal from "sweetalert2";
@@ -185,155 +227,204 @@ export default {
     MyModal,
   },
   data() {
-  return {
-    showCreateModal: false,
-    showEditModal: false,
-    searchQuery: "",
-    formData: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      status: "Activo",
-      platform: "Masculino", // Valor por defecto para la plataforma
-      photo: "path/to/default/photo.png",
-    },
-    editFormData: {}, // Para almacenar los datos del manager que se está editando
-    users: [
-      {
-        id: 1, // Identificador único
-        firstName: "John",
-        lastName: "Doe",
-        email: "Alexander@ya.ed",
-        status: "Activo",
-        platform: "Femenino",
-        photo: "https://i.pinimg.com/736x/a2/56/51/a256518753a01a4fe95d1bfd35b63317.jpg",
+    return {
+      showCreateModal: false,
+      showViewModal: false,
+      formData: {
+        Foto_manager: "",
+        Apellidos: "",
+        Nombres: "",
+        Email: "",
+        genero_fk: null,
+        estado_fk: null,
       },
-      {
-        id: 2, // Identificador único
-        firstName: "Jane",
-        lastName: "Smith",
-        email: "Alexander@ya.ed",
-        status: "Inactivo",
-        platform: "Masculino",
-        photo: "https://i.pinimg.com/736x/a2/56/51/a256518753a01a4fe95d1bfd35b63317.jpg",
-      },
-      {
-        id: 3, // Identificador único
-        firstName: "Alexander",
-        lastName: "Narvaez",
-        email: "Alexander@ya.ed",
-        status: "Activo",
-        platform: "Masculino",
-        photo: "https://i.pinimg.com/736x/a2/56/51/a256518753a01a4fe95d1bfd35b63317.jpg",
-      },
-    ],
-  };
-},
-
-  computed: {
-    filteredUsers() {
-      const query = this.searchQuery.toLowerCase();
-      return this.users.filter(
-        (user) =>
-          user.firstName.toLowerCase().includes(query) ||
-          user.lastName.toLowerCase().includes(query) ||
-          user.email.toLowerCase().includes(query) ||
-          user.status.toLowerCase().includes(query) ||
-          user.platform.toLowerCase().includes(query)
-      );
-    },
+      managers: [],
+      generos: [],
+      estados: [],
+      csrfToken: "",
+      isEditing: false,
+      editManagerId: null,
+      searchQuery: "",
+      selectedManager: null,
+    };
+  },
+  async mounted() {
+    try {
+      // Obtén el token CSRF del backend
+      const response = await instance.get("/");
+      this.csrfToken = response.data.csrfToken;
+      // Configura el token CSRF en Axios
+      instance.defaults.headers["X-CSRF-Token"] = this.csrfToken;
+      this.fetchManagers();
+      this.fetchGeneros();
+      this.fetchEstados();
+    } catch (error) {
+      console.error("Error al obtener el token CSRF:", error);
+    }
   },
   methods: {
-    handleCreate() {
-    const newUser = { ...this.formData, id: this.users.length + 1 };
-    this.users.push(newUser);
-    this.showCreateModal = false;
-    this.resetFormData();
-    Swal.fire({
-      title: "¡Manager creado!",
-      text: "El nuevo manager ha sido creado con éxito.",
-      icon: "success",
-      confirmButtonText: "OK",
-    });
-  },
-    handleEdit() {
-      const index = this.users.findIndex(
-        (user) => user.id === this.editFormData.id
-      );
-      if (index !== -1) {
-        // Actualiza el objeto en el índice correcto sin usar this.$set
-        this.users[index] = { ...this.editFormData };
-        this.showEditModal = false;
-        this.editFormData = {};
-        Swal.fire({
-          title: "¡Manager editado!",
-          text: "Los cambios han sido guardados exitosamente.",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
+    async fetchManagers() {
+      try {
+        const response = await instance.get("/managers");
+        this.managers = response.data;
+      } catch (error) {
+        console.error("Error al obtener managers:", error);
       }
     },
-
-    editUser(user) {
-    this.editFormData = { ...user }; // Asigna una copia del objeto
-    this.showEditModal = true;
-  },
-    deleteUser(user) {
-      user.status = "Inactivo";
-      Swal.fire({
-        title: "¡Manager eliminado!",
-        text: "El manager ha sido movido a la lista de Inactivos.",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
+    async fetchGeneros() {
+      try {
+        const response = await instance.get("/generoPersonas");
+        this.generos = response.data;
+      } catch (error) {
+        console.error("Error al obtener géneros:", error);
+      }
     },
-    restoreUser(user) {
-      user.status = "Activo";
-      Swal.fire({
-        title: "¡Manager restaurado!",
-        text: "El manager ha sido movido a la lista de Activos.",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
+    async fetchEstados() {
+      try {
+        const response = await instance.get("/estadoManager");
+        this.estados = response.data;
+      } catch (error) {
+        console.error("Error al obtener estados:", error);
+      }
     },
-    closeModals() {
-      this.showCreateModal = false;
-      this.showEditModal = false;
-      this.resetFormData();
-      this.editFormData = {};
-    },
-    resetFormData() {
+    openCreateModal() {
+      this.isEditing = false;
       this.formData = {
-        firstName: "",
-        lastName: "",
-        email: "",
-        status: "Activo",
-        platform: "Genero",
-        photo: "path/to/default/photo.png",
+        Foto_manager: "",
+        Apellidos: "",
+        Nombres: "",
+        Email: "",
+        genero_fk: null,
+        estado_fk: null,
       };
+      this.showCreateModal = true;
     },
-    viewUser(user) {
+    closeModal() {
+      this.showCreateModal = false;
+    },
+    closeViewModal() {
+      this.showViewModal = false;
+    },
+    async handleCreate() {
+      try {
+        await instance.post("/managers", this.formData);
+        Swal.fire("Éxito", "Manager creado exitosamente", "success");
+        this.fetchManagers();
+        this.closeModal();
+      } catch (error) {
+        console.error("Error al crear el manager:", error);
+        Swal.fire("Error", "No se pudo crear el manager", "error");
+      }
+    },
+    async handleEdit() {
+      try {
+        await instance.put(`/managers/${this.editManagerId}`, this.formData);
+        Swal.fire("Éxito", "Manager actualizado exitosamente", "success");
+        this.fetchManagers();
+        this.closeModal();
+      } catch (error) {
+        console.error("Error al actualizar el manager:", error);
+        Swal.fire("Error", "No se pudo actualizar el manager", "error");
+      }
+    },
+    startEditing(manager) {
+      this.isEditing = true;
+      this.editManagerId = manager.id_Manager;
+      this.formData = { ...manager };
+      this.showCreateModal = true;
+    },
+    async deleteManager(manager) {
       Swal.fire({
-        title: "Detalles del Manager",
-        html: `
-          <div class="modal-details">
-            <p><strong>Nombres:</strong> ${user.firstName}</p>
-            <p><strong>Apellidos:</strong> ${user.lastName}</p>
-            <p><strong>Correo:</strong> ${user.email}</p>
-            <p><strong>Género:</strong> ${user.platform}</p>
-            <p><strong>Plataforma:</strong> ${user.platform}</p>
-            <p><strong>Estado:</strong> ${user.status}</p>
-            <img src="${user.photo}" alt="Foto del Manager" class="modal-photo">
-          </div>
-        `,
-        confirmButtonText: "OK",
+        title: "¿Estás seguro?",
+        text: "Esta acción cambiará el estado del manager a 'Eliminado'.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await instance.put(`/managers/${manager.id_Manager}`, { ...manager, estado_fk: 2 });
+            // Actualiza el estado del manager en el array local
+            const index = this.managers.findIndex(m => m.id_Manager === manager.id_Manager);
+            if (index !== -1) {
+              this.managers[index].estado_fk = 2;
+            }
+            Swal.fire("¡Eliminado!", "El manager ha sido eliminado.", "success");
+          } catch (error) {
+            console.error("Error al eliminar el manager:", error);
+            Swal.fire("Error", "No se pudo eliminar el manager", "error");
+          }
+        }
       });
+    },
+    async restoreManager(manager) {
+      Swal.fire({
+        title: "¿Estás seguro?",
+        text: "Esta acción cambiará el estado del manager a 'Activo'.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, restaurar",
+        cancelButtonText: "Cancelar",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await instance.put(`/managers/${manager.id_Manager}`, { ...manager, estado_fk: 1 });
+            // Actualiza el estado del manager en el array local
+            const index = this.managers.findIndex(m => m.id_Manager === manager.id_Manager);
+            if (index !== -1) {
+              this.managers[index].estado_fk = 1;
+            }
+            Swal.fire("¡Restaurado!", "El manager ha sido restaurado.", "success");
+          } catch (error) {
+            console.error("Error al restaurar el manager:", error);
+            Swal.fire("Error", "No se pudo restaurar el manager", "error");
+          }
+        }
+      });
+    },
+    viewManagerDetails(manager) {
+      this.selectedManager = manager;
+      this.showViewModal = true;
+    },
+    getGeneroLabel(id) {
+      const genero = this.generos.find(g => g.id_genero === id);
+      return genero ? genero.nombre_genero : "Desconocido";
+    },
+    getStatusLabel(id) {
+      const estado = this.estados.find(e => e.id_estado_manager === id);
+      return estado ? estado.estado : "Desconocido";
+    },
+    getGeneroClass(id) {
+      const genero = this.generos.find(g => g.id_genero === id);
+      return genero ? `genero-${(genero.nombre_genero || '').toLowerCase()}` : "genero-desconocido";
+    },
+    getStatusClass(id) {
+      const estado = this.estados.find(e => e.id_estado_manager === id);
+      return estado ? `estado-${(estado.estado || '').toLowerCase()}` : "estado-desconocido";
+    },
+    exportToPDF() {
+      // Implementa la lógica para exportar a PDF
+    },
+    exportToExcel() {
+      // Implementa la lógica para exportar a Excel
+    },
+  },
+  computed: {
+    filteredManagers() {
+      return this.managers.filter(manager => 
+        manager.Apellidos.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        manager.Nombres.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        manager.Email.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
     },
   },
 };
 </script>
-
-
 <style scoped>
 /* Estilos para el contenedor principal */
 #capa-padre {
@@ -549,16 +640,6 @@ th {
 }
 
 /* Estilos de la vista previa de la imagen */
-.image-preview {
-  margin: 80px;
-}
-
-.image-preview img {
-  max-width: 50%;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
-}
 
 /* Estilos del botón para subir imagen */
 .form-group1 {
@@ -570,7 +651,45 @@ th {
   cursor: pointer;
   text-align: center;
 }
+.custom-image-preview {
+  margin-top: 10px;
+}
+
+.custom-preview-img {
+  max-width: 40%;
+  max-height: 30px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
 
 
+.manager-photo {
+  max-width: 60px; /* Ancho máximo de la imagen */
+  max-height: 70px; /* Altura máxima de la imagen */
+  width: auto; /* Ancho automático para mantener la relación de aspecto */
+  height: auto; /* Altura automática para mantener la relación de aspecto */
+  object-fit: cover; /* Ajusta la imagen al contenedor sin distorsionar */
+  border-radius: 4px; 
+}
+
+.modal-content {
+  padding: 20px;
+  max-width: 200px;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.preview-img {
+  max-width: 200%;
+  height: auto;
+  max-height: 200px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+}
 .buscar {}
 </style>

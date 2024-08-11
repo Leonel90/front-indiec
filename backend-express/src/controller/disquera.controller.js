@@ -1,103 +1,106 @@
-const { disqueras } = require('../Database/dataBase.orm'); // Ajusta la ruta según sea necesario
-
-const disquerasCtl = {};
-
-// Mostrar todas las disqueras
-disquerasCtl.mostrar = async (req, res) => {
-  try {
-    const listaDisqueras = await disqueras.findAll();
-    res.status(200).json(listaDisqueras);
-  } catch (error) {
-    console.error("Error al obtener las disqueras:", error);
-    res.status(500).send("Hubo un error al obtener las disqueras");
-  }
-};
-
+const { disqueras } = require('../Database/dataBase.orm');
 
 // Crear una nueva disquera
-disquerasCtl.crear = async (req, res) => {
-  // Manejo de archivo subido
-  const { file } = req;
-  const { Nombre_disquera, Descripcion_disquera, Url, estado_fk } = req.body;
+const crearDisquera = async (req, res) => {
+    try {
+        const { Nombre_disquera, Descripcion_disquera, Foto_disquera, Url, estado_fk, plataforma_fk } = req.body;
+        if (!Nombre_disquera || !estado_fk || !plataforma_fk) {
+            return res.status(400).json({ message: "Datos incompletos" });
+        }
+        
+        const nuevaDisquera = await disqueras.create({ Nombre_disquera, Descripcion_disquera, Foto_disquera, Url, estado_fk, plataforma_fk });
+        res.status(201).json(nuevaDisquera);
+    } catch (error) {
+        console.error('Error al crear disquera:', error);
+        res.status(500).json({ message: 'Error al crear la disquera' });
+    }
+};
 
-  try {
-    const fotoDisquera = file ? file.filename : null; // Nombre del archivo subido (ajustar según configuración de multer)
-
-    await disqueras.create({ 
-      Foto_disquera: fotoDisquera, 
-      Nombre_disquera, 
-      Descripcion_disquera, 
-      Url, 
-      estado_fk 
-    });
-
-    res.status(201).send("Disquera creada con éxito");
-  } catch (error) {
-    console.error("Error al crear la disquera:", error);
-    res.status(500).send("Hubo un error al crear la disquera");
-  }
+// Obtener todas las disqueras
+const obtenerDisqueras = async (req, res) => {
+    try {
+        const todasLasDisqueras = await disqueras.findAll();
+        res.status(200).json(todasLasDisqueras);
+    } catch (error) {
+        console.error("Error al obtener disqueras:", error);
+        res.status(500).json({ message: "Error al obtener disqueras" });
+    }
 };
 
 // Obtener una disquera por ID
-disquerasCtl.obtenerPorId = async (req, res) => {
-  const { id } = req.params;
-
-  console.log("ID recibido:", id); // Añadir este log para verificar el ID recibido
-
-  try {
-    const disqueraEncontrada = await disqueras.findByPk(id);
-
-    if (!disqueraEncontrada) {
-      return res.status(404).json({ message: 'Disquera no encontrada' });
+const obtenerDisqueraPorId = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const disqueraItem = await disqueras.findByPk(id);
+        if (disqueraItem) {
+            res.status(200).json(disqueraItem);
+        } else {
+            res.status(404).json({ message: "Disquera no encontrada" });
+        }
+    } catch (error) {
+        console.error("Error al obtener disquera:", error);
+        res.status(500).json({ message: "Error al obtener disquera" });
     }
-    res.status(200).json(disqueraEncontrada);
+};
+
+// Actualizar una disquera
+const actualizarDisquera = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const [actualizado] = await disqueras.update(req.body, {
+            where: { id_Disquera: id }
+        });
+        if (actualizado) {
+            const disqueraActualizada = await disqueras.findByPk(id);
+            res.status(200).json(disqueraActualizada);
+        } else {
+            res.status(404).json({ message: "Disquera no encontrada" });
+        }
+    } catch (error) {
+        console.error("Error al actualizar disquera:", error);
+        res.status(500).json({ message: "Error al actualizar disquera" });
+    }
+};
+
+// Eliminar una disquera (lógica)
+const eliminarDisquera = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const disqueraItem = await disqueras.findByPk(id);
+        if (disqueraItem) {
+            await disqueraItem.update({ estado_fk: 2 }); // Cambia el estado a "Eliminado"
+            res.status(200).json({ message: "Disquera eliminada" });
+        } else {
+            res.status(404).json({ message: "Disquera no encontrada" });
+        }
+    } catch (error) {
+        console.error("Error al eliminar disquera:", error);
+        res.status(500).json({ message: "Error al eliminar disquera" });
+    }
+};
+
+// Restaurar una disquera
+const restaurarDisquera = async (req, res) => {
+  const { id } = req.params;
+  try {
+      const disqueraItem = await disqueras.findByPk(id);
+      if (disqueraItem) {
+          await disqueraItem.update({ estado_fk: 1 }); // Cambia el estado a "Activo"
+          res.status(200).json({ message: "Disquera restaurada" });
+      } else {
+          res.status(404).json({ message: "Disquera no encontrada" });
+      }
   } catch (error) {
-    console.error("Error al obtener la disquera:", error);
-    res.status(500).json({ message: 'Error interno del servidor: ' + error.message });
+      console.error("Error al restaurar disquera:", error);
+      res.status(500).json({ message: "Error al restaurar disquera" });
   }
 };
 
-// Eliminar una disquera (lógica, cambia el estado a 'eliminado')
-disquerasCtl.eliminar = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const result = await disqueras.update(
-      { estado: 'eliminado' },
-      { where: { id_Disquera: id } }
-    );
-
-    if (result[0] > 0) {
-      res.status(200).send("Disquera eliminada con éxito");
-    } else {
-      res.status(404).send("Disquera no encontrada");
-    }
-  } catch (error) {
-    console.error("Error al eliminar la disquera:", error);
-    res.status(500).send("Hubo un error al eliminar la disquera");
-  }
+module.exports = {
+    crearDisquera,
+    obtenerDisqueras,
+    obtenerDisqueraPorId,
+    actualizarDisquera,
+    eliminarDisquera,
+    restaurarDisquera
 };
-
-// Actualizar una disquera por ID
-disquerasCtl.actualizar = async (req, res) => {
-  const { id } = req.params;
-  const { Foto_disquera, Nombre_disquera, Descripcion_disquera, Url, estado } = req.body;
-
-  try {
-    const result = await disqueras.update(
-      { Foto_disquera, Nombre_disquera, Descripcion_disquera, Url, estado },
-      { where: { id_Disquera: id } }
-    );
-
-    if (result[0] > 0) {
-      res.status(200).send("Disquera actualizada con éxito");
-    } else {
-      res.status(404).send("Disquera no encontrada");
-    }
-  } catch (error) {
-    console.error("Error al actualizar la disquera:", error);
-    res.status(500).send("Hubo un error al actualizar la disquera");
-  }
-};
-
-module.exports = disquerasCtl;

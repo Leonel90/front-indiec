@@ -1,20 +1,30 @@
 const express = require('express');
 const router = express.Router();
-const disquerasCtl = require('../controller/disquera.controller'); // Ajusta la ruta según sea necesario
+const {
+    crearDisquera,
+    obtenerDisqueras,
+    obtenerDisqueraPorId,
+    actualizarDisquera,
+    eliminarDisquera,
+    restaurarDisquera
+} = require('../controller/disquera.controller');
 
-// Obtener todas las disqueras
-router.get('/disqueras', disquerasCtl.mostrar);
+// Ruta para crear una nueva disquera
+router.post('/disqueras', crearDisquera);
 
-// Crear una nueva disquera
-router.post('/disqueras', disquerasCtl.crear);
+// Ruta para obtener todas las disqueras
+router.get('/disqueras', obtenerDisqueras);
 
-// Obtener una disquera por ID
-router.get('/disqueras/:id', disquerasCtl.obtenerPorId);
+// Ruta para obtener una disquera por ID
+router.get('/disqueras/:id', obtenerDisqueraPorId);
 
-// Eliminar una disquera por ID (lógica)
-router.delete('/disqueras/:id', disquerasCtl.eliminar);
+// Ruta para actualizar una disquera por ID
+router.put('/disqueras/:id', actualizarDisquera);
 
-// Actualizar una disquera por ID
-router.put('/disqueras/:id', disquerasCtl.actualizar);
+// Ruta para eliminar una disquera (eliminación lógica)
+router.delete('/disqueras/:id', eliminarDisquera);
+
+// Ruta para restaurar una disquera por ID
+router.put('/disqueras/restore/:id', restaurarDisquera);
 
 module.exports = router;

@@ -193,10 +193,17 @@ app.use(require('./router/envio.router'));
 
 // rutas
 app.use(require('./router/genero_musical.router'));
-app.use(require('./router/disquera.router'))
+app.use(require('./router/disquera.router'));
 app.use(require('./router/plataforma.router'));
 app.use(require('./router/estado_manager.router'));
 app.use(require('./router/musica.router'));
+app.use(require('./router/genero_persona.router'));
+app.use(require('./router/maneger.router'));
+app.use(require('./router/album.router'));
+app.use(require('./router/grupoMusical.router'));
+app.use(require('./router/evento.router'));
+
+
 
 
 

@@ -47,14 +47,7 @@ const evento = (sequelize, DataTypes) => {
             },
             comment: 'Clave foránea que referencia a EstadoManager'
         },
-        detalle_artista_grupo_fk: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'detalle_artista_grupos', 
-                key: 'id_detalle_grupo'         
-            },
-            comment: 'Clave foránea que referencia a detalle_artista_grupo'
-        }
+       
     }, {
         timestamps: false,  
         comment: 'Tabla de eventos'

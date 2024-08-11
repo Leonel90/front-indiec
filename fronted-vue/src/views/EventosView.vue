@@ -1,142 +1,190 @@
 <template>
   <div>
     <ProtectedNavbar />
-    
+
     <div class="content">
       <div class="header">
         <div id="capa-padre">
-          <h1>Eventos</h1>
+          <h1>Evento</h1>
           <div id="app">
-            <button @click="showCreateModal = true">Crear Evento</button>
-            <MyModal :isVisible="showCreateModal" @close="showCreateModal = false">
-              <form v-if="!isEditing" @submit.prevent="handleCreate">
-                <h2>Crear Evento</h2>
-                
-                <div class="form-group custom-form-group">
-                  <label for="imagen" class="upload-label custom-upload-label">
-                    <i class="bx bx-check"></i> Subir Imagen
-                  </label>
-                  <input
-                    type="file"
-                    id="imagen"
-                    class="custom-upload-input"
-                    @change="handleFileUpload"
-                    accept="image/*"
-                  />
-                </div>
-                
-                <div v-if="imagePreview" class="image-preview custom-image-preview">
-                  <img
-                    :src="imagePreview"
-                    alt="Vista previa de la imagen"
-                    class="custom-preview-img"
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="eventName">Nombre del Evento:</label>
-                  <input type="text" v-model="formData.eventName" required />
-                </div>
-                <div class="form-group">
-                  <label for="description">Descripción:</label>
-                  <input type="text" v-model="formData.description" required />
-                </div>
-                <div class="form-group">
-                  <label for="location">Ubicación:</label>
-                  <input type="text" v-model="formData.location" required />
-                </div>
-                <div class="form-group">
-                  <label for="date">Fecha:</label>
-                  <input type="date" v-model="formData.date" required />
-                </div>
-                <div class="form-group">
-                  <label for="url">URL:</label>
-                  <input type="url" v-model="formData.url" required />
-                </div>
-                <div class="form-group">
-                  <label for="contact">Contacto:</label>
-                  <input type="text" v-model="formData.contact" required />
-                </div>
-                <div class="form-group">
-                  <label for="capacity">Capacidad:</label>
-                  <input type="number" v-model="formData.capacity" required />
-                </div>
-                <div class="form-group">
-                  <label for="artists">Artistas:</label>
-                  <textarea v-model="formData.artists" placeholder="Ingrese los nombres de los artistas, separados por comas" required></textarea>
-                </div>
-                <div class="button-container">
-                  <button type="submit">Guardar</button>
-                </div>
-              </form>
+            <button @click="openCreateModal">Crear Evento</button>
+            <MyModal :isVisible="showCreateModal" @close="closeModal">
+              <!-- Formulario para crear o editar un evento -->
+              <form @submit.prevent="isEditing ? handleEdit() : handleCreate()">
+                <h2>{{ isEditing ? "Editar Evento" : "Crear Evento" }}</h2>
 
-              <form v-else @submit.prevent="handleEdit">
-                <h2>Editar Evento</h2>
-                
-                <div class="form-group custom-form-group">
-                  <label for="edit-imagen" class="upload-label custom-upload-label">
-                    <i class="bx bx-check"></i> Cambiar Imagen
-                  </label>
+                <div class="form-group">
+                  <label for="Foto_evento">Foto del Evento (URL):</label>
                   <input
-                    type="file"
-                    id="edit-imagen"
-                    class="custom-upload-input"
-                    @change="handleEditFileUpload"
-                    accept="image/*"
+                    type="text"
+                    id="Foto_evento"
+                    v-model="formData.Foto_evento"
+                    placeholder="URL de la foto"
                   />
                 </div>
-                
-                <div v-if="editImagePreview" class="image-preview custom-image-preview">
+
+                <div v-if="formData.Foto_evento" class="image-preview">
                   <img
-                    :src="editImagePreview"
-                    alt="Vista previa de la imagen"
-                    class="custom-preview-img"
+                    :src="formData.Foto_evento"
+                    alt="Vista previa de la foto"
+                    class="preview-img"
                   />
                 </div>
+
                 <div class="form-group">
-                  <label for="eventName">Nombre del Evento:</label>
-                  <input type="text" v-model="formData.eventName" required />
+                  <label for="Nombre_evento">Nombre del Evento:</label>
+                  <input
+                    type="text"
+                    id="Nombre_evento"
+                    v-model="formData.Nombre_evento"
+                    required
+                    placeholder="Ingrese nombre del evento"
+                  />
                 </div>
+
                 <div class="form-group">
-                  <label for="description">Descripción:</label>
-                  <input type="text" v-model="formData.description" required />
+                  <label for="Descripcion">Descripción:</label>
+                  <input
+                    type="text"
+                    id="Descripcion"
+                    v-model="formData.Descripcion"
+                    placeholder="Ingrese descripción"
+                  />
                 </div>
+
                 <div class="form-group">
-                  <label for="location">Ubicación:</label>
-                  <input type="text" v-model="formData.location" required />
+                  <label for="Ubicacion">Ubicación:</label>
+                  <input
+                    type="text"
+                    id="Ubicacion"
+                    v-model="formData.Ubicacion"
+                    placeholder="Ingrese ubicación"
+                  />
                 </div>
+
                 <div class="form-group">
-                  <label for="date">Fecha:</label>
-                  <input type="date" v-model="formData.date" required />
+                  <label for="Fecha">Fecha:</label>
+                  <input
+                    type="date"
+                    id="Fecha"
+                    v-model="formData.Fecha"
+                    required
+                  />
                 </div>
+
                 <div class="form-group">
-                  <label for="url">URL:</label>
-                  <input type="url" v-model="formData.url" required />
+                  <label for="Contacto">Contacto:</label>
+                  <input
+                    type="text"
+                    id="Contacto"
+                    v-model="formData.Contacto"
+                    placeholder="Ingrese contacto"
+                  />
                 </div>
+
                 <div class="form-group">
-                  <label for="contact">Contacto:</label>
-                  <input type="text" v-model="formData.contact" required />
+                  <label for="Capacidad">Capacidad:</label>
+                  <input
+                    type="text"
+                    id="Capacidad"
+                    v-model="formData.Capacidad"
+                    placeholder="Ingrese capacidad"
+                  />
                 </div>
+
                 <div class="form-group">
-                  <label for="capacity">Capacidad:</label>
-                  <input type="number" v-model="formData.capacity" required />
+                  <label for="Artistas">Artistas:</label>
+                  <input
+                    type="text"
+                    id="Artistas"
+                    v-model="formData.Artistas"
+                    placeholder="Ingrese nombres de los artistas"
+                  />
                 </div>
+
                 <div class="form-group">
-                  <label for="artists">Artistas:</label>
-                  <textarea v-model="formData.artists" placeholder="Ingrese los nombres de los artistas, separados por comas" required></textarea>
+                  <label for="estado_fk">Estado:</label>
+                  <select v-model="formData.estado_fk" required>
+                    <option
+                      v-for="estado in estados"
+                      :key="estado.id_estado_manager"
+                      :value="estado.id_estado_manager"
+                    >
+                      {{ estado.estado }}
+                    </option>
+                  </select>
                 </div>
+
                 <div class="button-container">
-                  <button type="submit">Guardar Cambios</button>
+                  <button type="submit">
+                    {{ isEditing ? "Guardar Cambios" : "Guardar" }}
+                  </button>
                 </div>
               </form>
+            </MyModal>
+
+            <MyModal :isVisible="showViewModal" @close="closeViewModal">
+              <!-- Información detallada del evento -->
+              <div v-if="selectedEvent">
+                <h2>Detalles del Evento</h2>
+                <div class="form-group">
+                  <label>Foto:</label>
+                  <img
+                    :src="selectedEvent.Foto_evento"
+                    alt="Foto del evento"
+                    class="preview-img"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label>Nombre del Evento:</label>
+                  <p>{{ selectedEvent.Nombre_evento }}</p>
+                </div>
+
+                <div class="form-group">
+                  <label>Descripción:</label>
+                  <p>{{ selectedEvent.Descripcion }}</p>
+                </div>
+
+                <div class="form-group">
+                  <label>Ubicación:</label>
+                  <p>{{ selectedEvent.Ubicacion }}</p>
+                </div>
+
+                <div class="form-group">
+                  <label>Fecha:</label>
+                  <p>{{ selectedEvent.Fecha }}</p>
+                </div>
+
+                <div class="form-group">
+                  <label>Contacto:</label>
+                  <p>{{ selectedEvent.Contacto }}</p>
+                </div>
+
+                <div class="form-group">
+                  <label>Capacidad:</label>
+                  <p>{{ selectedEvent.Capacidad }}</p>
+                </div>
+
+                <div class="form-group">
+                  <label>Artistas:</label>
+                  <p>{{ selectedEvent.Artistas }}</p>
+                </div>
+
+                <div class="form-group">
+                  <label>Estado:</label>
+                  <p>{{ getStatusLabel(selectedEvent.estado_fk) }}</p>
+                </div>
+              </div>
             </MyModal>
           </div>
         </div>
       </div>
 
-      
+      <!-- Botones para exportar y buscar -->
       <div class="button-container">
-        <button class="pdf">PDF</button>
-        <button class="excel">EXCEL</button>
+        <button class="pdf" @click="exportToPDF">PDF</button>
+        <button class="excel" @click="exportToExcel">EXCEL</button>
         <input
           type="text"
           placeholder="Buscar . . ."
@@ -145,62 +193,40 @@
         />
       </div>
 
-      
+      <!-- Tabla de Eventos -->
       <div class="table-container">
         <table>
           <thead>
             <tr>
-              <th><div class="cell">#</div></th>
-              <th><div class="cell">Foto</div></th>
-              <th><div class="cell">Nombre del Evento</div></th>
-              <th><div class="cell">Descripción</div></th>
-              <th><div class="cell">Ubicación</div></th>
-              <th><div class="cell">Fecha</div></th>
-              <th><div class="cell">Contacto</div></th>
-              <th><div class="cell">Capacidad</div></th>
-              <th><div class="cell">Artistas</div></th>
-              <th><div class="cell">Estado</div></th>
-              <th><div class="cell">Acciones</div></th>
+              <th>#</th>
+              <th>Foto</th>
+              <th>Nombre del Evento</th>
+              <th>Descripción</th>
+              <th>Ubicación</th>
+              <th>Fecha</th>
+              <th>Contacto</th>
+              <th>Capacidad</th>
+              <th>Artistas</th>
+              <th>Estado</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(event, index) in filteredEvents" :key="index">
+            <tr v-for="(event, index) in filteredEvents" :key="event.id_Evento">
+              <td>{{ index + 1 }}</td>
               <td>
-                <div class="cell">{{ index + 1 }}</div>
+                <img :src="event.Foto_evento" alt="Foto" class="event-photo" />
               </td>
+              <td>{{ event.Nombre_evento }}</td>
+              <td>{{ event.Descripcion }}</td>
+              <td>{{ event.Ubicacion }}</td>
+              <td>{{ event.Fecha }}</td>
+              <td>{{ event.Contacto }}</td>
+              <td>{{ event.Capacidad }}</td>
+              <td>{{ event.Artistas }}</td>
               <td>
-                <div class="cell">
-                  <img :src="event.photo" alt="Foto" class="event-photo" />
-                </div>
-              </td>
-              <td>
-                <div class="cell">{{ event.eventName }}</div>
-              </td>
-              <td>
-                <div class="cell">{{ event.description }}</div>
-              </td>
-              <td>
-                <div class="cell">{{ event.location }}</div>
-              </td>
-              <td>
-                <div class="cell">{{ event.date }}</div>
-              </td>
-              <td>
-                <div class="cell">{{ event.contact }}</div>
-              </td>
-              <td>
-                <div class="cell">{{ event.capacity }}</div>
-              </td>
-              <td>
-                <div class="cell">
-                  <div class="scroll-container">
-                    <div v-for="artist in event.artistsList" :key="artist">{{ artist }}</div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <span :class="getEventStatusClass(event.status)">
-                  {{ event.status }}
+                <span :class="getStatusClass(event.estado_fk)">
+                  {{ getStatusLabel(event.estado_fk) }}
                 </span>
               </td>
               <td>
@@ -213,7 +239,7 @@
                   </button>
                   <button
                     class="btn delete-btn"
-                    v-if="event.status === 'Activo'"
+                    v-if="event.estado_fk === 1"
                     @click="deleteEvent(event)"
                   >
                     <i class="bx bx-trash"></i>
@@ -232,6 +258,7 @@
 </template>
 
 <script>
+import instance from "@/pluggins/axios";
 import ProtectedNavbar from "../components/ProtectedNavbar.vue";
 import MyModal from "../components/Modal.vue";
 import Swal from "sweetalert2";
@@ -244,178 +271,210 @@ export default {
   data() {
     return {
       showCreateModal: false,
-      searchQuery: "",
+      showViewModal: false,
       formData: {
-        eventName: "",
-        description: "",
-        location: "",
-        date: "",
-        url: "",
-        contact: "",
-        capacity: "",
-        artists: "", 
-        photo: "", 
+        Foto_evento: "",
+        Nombre_evento: "",
+        Descripcion: "",
+        Ubicacion: "",
+        Fecha: "",
+        Contacto: "",
+        Capacidad: "",
+        Artistas: "",
+        estado_fk: null,
       },
-      events: [
-        {
-          eventName: "Concierto de Rock",
-          description: "Un evento emocionante con las mejores bandas de rock.",
-          location: "Madison Square Garden, NY",
-          date: "2024-08-15",
-          url: "https://example.com/concierto-rock",
-          contact: "contacto@rockeventos.com",
-          capacity: 5000,
-          artists: "The Rockers, The Bandits",
-          artistsList: ["The Rockers", "The Bandits"],
-          photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1GMNYbY19i8wfENiGt6brnICTDjz5Rllhjw&s",
-          status: "Activo",
-        },
-        {
-          eventName: "Festival de Jazz",
-          description: "Un festival con los músicos de jazz más renombrados.",
-          location: "Central Park, NY",
-          date: "2024-09-10",
-          url: "https://example.com/festival-jazz",
-          contact: "contacto@jazzfestival.com",
-          capacity: 3000,
-          artists: "Smooth Jazz, Blue Note",
-          artistsList: ["Smooth Jazz", "Blue Note"],
-          photo: "https://www.caravanjazz.es/wp-content/uploads/2020/01/fb-roots.jpg",
-          status: "Activo",
-        },
-        {
-          eventName: "Exposición de Arte Moderno",
-          description: "Una muestra de las últimas tendencias en arte moderno.",
-          location: "Museo de Arte Moderno, NY",
-          date: "2024-10-05",
-          url: "https://example.com/exposicion-arte",
-          contact: "contacto@arteexpo.com",
-          capacity: 1000,
-          artists: "Artistas Emergentes, Galería Arte",
-          artistsList: ["Artistas Emergentes", "Galería Arte"],
-          photo: "https://i0.wp.com/evemuseografia.com/wp-content/uploads/2020/01/EVE06012020-1.jpg?fit=1170%2C613&ssl=1",
-          status: "Activo",
-        }
-      ],
+      events: [],
+      estados: [],
+      csrfToken: "",
       isEditing: false,
-      editIndex: null,
-      imagePreview: null, 
-      editImagePreview: null, 
+      editEventId: null,
+      searchQuery: "",
+      selectedEvent: null,
     };
+  },
+  async mounted() {
+    try {
+      // Obtén el token CSRF del backend
+      const response = await instance.get("/");
+      this.csrfToken = response.data.csrfToken;
+      // Configura el token CSRF en Axios
+      instance.defaults.headers["X-CSRF-Token"] = this.csrfToken;
+      this.fetchEvents();
+      this.fetchEstados();
+    } catch (error) {
+      console.error("Error al obtener el token CSRF:", error);
+    }
+  },
+  methods: {
+    fetchEvents() {
+      instance
+        .get("/eventos")
+        .then((response) => {
+          this.events = response.data;
+        })
+        .catch((error) => {
+          console.error("Error al obtener eventos:", error);
+        });
+    },
+    fetchEstados() {
+      instance
+        .get("/estadoManager")
+        .then((response) => {
+          this.estados = response.data;
+        })
+        .catch((error) => {
+          console.error("Error al obtener estados:", error);
+        });
+    },
+    handleCreate() {
+      instance
+        .post("/eventos", this.formData)
+        .then((response) => {
+          this.events.push(response.data);
+          this.showCreateModal = false;
+          this.resetFormData();
+          Swal.fire("¡Éxito!", "El evento ha sido creado exitosamente.", "success");
+        })
+        .catch((error) => {
+          console.error("Error al crear evento:", error);
+        });
+    },
+    handleEdit() {
+      instance
+        .put(`/eventos/${this.editEventId}`, this.formData)
+        .then((response) => {
+          const updatedEvent = response.data;
+          const index = this.events.findIndex(
+            (event) => event.id_Evento === updatedEvent.id_Evento
+          );
+          if (index !== -1) {
+            this.events.splice(index, 1, updatedEvent);
+          }
+          this.showCreateModal = false;
+          this.isEditing = false;
+          this.resetFormData();
+          Swal.fire("¡Éxito!", "El evento ha sido actualizado exitosamente.", "success");
+        })
+        .catch((error) => {
+          console.error("Error al actualizar evento:", error);
+        });
+    },
+    startEditing(event) {
+      this.isEditing = true;
+      this.editEventId = event.id_Evento;
+      this.formData = { ...event };
+      this.showCreateModal = true;
+    },
+    viewEventDetails(event) {
+      this.selectedEvent = event;
+      this.showViewModal = true;
+    },
+    deleteEvent(event) {
+      Swal.fire({
+        title: "¿Estás seguro?",
+        text: "Esta acción cambiará el estado del evento a 'Eliminado'.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          instance
+            .put(`/eventos/${event.id_Evento}`, { ...event, estado_fk: 2 })
+            .then(() => {
+              event.estado_fk = 2;
+              Swal.fire("¡Eliminado!", "El evento ha sido eliminado.", "success");
+            })
+            .catch((error) => {
+              console.error("Error al eliminar evento:", error);
+            });
+        }
+      });
+    },
+    restoreEvent(event) {
+      Swal.fire({
+        title: "¿Estás seguro?",
+        text: "Esta acción cambiará el estado del evento a 'Activo'.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, restaurar",
+        cancelButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          instance
+            .put(`/eventos/${event.id_Evento}`, { ...event, estado_fk: 1 })
+            .then(() => {
+              event.estado_fk = 1;
+              Swal.fire("¡Restaurado!", "El evento ha sido restaurado.", "success");
+            })
+            .catch((error) => {
+              console.error("Error al restaurar evento:", error);
+            });
+        }
+      });
+    },
+    openCreateModal() {
+      this.isEditing = false;
+      this.resetFormData();
+      this.showCreateModal = true;
+    },
+    closeModal() {
+      this.showCreateModal = false;
+      this.resetFormData();
+    },
+    closeViewModal() {
+      this.showViewModal = false;
+      this.selectedEvent = null;
+    },
+    resetFormData() {
+      this.formData = {
+        Foto_evento: "",
+        Nombre_evento: "",
+        Descripcion: "",
+        Ubicacion: "",
+        Fecha: "",
+        Contacto: "",
+        Capacidad: "",
+        Artistas: "",
+        estado_fk: null,
+      };
+    },
+    getStatusClass(estado_fk) {
+      return estado_fk === 1 ? "active" : "inactive";
+    },
+    getStatusLabel(estado_fk) {
+      return estado_fk === 1 ? "Activo" : "Eliminado";
+    },
+    exportToPDF() {
+      // Implementar exportación a PDF
+    },
+    exportToExcel() {
+      // Implementar exportación a Excel
+    },
   },
   computed: {
     filteredEvents() {
       const query = this.searchQuery.toLowerCase();
       return this.events.filter(
         (event) =>
-          event.eventName.toLowerCase().includes(query) ||
-          event.description.toLowerCase().includes(query) ||
-          event.location.toLowerCase().includes(query) ||
-          event.date.toLowerCase().includes(query) ||
-          event.url.toLowerCase().includes(query) ||
-          event.contact.toLowerCase().includes(query) ||
-          event.capacity.toString().includes(query) ||
-          event.artists.toLowerCase().includes(query) ||
-          event.status.toLowerCase().includes(query)
+          event.Nombre_evento.toLowerCase().includes(query) ||
+          event.Descripcion.toLowerCase().includes(query) ||
+          event.Ubicacion.toLowerCase().includes(query) ||
+          event.Artistas.toLowerCase().includes(query)
       );
-    },
-  },
-  methods: {
-    handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      this.imagePreview = URL.createObjectURL(file);
-      this.formData.photo = this.imagePreview;
-    },
-    handleEditFileUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      this.editImagePreview = URL.createObjectURL(file);
-      this.formData.photo = this.editImagePreview;
-    },
-    handleCreate() {
-      const newEvent = { ...this.formData, artistsList: this.formData.artists.split(',').map(a => a.trim()) };
-      this.events.push(newEvent);
-      this.showCreateModal = false;
-      this.resetFormData();
-      this.imagePreview = null; 
-      Swal.fire("¡Éxito!", "El Evento ha sido creado exitosamente.", "success");
-    },
-    startEditing(event) {
-      this.isEditing = true;
-      this.formData = { ...event, artists: event.artistsList.join(', ') };
-      this.editIndex = this.events.indexOf(event);
-      this.showCreateModal = true;
-    },
-    handleEdit() {
-      if (this.editIndex !== null) {
-        const updatedEvent = { ...this.formData, artistsList: this.formData.artists.split(',').map(a => a.trim()) };
-        this.events.splice(this.editIndex, 1, updatedEvent);
-        this.showCreateModal = false;
-        this.isEditing = false;
-        this.resetFormData();
-        this.editImagePreview = null; 
-        Swal.fire("¡Éxito!", "El Evento ha sido actualizado exitosamente.", "success");
-      }
-    },
-    resetFormData() {
-      this.formData = {
-        eventName: "",
-        description: "",
-        location: "",
-        date: "",
-        url: "",
-        contact: "",
-        capacity: "",
-        artists: "", 
-        photo: "", 
-      };
-    },
-    deleteEvent(event) {
-      event.status = "Eliminado";
-      Swal.fire("¡Éxito!", "El Evento ha sido eliminado exitosamente.", "success");
-    },
-    restoreEvent(event) {
-      event.status = "Activo";
-      Swal.fire("¡Éxito!", "El Evento ha sido restaurado exitosamente.", "success");
-    },
-    viewEventDetails(event) {
-      Swal.fire({
-        title: `Detalles del Evento ${event.eventName}`,
-        html: `
-          <div>
-            <img src="${event.photo}" alt="Foto de ${event.eventName}" style="max-width: 100%; height: auto;">
-          </div>
-          <p><strong>Nombre del Evento:</strong> ${event.eventName}</p>
-          <p><strong>Descripción:</strong> ${event.description}</p>
-          <p><strong>Ubicación:</strong> ${event.location}</p>
-          <p><strong>Fecha:</strong> ${event.date}</p>
-          <p><strong>URL:</strong> <a href="${event.url}" target="_blank">${event.url}</a></p>
-          <p><strong>Contacto:</strong> ${event.contact}</p>
-          <p><strong>Capacidad:</strong> ${event.capacity}</p>
-          <p><strong>Artistas:</strong> ${event.artists}</p>
-          <p><strong>Estado:</strong> ${event.status}</p>
-        `,
-        confirmButtonText: "Cerrar",
-        customClass: {
-          popup: "custom-swal-popup",
-          content: "custom-swal-content",
-          closeButton: "custom-swal-close",
-          confirmButton: "custom-swal-confirm",
-        },
-      });
-    },
-    getEventStatusClass(status) {
-      return {
-        "status-active": status === "Activo",
-        "status-inactive": status === "Eliminado",
-      };
     },
   },
 };
 </script>
+
+
+
+
+
 <style scoped>
 #capa-padre {
   background-color: aliceblue;
@@ -672,5 +731,19 @@ th {
   border-radius: 4px;
   object-fit: cover;
 }
+.image-preview {
+  margin-top: 15px;
+  text-align: center; /* Centra la imagen en el contenedor */
+}
+
+.preview-img {
+  max-width: 15%; /* Asegura que la imagen no se desborde */
+  height: auto;    /* Mantiene la proporción de la imagen */
+  border: 1px solid #ddd; /* Añade un borde sutil alrededor de la imagen */
+  border-radius: 4px; /* Añade bordes redondeados */
+}
+
+.buscar {}
+
 
 </style>

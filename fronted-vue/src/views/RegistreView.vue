@@ -35,14 +35,12 @@
           type="email"
           class="form-field animation a3"
           placeholder="example@yavirac.edu.ec"
-
         />
         <input
           v-model="celular"
           type="text"
           class="form-field animation a3"
           placeholder="Ingrese Celular"
-
         />
         <input
           v-model="contrasena"
@@ -64,9 +62,6 @@
 <script>
 import Swal from "sweetalert2";
 import instance from "@/pluggins/axios";
-
-
-
 
 export default {
   data() {
@@ -127,7 +122,6 @@ export default {
         throw new Error("No se pudo obtener el token CSRF");
       }
     },
-    
   },
 };
 </script>
@@ -141,12 +135,11 @@ export default {
 }
 
 .left {
-  align-items: center; /* Centrar horizontalmente */
-  overflow: hidden;
+  flex: 1;
   display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  justify-content: center; /* Centra el contenido horizontalmente */
+  overflow: hidden;
   animation-name: left;
   animation-duration: 1s;
   animation-fill-mode: both;
@@ -154,7 +147,7 @@ export default {
 }
 
 .right {
-  flex: 1;
+  flex: 0 0 50%; /* Ajusta el tamaño de la imagen */
   transition: 1s;
   background-image: url("/public/img/login.png");
   background-size: cover;
@@ -168,7 +161,8 @@ export default {
 }
 
 .form {
-  max-width: 80%;
+  max-width: 100%;
+  width: 400px; /* Ajusta el ancho del formulario según sea necesario */
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -182,12 +176,12 @@ export default {
 
 .form-field {
   height: 30px;
-  padding: 20px;
+  padding: 10px; /* Ajusta el padding */
   border: 2px solid #656ed3;
   border-radius: 15px;
   outline: 0;
   transition: 0.2s;
-  margin: 13px;
+  margin: 13px 0; /* Ajusta el margen vertical */
 }
 
 .form-field:focus {
@@ -203,7 +197,7 @@ export default {
   border-radius: 15px;
   outline: 0;
   transition: 0.2s;
-  margin: 13px;
+  margin: 13px 0;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -226,7 +220,7 @@ export default {
   border-radius: 15px;
   outline: 0;
   transition: 0.2s;
-  margin: 13px;
+  margin: 13px 0;
 }
 
 .file-field:focus {
@@ -234,11 +228,11 @@ export default {
 }
 
 .form > button {
-  padding: 10px 10px;
+  padding: 10px 20px; /* Ajusta el padding del botón */
   border: 0;
   background: linear-gradient(to right, #656ed3 0%, #afb3ff 100%);
   border-radius: 15px;
-  margin: 5px;
+  margin: 5px 0; /* Ajusta el margen vertical del botón */
   color: #fff;
   letter-spacing: 1px;
 }

@@ -16,13 +16,10 @@ const album = (sequelize) => {
             type: DataTypes.STRING,
             comment: 'Nombre del album'
         },
-        grupo_musicals_fk: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'grupo_musicals', 
-                key: 'id_GrupoMusical' 
-            },
-            comment: 'Clave foránea al grupo musical'
+
+        grupo_musical: {
+            type: DataTypes.STRING,
+            comment: 'Nombre del grupo'
         },
         integrantes: {
             type: DataTypes.STRING,

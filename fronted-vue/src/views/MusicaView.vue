@@ -11,38 +11,65 @@
             <MyModal :isVisible="showCreateModal" @close="closeModal">
               <!-- Formulario para crear o editar una canción -->
               <form @submit.prevent="isEditing ? handleEdit() : handleCreate()">
-                <h2>{{ isEditing ? 'Editar Canción' : 'Crear Canción' }}</h2>
+                <h2>{{ isEditing ? "Editar Canción" : "Crear Canción" }}</h2>
 
                 <div class="form-group">
                   <label for="imagen">Imagen (URL):</label>
-                  <input type="text" id="imagen" v-model="formData.foto_musica" placeholder="URL de la imagen" />
+                  <input
+                    type="text"
+                    id="imagen"
+                    v-model="formData.foto_musica"
+                    placeholder="URL de la imagen"
+                  />
                 </div>
 
                 <div v-if="formData.foto_musica" class="image-preview">
-                  <img :src="formData.foto_musica" alt="Vista previa de la imagen" class="preview-img" />
+                  <img
+                    :src="formData.foto_musica"
+                    alt="Vista previa de la imagen"
+                    class="preview-img"
+                  />
                 </div>
 
                 <div class="form-group">
                   <label for="nombre_musica">Nombre de la Canción:</label>
-                  <input type="text" id="nombre_musica" v-model="formData.nombre_musica" required placeholder="Ingrese nombre" />
+                  <input
+                    type="text"
+                    id="nombre_musica"
+                    v-model="formData.nombre_musica"
+                    required
+                    placeholder="Ingrese nombre"
+                  />
                 </div>
 
                 <div class="form-group">
                   <label for="nombre_Artista">Nombre del Artista:</label>
-                  <input type="text" id="nombre_Artista" v-model="formData.nombre_Artista" required placeholder="Ingrese nombre del artista" />
+                  <input
+                    type="text"
+                    id="nombre_Artista"
+                    v-model="formData.nombre_Artista"
+                    required
+                    placeholder="Ingrese nombre del artista"
+                  />
                 </div>
 
                 <div class="form-group">
                   <label for="estado_fk">Estado:</label>
                   <select v-model="formData.estado_fk" required>
-                    <option v-for="estado in estados" :key="estado.id_estado_manager" :value="estado.id_estado_manager">
+                    <option
+                      v-for="estado in estados"
+                      :key="estado.id_estado_manager"
+                      :value="estado.id_estado_manager"
+                    >
                       {{ estado.estado }}
                     </option>
                   </select>
                 </div>
 
                 <div class="button-container">
-                  <button type="submit">{{ isEditing ? 'Guardar Cambios' : 'Guardar' }}</button>
+                  <button type="submit">
+                    {{ isEditing ? "Guardar Cambios" : "Guardar" }}
+                  </button>
                 </div>
               </form>
             </MyModal>
@@ -53,7 +80,11 @@
                 <h2>Detalles de la Canción</h2>
                 <div class="form-group">
                   <label>Imagen:</label>
-                  <img :src="selectedSong.foto_musica" alt="Imagen de la canción" class="preview-img" />
+                  <img
+                    :src="selectedSong.foto_musica"
+                    alt="Imagen de la canción"
+                    class="preview-img"
+                  />
                 </div>
 
                 <div class="form-group">
@@ -80,7 +111,12 @@
       <div class="button-container">
         <button class="pdf" @click="exportToPDF">PDF</button>
         <button class="excel" @click="exportToExcel">EXCEL</button>
-        <input type="text" placeholder="Buscar . . ." class="buscar" v-model="searchQuery" />
+        <input
+          type="text"
+          placeholder="Buscar . . ."
+          class="buscar"
+          v-model="searchQuery"
+        />
       </div>
 
       <!-- Tabla de Canciones -->
@@ -117,7 +153,11 @@
                   <button class="btn edit-btn" @click="startEditing(song)">
                     <i class="bx bx-edit"></i>
                   </button>
-                  <button class="btn delete-btn" v-if="song.estado_fk === 1" @click="deleteSong(song)">
+                  <button
+                    class="btn delete-btn"
+                    v-if="song.estado_fk === 1"
+                    @click="deleteSong(song)"
+                  >
                     <i class="bx bx-trash"></i>
                   </button>
                   <button class="btn restore-btn" v-else @click="restoreSong(song)">
@@ -156,7 +196,7 @@ export default {
       },
       songs: [],
       estados: [],
-      csrfToken: '',
+      csrfToken: "",
       isEditing: false,
       editSongId: null,
       searchQuery: "",
@@ -166,52 +206,58 @@ export default {
   async mounted() {
     try {
       // Obtén el token CSRF del backend
-      const response = await instance.get('/');
+      const response = await instance.get("/");
       this.csrfToken = response.data.csrfToken;
       // Configura el token CSRF en Axios
-      instance.defaults.headers['X-CSRF-Token'] = this.csrfToken;
+      instance.defaults.headers["X-CSRF-Token"] = this.csrfToken;
       this.fetchSongs();
       this.fetchEstados();
     } catch (error) {
-      console.error('Error al obtener el token CSRF:', error);
+      console.error("Error al obtener el token CSRF:", error);
     }
   },
   methods: {
     fetchSongs() {
-      instance.get('/musicas')
-        .then(response => {
+      instance
+        .get("/musicas")
+        .then((response) => {
           this.songs = response.data;
         })
-        .catch(error => {
-          console.error('Error al obtener canciones:', error);
+        .catch((error) => {
+          console.error("Error al obtener canciones:", error);
         });
     },
     fetchEstados() {
-      instance.get('/estadoManager')
-        .then(response => {
+      instance
+        .get("/estadoManager")
+        .then((response) => {
           this.estados = response.data;
         })
-        .catch(error => {
-          console.error('Error al obtener estados:', error);
+        .catch((error) => {
+          console.error("Error al obtener estados:", error);
         });
     },
     handleCreate() {
-      instance.post('/musicas', this.formData)
-        .then(response => {
+      instance
+        .post("/musicas", this.formData)
+        .then((response) => {
           this.songs.push(response.data);
           this.showCreateModal = false;
           this.resetFormData();
           Swal.fire("¡Éxito!", "La canción ha sido creada exitosamente.", "success");
         })
-        .catch(error => {
-          console.error('Error al crear canción:', error);
+        .catch((error) => {
+          console.error("Error al crear canción:", error);
         });
     },
     handleEdit() {
-      instance.put(`/musicas/${this.editSongId}`, this.formData)
-        .then(response => {
+      instance
+        .put(`/musicas/${this.editSongId}`, this.formData)
+        .then((response) => {
           const updatedSong = response.data;
-          const index = this.songs.findIndex(song => song.id_Musica === updatedSong.id_Musica);
+          const index = this.songs.findIndex(
+            (song) => song.id_Musica === updatedSong.id_Musica
+          );
           if (index !== -1) {
             this.songs.splice(index, 1, updatedSong);
           }
@@ -220,8 +266,8 @@ export default {
           this.resetFormData();
           Swal.fire("¡Éxito!", "La canción ha sido actualizada exitosamente.", "success");
         })
-        .catch(error => {
-          console.error('Error al actualizar canción:', error);
+        .catch((error) => {
+          console.error("Error al actualizar canción:", error);
         });
     },
     startEditing(song) {
@@ -236,46 +282,48 @@ export default {
     },
     deleteSong(song) {
       Swal.fire({
-        title: '¿Estás seguro?',
+        title: "¿Estás seguro?",
         text: "Esta acción cambiará el estado de la canción a 'Eliminado'.",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          instance.put(`/musicas/${song.id_Musica}`, { ...song, estado_fk: 2 })
+          instance
+            .put(`/musicas/${song.id_Musica}`, { ...song, estado_fk: 2 })
             .then(() => {
               song.estado_fk = 2;
               Swal.fire("¡Eliminado!", "La canción ha sido eliminada.", "success");
             })
-            .catch(error => {
-              console.error('Error al eliminar canción:', error);
+            .catch((error) => {
+              console.error("Error al eliminar canción:", error);
             });
         }
       });
     },
     restoreSong(song) {
       Swal.fire({
-        title: '¿Estás seguro?',
+        title: "¿Estás seguro?",
         text: "Esta acción cambiará el estado de la canción a 'Activo'.",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, restaurar',
-        cancelButtonText: 'Cancelar'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, restaurar",
+        cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          instance.put(`/musicas/${song.id_Musica}`, { ...song, estado_fk: 1 })
+          instance
+            .put(`/musicas/${song.id_Musica}`, { ...song, estado_fk: 1 })
             .then(() => {
               song.estado_fk = 1;
               Swal.fire("¡Restaurado!", "La canción ha sido restaurada.", "success");
             })
-            .catch(error => {
-              console.error('Error al restaurar canción:', error);
+            .catch((error) => {
+              console.error("Error al restaurar canción:", error);
             });
         }
       });
@@ -302,10 +350,10 @@ export default {
       };
     },
     getStatusClass(estado_fk) {
-      return estado_fk === 1 ? 'active' : 'inactive';
+      return estado_fk === 1 ? "active" : "inactive";
     },
     getStatusLabel(estado_fk) {
-      return estado_fk === 1 ? 'Activo' : 'Eliminado';
+      return estado_fk === 1 ? "Activo" : "Eliminado";
     },
     exportToPDF() {
       // Implementar exportación a PDF
@@ -317,9 +365,10 @@ export default {
   computed: {
     filteredSongs() {
       const query = this.searchQuery.toLowerCase();
-      return this.songs.filter(song =>
-        song.nombre_musica.toLowerCase().includes(query) ||
-        song.nombre_Artista.toLowerCase().includes(query)
+      return this.songs.filter(
+        (song) =>
+          song.nombre_musica.toLowerCase().includes(query) ||
+          song.nombre_Artista.toLowerCase().includes(query)
       );
     },
   },
@@ -569,12 +618,13 @@ th {
 }
 
 .song-photo {
-  max-width: 70px;
-  max-height: 50px;
-  border-radius: 4px;
-  object-fit: cover;
+  max-width: 60px; /* Ancho máximo de la imagen */
+  max-height: 70px; /* Altura máxima de la imagen */
+  width: auto; /* Ancho automático para mantener la relación de aspecto */
+  height: auto; /* Altura automática para mantener la relación de aspecto */
+  object-fit: cover; /* Ajusta la imagen al contenedor sin distorsionar */
+  border-radius: 4px; 
 }
-
 
 /* styles.css o archivo de estilo del componente */
 .modal-content {
@@ -594,6 +644,6 @@ th {
 }
 
 
-
-.buscar {}
+.buscar {
+}
 </style>

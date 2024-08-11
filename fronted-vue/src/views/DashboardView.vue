@@ -7,18 +7,14 @@
       </div>
       <div id="capa-padre">
         <div>
-          <!-- Gráficos -->
           <div class="chart-container">
-            <!-- Barras -->
             <div class="chart-item">
               <canvas id="barChart"></canvas>
             </div>
-            <!-- Líneas -->
             <div class="chart-item larger-chart">
               <canvas id="lineChart"></canvas>
             </div>
           </div>
-          <!-- Cartas combinadas -->
           <div class="cards-container">
             <div v-for="(data, index) in percentageData" :key="data.id" class="card">
               <img
@@ -44,6 +40,7 @@
                       :name="'rating-' + data.id"
                       value="5"
                       v-model="ratings[index]"
+                      @change="updateCharts"
                     />
                     <label :for="'star5-' + data.id" title="5 stars">&#9733;</label>
                     <input
@@ -52,6 +49,7 @@
                       :name="'rating-' + data.id"
                       value="4"
                       v-model="ratings[index]"
+                      @change="updateCharts"
                     />
                     <label :for="'star4-' + data.id" title="4 stars">&#9733;</label>
                     <input
@@ -60,6 +58,7 @@
                       :name="'rating-' + data.id"
                       value="3"
                       v-model="ratings[index]"
+                      @change="updateCharts"
                     />
                     <label :for="'star3-' + data.id" title="3 stars">&#9733;</label>
                     <input
@@ -68,6 +67,7 @@
                       :name="'rating-' + data.id"
                       value="2"
                       v-model="ratings[index]"
+                      @change="updateCharts"
                     />
                     <label :for="'star2-' + data.id" title="2 stars">&#9733;</label>
                     <input
@@ -76,6 +76,7 @@
                       :name="'rating-' + data.id"
                       value="1"
                       v-model="ratings[index]"
+                      @change="updateCharts"
                     />
                     <label :for="'star1-' + data.id" title="1 star">&#9733;</label>
                   </div>
@@ -86,27 +87,18 @@
         </div>
       </div>
     </div>
-    <div id="app-2">
-      <ejs-chart>
-        <e-series-collection>
-          <e-series type="Column"></e-series>
-        </e-series-collection>
-      </ejs-chart>
-    </div>
   </div>
 </template>
 
 <script>
 import ProtectedNavbar from "../components/ProtectedNavbar.vue";
-import { CalendarComponent } from "@syncfusion/ej2-vue-calendars";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import Chart from "chart.js/auto";
 
 export default {
   name: "Dashboard",
   components: {
     ProtectedNavbar,
-    "ejs-calendar": CalendarComponent,
   },
   setup() {
     const percentageData = ref([
@@ -118,6 +110,17 @@ export default {
     ]);
 
     const ratings = ref(Array(percentageData.value.length).fill(null));
+
+    const chartData = ref({
+      labels: percentageData.value.map((data) => data.name),
+      datasets: [
+        {
+          label: "Porcentaje",
+          data: percentageData.value.map((data) => data.percentage),
+          backgroundColor: ["#FF8977", "#89A2EB", "#FFCE89", "#FFCE19"],
+        },
+      ],
+    });
 
     const lineChartData = ref({
       labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"],
@@ -132,58 +135,70 @@ export default {
       ],
     });
 
-    onMounted(() => {
-      const barCtx = document.getElementById("barChart").getContext("2d");
-      new Chart(barCtx, {
-        type: "bar",
-        data: {
-          labels: percentageData.value.map((data) => data.name),
-          datasets: [
-            {
-              label: "Porcentaje",
-              data: percentageData.value.map((data) => data.percentage),
-              backgroundColor: ["#FF8977", "#89A2EB", "#FFCE89", "#FFCE19"],
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: "top",
-            },
-          },
-          scales: {
-            x: {
-              barPercentage: 0.5,
-              categoryPercentage: 0.5,
-            },
-          },
-        },
-      });
+    const barChart = ref(null);
+    const lineChart = ref(null);
 
-      const lineCtx = document.getElementById("lineChart").getContext("2d");
-      new Chart(lineCtx, {
-        type: "line",
-        data: lineChartData.value,
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: "top",
+    const updateCharts = () => {
+      const selectedRatings = ratings.value.map((rating) => rating || 0);
+      chartData.value.datasets[0].data = selectedRatings;
+      lineChartData.value.datasets[0].data = selectedRatings;
+
+      const barCtx = document.getElementById("barChart")?.getContext("2d");
+      if (barCtx) {
+        if (barChart.value) {
+          barChart.value.destroy(); // Destruye el gráfico anterior
+        }
+        barChart.value = new Chart(barCtx, {
+          type: "bar",
+          data: chartData.value,
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "top",
+              },
+            },
+            scales: {
+              x: {
+                barPercentage: 0.5,
+                categoryPercentage: 0.5,
+              },
             },
           },
-        },
-      });
+        });
+      } else {
+        console.error("No se pudo obtener el contexto del canvas para barChart.");
+      }
+
+      const lineCtx = document.getElementById("lineChart")?.getContext("2d");
+      if (lineCtx) {
+        if (lineChart.value) {
+          lineChart.value.destroy(); // Destruye el gráfico anterior
+        }
+        lineChart.value = new Chart(lineCtx, {
+          type: "line",
+          data: lineChartData.value,
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "top",
+              },
+            },
+          },
+        });
+      } else {
+        console.error("No se pudo obtener el contexto del canvas para lineChart.");
+      }
+    };
+
+    onMounted(() => {
+      updateCharts(); // Inicializa los gráficos después de que el DOM esté listo
     });
 
-    return { percentageData, lineChartData, ratings };
-  },
-  methods: {
-    logout() {
-      localStorage.removeItem("token");
-      this.$router.push("/login");
-    },
+    watch(ratings, updateCharts, { deep: true });
+
+    return { percentageData, ratings };
   },
 };
 </script>

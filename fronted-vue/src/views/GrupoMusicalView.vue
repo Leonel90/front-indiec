@@ -1,122 +1,148 @@
 <template>
   <div>
     <ProtectedNavbar />
-    
+
     <div class="content">
       <div class="header">
         <div id="capa-padre">
           <h1>Grupo Musical</h1>
           <div id="app">
-            <button @click="showCreateModal = true">Crear Grupo</button>
-            <MyModal :isVisible="showCreateModal" @close="showCreateModal = false">
-              <form v-if="!isEditing" @submit.prevent="handleCreate">
-                <h2>Crear Grupo</h2>
-                
-                <!-- Imagen Upload Section (unchanged) -->
-                <div class="form-group custom-form-group">
-                  <label for="imagen" class="upload-label custom-upload-label">
-                    <i class="bx bx-check"></i> Subir Imagen
-                  </label>
+            <button @click="openCreateModal">Crear Grupo Musical</button>
+            <MyModal :isVisible="showCreateModal" @close="closeModal">
+              <!-- Formulario para crear o editar un grupo musical -->
+              <form @submit.prevent="isEditing ? handleEdit() : handleCreate()">
+                <h2>{{ isEditing ? "Editar Grupo Musical" : "Crear Grupo Musical" }}</h2>
+
+                <div class="form-group">
+                  <label for="foto_grupo">Foto (URL):</label>
                   <input
-                    type="file"
-                    id="imagen"
-                    class="custom-upload-input"
-                    @change="handleFileUpload"
-                    accept="image/*"
+                    type="text"
+                    id="foto_grupo"
+                    v-model="formData.foto_grupo"
+                    placeholder="URL de la foto"
                   />
                 </div>
-                
-                <div v-if="imagePreview" class="image-preview custom-image-preview">
+
+                <div v-if="formData.foto_grupo" class="image-preview">
                   <img
-                    :src="imagePreview"
-                    alt="Vista previa de la imagen"
-                    class="custom-preview-img"
+                    :src="formData.foto_grupo"
+                    alt="Vista previa de la foto"
+                    class="preview-img"
                   />
                 </div>
 
                 <div class="form-group">
-                  <label for="recordlabelName">Grupo:</label>
-                  <input type="text" v-model="formData.recordlabelName" required placeholder="Ingrese el nombre" />
-                </div>
-                <div class="form-group">
-                  <label for="descriptiontName">Descripción:</label>
-                  <input type="text" v-model="formData.descriptiontName" required placeholder="Ingrese descripción" />
-                </div>
-                <div class="form-group">
-                  <label for="platform">Plataforma:</label>
-                  <select v-model="formData.platform" required>
-                    <option value="" disabled>Selecciona una plataforma</option>
-                    <option value="Plataforma 1">Plataforma 1</option>
-                    <option value="Plataforma 2">Plataforma 2</option>
-                    <option value="Plataforma 3">Plataforma 3</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="url">URL:</label>
-                  <input type="url" v-model="formData.url" required placeholder="Ingrese la url" />
-                </div>
-                <div class="button-container">
-                  <button type="submit">Guardar</button>
-                </div>
-              </form>
-
-              <form v-else @submit.prevent="handleEdit">
-                <h2>Editar Grupo Musical</h2>
-                
-                <!-- Imagen Upload Section (unchanged) -->
-                <div class="form-group custom-form-group">
-                  <label for="edit-imagen" class="upload-label custom-upload-label">
-                    <i class="bx bx-check"></i> Cambiar Imagen
-                  </label>
+                  <label for="nombre_grupo">Nombre del Grupo Musical:</label>
                   <input
-                    type="file"
-                    id="edit-imagen"
-                    class="custom-upload-input"
-                    @change="handleEditFileUpload"
-                    accept="image/*"
+                    type="text"
+                    id="nombre_grupo"
+                    v-model="formData.nombre_grupo"
+                    required
+                    placeholder="Ingrese nombre del grupo musical"
                   />
                 </div>
-                
-                <div v-if="editImagePreview" class="image-preview custom-image-preview">
-                  <img
-                    :src="editImagePreview"
-                    alt="Vista previa de la imagen"
-                    class="custom-preview-img"
+
+                <div class="form-group">
+                  <label for="descripcion">Descripción:</label>
+                  <input
+                    type="text"
+                    id="descripcion"
+                    v-model="formData.descripcion"
+                    placeholder="Ingrese una descripción"
                   />
                 </div>
-                
-                <div class="form-group">
-                  <label for="recordlabelName">Grupo:</label>
-                  <input type="text" v-model="formData.recordlabelName" required placeholder="Ingrese el nombre" />
-                </div>
-                <div class="form-group">
-                  <label for="descriptiontName">Descripción:</label>
-                  <input type="text" v-model="formData.descriptiontName" required placeholder="Ingrese descripción" />
-                </div>
-                <div class="form-group">
-                  <label for="platform">Plataforma:</label>
-                  <select v-model="formData.platform" required>
-                    <option value="Plataforma 1">Plataforma 1</option>
-                    <option value="Plataforma 2">Plataforma 2</option>
-                    <option value="Plataforma 3">Plataforma 3</option>
-                  </select>
-                </div>
+
                 <div class="form-group">
                   <label for="url">URL:</label>
-                  <input type="url" v-model="formData.url" required placeholder="Ingrese la url" />
+                  <input
+                    type="text"
+                    id="url"
+                    v-model="formData.url"
+                    placeholder="Ingrese URL"
+                  />
                 </div>
+
+                <div class="form-group">
+                  <label for="estado_fk">Estado:</label>
+                  <select v-model="formData.estado_fk" required>
+                    <option
+                      v-for="estado in estados"
+                      :key="estado.id_estado_manager"
+                      :value="estado.id_estado_manager"
+                    >
+                      {{ estado.estado }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="plataforma_fk">Plataforma:</label>
+                  <select v-model="formData.plataforma_fk" required>
+                    <option
+                      v-for="plataforma in plataformas"
+                      :key="plataforma.id_plataforma"
+                      :value="plataforma.id_plataforma"
+                    >
+                      {{ plataforma.nombre_plataforma }}
+                    </option>
+                  </select>
+                </div>
+
                 <div class="button-container">
-                  <button type="submit">Guardar Cambios</button>
+                  <button type="submit">
+                    {{ isEditing ? "Guardar Cambios" : "Guardar" }}
+                  </button>
                 </div>
               </form>
+            </MyModal>
+
+            <MyModal :isVisible="showViewModal" @close="closeViewModal">
+              <!-- Información detallada del grupo musical -->
+              <div v-if="selectedGrupoMusical">
+                <h2>Detalles del Grupo Musical</h2>
+                <div class="form-group">
+                  <label>Foto:</label>
+                  <img
+                    :src="selectedGrupoMusical.foto_grupo"
+                    alt="Foto del grupo musical"
+                    class="preview-img"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label>Nombre del Grupo Musical:</label>
+                  <p>{{ selectedGrupoMusical.nombre_grupo }}</p>
+                </div>
+
+                <div class="form-group">
+                  <label>Descripción:</label>
+                  <p>{{ selectedGrupoMusical.descripcion }}</p>
+                </div>
+
+                <div class="form-group">
+                  <label>URL:</label>
+                  <p>{{ selectedGrupoMusical.url }}</p>
+                </div>
+
+                <div class="form-group">
+                  <label>Estado:</label>
+                  <p>{{ getStatusLabel(selectedGrupoMusical.estado_fk) }}</p>
+                </div>
+
+                <div class="form-group">
+                  <label>Plataforma:</label>
+                  <p>{{ getPlataformaLabel(selectedGrupoMusical.plataforma_fk) }}</p>
+                </div>
+              </div>
             </MyModal>
           </div>
         </div>
       </div>
 
+      <!-- Botones para exportar y buscar -->
       <div class="button-container">
-        <button class="pdf">PDF</button>
-        <button class="excel">EXCEL</button>
+        <button class="pdf" @click="exportToPDF">PDF</button>
+        <button class="excel" @click="exportToExcel">EXCEL</button>
         <input
           type="text"
           placeholder="Buscar . . ."
@@ -125,65 +151,52 @@
         />
       </div>
 
+      <!-- Tabla de Grupos Musicales -->
       <div class="table-container">
         <table>
           <thead>
             <tr>
-              <th><div class="cell">#</div></th>
-              <th><div class="cell">Foto</div></th>
-              <th><div class="cell">Nombre del <br> Grupo Musical</div></th>
-              <th><div class="cell">Descripción</div></th>
-              <th><div class="cell">Plataforma</div></th>
-              <th><div class="cell">URL</div></th>
-              <th><div class="cell">Estado</div></th>
-              <th><div class="cell">Acciones</div></th>
+              <th>#</th>
+              <th>Foto</th>
+              <th>Nombre del Grupo Musical</th>
+              <th>Descripción</th>
+              <th>URL</th>
+              <th>Estado</th>
+              <th>Plataforma</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(song, index) in filteredSongs" :key="index">
+            <tr v-for="(grupoMusical, index) in filteredGruposMusicales" :key="grupoMusical.id_GrupoMusical">
+              <td>{{ index + 1 }}</td>
               <td>
-                <div class="cell">{{ index + 1 }}</div>
+                <img :src="grupoMusical.foto_grupo" alt="Foto" class="grupo-musical-photo" />
               </td>
+              <td>{{ grupoMusical.nombre_grupo }}</td>
+              <td>{{ grupoMusical.descripcion }}</td>
+              <td>{{ grupoMusical.url }}</td>
               <td>
-                <div class="cell">
-                  <img :src="song.photo" alt="Foto" class="song-photo" />
-                </div>
-              </td>
-              <td>
-                <div class="cell">{{ song.recordlabelName }}</div>
-              </td>
-              <td>
-                <div class="cell">{{ song.descriptiontName }}</div>
-              </td>
-              <td>
-                <div class="cell">{{ song.platform }}</div>
-              </td>
-              <td>
-                <div class="cell">
-                  <a :href="song.url" target="_blank">{{ song.url }}</a>
-                </div>
-              </td>
-              <td>
-                <span :class="getSongStatusClass(song.status)">
-                  {{ song.status }}
+                <span :class="getStatusClass(grupoMusical.estado_fk)">
+                  {{ getStatusLabel(grupoMusical.estado_fk) }}
                 </span>
               </td>
+              <td>{{ getPlataformaLabel(grupoMusical.plataforma_fk) }}</td>
               <td>
                 <div class="button-group">
-                  <button class="btn view-btn" @click="viewSongDetails(song)">
+                  <button class="btn view-btn" @click="viewGrupoMusicalDetails(grupoMusical)">
                     <i class="bx bx-show"></i>
                   </button>
-                  <button class="btn edit-btn" @click="startEditing(song)">
+                  <button class="btn edit-btn" @click="startEditing(grupoMusical)">
                     <i class="bx bx-edit"></i>
                   </button>
                   <button
                     class="btn delete-btn"
-                    v-if="song.status === 'Activo'"
-                    @click="deleteSong(song)"
+                    v-if="grupoMusical.estado_fk === 1"
+                    @click="deleteGrupoMusical(grupoMusical)"
                   >
                     <i class="bx bx-trash"></i>
                   </button>
-                  <button class="btn restore-btn" v-else @click="restoreSong(song)">
+                  <button class="btn restore-btn" v-else @click="restoreGrupoMusical(grupoMusical)">
                     <i class="bx bx-undo"></i>
                   </button>
                 </div>
@@ -193,10 +206,11 @@
         </table>
       </div>
     </div>
-  </div> 
+  </div>
 </template>
 
 <script>
+import instance from "@/pluggins/axios";
 import ProtectedNavbar from "../components/ProtectedNavbar.vue";
 import MyModal from "../components/Modal.vue";
 import Swal from "sweetalert2";
@@ -209,140 +223,192 @@ export default {
   data() {
     return {
       showCreateModal: false,
-      searchQuery: "",
+      showViewModal: false,
       formData: {
-        recordlabelName: "",
-        descriptiontName: "",
-        platform: "",
+        foto_grupo: "",
+        nombre_grupo: "",
+        descripcion: "",
         url: "",
-        status: "Activo",
-        photo: "", 
+        estado_fk: null,
+        plataforma_fk: null,
       },
-      songs: [
-        {
-          photo: "https://w7.pngwing.com/pngs/766/288/png-transparent-logo-fairy-tail-symbol-fairy-tail-emblem-text-heart-thumbnail.png",
-          recordlabelName: "Disquera 1",
-          descriptiontName: "Descripcion 1",
-          platform: "Plataforma 1",
-          url: "https://youtube.com/song1",
-          status: "Activo",
-        },
-        {
-          photo: "https://w7.pngwing.com/pngs/766/288/png-transparent-logo-fairy-tail-symbol-fairy-tail-emblem-text-heart-thumbnail.png",
-          recordlabelName: "Disquera 2",
-          descriptiontName: "Descripcion 2",
-          platform: "Plataforma 2",
-          url: "https://youtube.com/song2",
-          status: "Eliminado",
-        }
-      ],
+      gruposMusicales: [],
+      estados: [],
+      plataformas: [],
+      csrfToken: "",
       isEditing: false,
-      editIndex: null,
-      imagePreview: null, 
-      editImagePreview: null, 
+      editGrupoMusicalId: null,
+      searchQuery: "",
+      selectedGrupoMusical: null,
     };
   },
-  computed: {
-    filteredSongs() {
-      const query = this.searchQuery.toLowerCase();
-      return this.songs.filter(song => 
-        song.recordlabelName.toLowerCase().includes(query) ||
-        song.descriptiontName.toLowerCase().includes(query) ||
-        song.platform.toLowerCase().includes(query) ||
-        song.url.toLowerCase().includes(query)
-      );
-    },
+  async mounted() {
+    try {
+      const response = await instance.get("/");
+      this.csrfToken = response.data.csrfToken;
+      instance.defaults.headers["X-CSRF-Token"] = this.csrfToken;
+      this.fetchGruposMusicales();
+      this.fetchEstados();
+      this.fetchPlataformas();
+    } catch (error) {
+      console.error("Error al obtener el token CSRF:", error);
+    }
   },
   methods: {
-    handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      this.imagePreview = URL.createObjectURL(file);
-      this.formData.photo = this.imagePreview;
+    fetchGruposMusicales() {
+      instance
+        .get("/grupos-musicales")
+        .then((response) => {
+          this.gruposMusicales = response.data;
+        })
+        .catch((error) => {
+          console.error("Error al obtener grupos musicales:", error);
+        });
     },
-    handleEditFileUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      this.editImagePreview = URL.createObjectURL(file);
-      if (this.editIndex !== null) {
-        this.songs[this.editIndex].photo = this.editImagePreview;
-      }
+    fetchEstados() {
+      instance
+        .get("/estadoManager")
+        .then((response) => {
+          this.estados = response.data;
+        })
+        .catch((error) => {
+          console.error("Error al obtener estados:", error);
+        });
     },
-    handleCreate() {
-      this.songs.push({ ...this.formData });
+    fetchPlataformas() {
+      instance
+        .get("/plataformas")
+        .then((response) => {
+          this.plataformas = response.data;
+        })
+        .catch((error) => {
+          console.error("Error al obtener plataformas:", error);
+        });
+    },
+    openCreateModal() {
+      this.showCreateModal = true;
+      this.isEditing = false;
+      this.formData = {
+        foto_grupo: "",
+        nombre_grupo: "",
+        descripcion: "",
+        url: "",
+        estado_fk: null,
+        plataforma_fk: null,
+      };
+    },
+    closeModal() {
       this.showCreateModal = false;
-      this.resetForm();
     },
-    startEditing(song) {
+    viewGrupoMusicalDetails(grupoMusical) {
+      this.selectedGrupoMusical = grupoMusical;
+      this.showViewModal = true;
+    },
+    closeViewModal() {
+      this.showViewModal = false;
+    },
+    startEditing(grupoMusical) {
       this.isEditing = true;
-      this.formData = { ...song };
-      this.editImagePreview = song.photo;
-      this.editIndex = this.songs.indexOf(song);
+      this.editGrupoMusicalId = grupoMusical.id_GrupoMusical;
+      this.formData = { ...grupoMusical };
       this.showCreateModal = true;
     },
-    handleEdit() {
-  if (this.editIndex !== null) {
-    Object.assign(this.songs[this.editIndex], this.formData);
-  }
-  this.isEditing = false;
-  this.showCreateModal = false;
-  this.resetForm();
-},
-    deleteSong(song) {
-      Swal.fire({
+    async handleCreate() {
+      try {
+        await instance.post("/grupos-musicales", this.formData);
+        Swal.fire("Éxito", "Grupo Musical creado exitosamente", "success");
+        this.fetchGruposMusicales();
+        this.closeModal();
+      } catch (error) {
+        Swal.fire("Error", "No se pudo crear el grupo musical", "error");
+      }
+    },
+    async handleEdit() {
+      try {
+        await instance.put(`/grupos-musicales/${this.editGrupoMusicalId}`, this.formData);
+        Swal.fire("Éxito", "Grupo Musical actualizado exitosamente", "success");
+        this.fetchGruposMusicales();
+        this.closeModal();
+      } catch (error) {
+        Swal.fire("Error", "No se pudo actualizar el grupo musical", "error");
+      }
+    },
+    async deleteGrupoMusical(grupoMusical) {
+    try {
+      const result = await Swal.fire({
         title: "¿Estás seguro?",
-        text: "¡No podrás recuperar este registro!",
+        text: "Esta acción cambiará el estado del grupo musical a 'Eliminado'.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Sí, eliminarlo",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          song.status = "Eliminado";
-          Swal.fire("Eliminado!", "El registro ha sido eliminado.", "success");
-        }
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
       });
-    },
-    restoreSong(song) {
-      Swal.fire({
+
+      if (result.isConfirmed) {
+        await instance.put(`/grupos-musicales/${grupoMusical.id_GrupoMusical}`, { ...grupoMusical, estado_fk: 2 });
+        Swal.fire("¡Eliminado!", "El grupo musical ha sido eliminado lógicamente.", "success");
+        this.fetchGruposMusicales(); // Actualiza la lista de grupos musicales
+      }
+    } catch (error) {
+      console.error("Error al eliminar grupo musical:", error);
+      Swal.fire("Error", "No se pudo eliminar el grupo musical.", "error");
+    }
+  },
+
+  async restoreGrupoMusical(grupoMusical) {
+    try {
+      const result = await Swal.fire({
         title: "¿Estás seguro?",
-        text: "¡Este registro será restaurado!",
+        text: "Esta acción cambiará el estado del grupo musical a 'Activo'.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "Sí, restaurar",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          song.status = "Activo";
-          Swal.fire("Restaurado!", "El registro ha sido restaurado.", "success");
-        }
+        cancelButtonText: "Cancelar",
       });
+
+      if (result.isConfirmed) {
+        await instance.put(`/grupos-musicales/${grupoMusical.id_GrupoMusical}`, { ...grupoMusical, estado_fk: 1 });
+        Swal.fire("¡Restaurado!", "El grupo musical ha sido restaurado.", "success");
+        this.fetchGruposMusicales(); // Actualiza la lista de grupos musicales
+      }
+    } catch (error) {
+      console.error("Error al restaurar grupo musical:", error);
+      Swal.fire("Error", "No se pudo restaurar el grupo musical.", "error");
+    }
+  },
+    getStatusLabel(id) {
+      const estado = this.estados.find((e) => e.id_estado_manager === id);
+      return estado ? estado.estado : "Desconocido";
     },
-    viewSongDetails(song) {
-      // Implement the view details logic
+    getPlataformaLabel(id) {
+      const plataforma = this.plataformas.find((p) => p.id_plataforma === id);
+      return plataforma ? plataforma.nombre_plataforma : "Desconocido";
     },
-    resetForm() {
-      this.formData = {
-        recordlabelName: "",
-        descriptiontName: "",
-        platform: "",
-        url: "",
-        status: "Activo",
-        photo: "", 
-      };
-      this.imagePreview = null;
-      this.editImagePreview = null;
+    getStatusClass(id) {
+      return id === 1 ? "active-status" : "inactive-status";
     },
-    getSongStatusClass(status) {
-      return status === "Activo" ? "status-active" : "status-deleted";
+    exportToPDF() {
+      // Implementa la funcionalidad de exportación a PDF
+    },
+    exportToExcel() {
+      // Implementa la funcionalidad de exportación a Excel
+    },
+  },
+  computed: {
+    filteredGruposMusicales() {
+      const query = this.searchQuery.toLowerCase();
+      return this.gruposMusicales.filter((grupo) =>
+        grupo.nombre_grupo.toLowerCase().includes(query)
+      );
     },
   },
 };
 </script>
+
 
 
 
@@ -587,11 +653,29 @@ th {
   border-radius: 4px;
 }
 
-.song-photo {
-  max-width: 70px;
-  max-height: 50px;
-  border-radius: 4px;
-  object-fit: cover;
+
+.image-preview {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
 }
 
+.preview-img {
+  max-width: 50px; 
+  max-height: 50px; 
+  object-fit: cover; 
+  border: 2px solid #ddd; 
+  border-radius: 8px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+.grupo-musical-photo {
+  max-width: 60px; 
+  max-height: 70px;
+  width: auto; 
+  height: auto; 
+  object-fit: cover; 
+  border-radius: 4px; 
+}
+
+.buscar {}
 </style>

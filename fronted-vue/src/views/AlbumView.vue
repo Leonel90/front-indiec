@@ -1,106 +1,138 @@
 <template>
   <div>
     <ProtectedNavbar />
-    <!-- Modal Crear Álbum -->
+
     <div class="content">
       <div class="header">
         <div id="capa-padre">
           <h1>Álbum</h1>
           <div id="app">
-            <button @click="showCreateModal = true">Crear Álbum</button>
-            <MyModal :isVisible="showCreateModal" @close="showCreateModal = false">
-              <form @submit.prevent="handleCreate">
-                <h2>Crear Álbum</h2>
-                <!-- Subir Imagen -->
-                <div class="form-group custom-form-group">
-                  <label for="imagen" class="upload-label custom-upload-label">
-                    <i class="bx bx-check"></i> Subir Imagen
-                  </label>
-                  <input type="file" id="imagen" class="custom-upload-input" @change="handleFileUpload"
-                    accept="image/*" />
-                </div>
-                <!-- Vista previa de la imagen seleccionada -->
-                <div v-if="imagePreview" class="image-preview custom-image-preview">
-                  <img :src="imagePreview" alt="Vista previa de la imagen" class="custom-preview-img" />
-                </div>
+            <button @click="openCreateModal">Crear Álbum</button>
+            <MyModal :isVisible="showCreateModal" @close="closeModal">
+              <!-- Formulario para crear o editar un álbum -->
+              <form @submit.prevent="isEditing ? handleEdit() : handleCreate()">
+                <h2>{{ isEditing ? "Editar Álbum" : "Crear Álbum" }}</h2>
+
                 <div class="form-group">
-                  <label for="albumName">Nombre del Álbum:</label>
-                  <input type="text" v-model="formData.albumName" required />
+                  <label for="foto_album">Foto del Álbum (URL):</label>
+                  <input
+                    type="text"
+                    id="foto_album"
+                    v-model="formData.foto_album"
+                    placeholder="URL de la foto del álbum"
+                  />
                 </div>
+
+                <div v-if="formData.foto_album" class="image-preview">
+                  <img
+                    :src="formData.foto_album"
+                    alt="Vista previa de la foto del álbum"
+                    class="preview-img"
+                  />
+                </div>
+
                 <div class="form-group">
-                  <label for="bandName">Nombre del Grupo:</label>
-                  <input type="text" v-model="formData.artistName" required />
+                  <label for="nombre_album">Nombre del Álbum:</label>
+                  <input
+                    type="text"
+                    id="nombre_album"
+                    v-model="formData.nombre_album"
+                    required
+                    placeholder="Ingrese nombre del álbum"
+                  />
                 </div>
+
                 <div class="form-group">
-                  <label for="integrantes">Integrantes:</label>
-                  <input type="text" v-model="formData.album" required />
+                  <label for="grupo_musical">Nombre del Grupo:</label>
+                  <input
+                    type="text"
+                    id="grupo_musical"
+                    v-model="formData.grupo_musical"
+                    required
+                    placeholder="Ingrese nombre del grupo"
+                  />
                 </div>
+
                 <div class="form-group">
-                  <label for="grupo">Grupo:</label>
-                  <div class="container">
-                    <select v-model="formData.grupo" class="custom-select">
-                      <option value="1">Grupo 1</option>
-                      <option value="2">Grupo 2</option>
-                      <option value="3">Grupo 3</option>
-                    </select>
-                  </div>
+                  <label for="integrantes">Número de Integrantes:</label>
+                  <input
+                    type="text"
+                    id="integrantes"
+                    v-model="formData.integrantes"
+                    required
+                    placeholder="Ingrese número de integrantes"
+                  />
                 </div>
+
                 <div class="form-group">
-                  <label for="url">URL:</label>
-                  <input type="url" v-model="formData.url" required />
+                  <label for="url">URL del Álbum:</label>
+                  <input
+                    type="text"
+                    id="url"
+                    v-model="formData.url"
+                    placeholder="Ingrese URL del álbum"
+                  />
                 </div>
+
+                <div class="form-group">
+                  <label for="estado_fk">Estado:</label>
+                  <select v-model="formData.estado_fk" required>
+                    <option
+                      v-for="estado in estados"
+                      :key="estado.id_estado_manager"
+                      :value="estado.id_estado_manager"
+                    >
+                      {{ estado.estado }}
+                    </option>
+                  </select>
+                </div>
+
                 <div class="button-container">
-                  <button type="submit">Guardar</button>
+                  <button type="submit">
+                    {{ isEditing ? "Guardar Cambios" : "Guardar" }}
+                  </button>
                 </div>
               </form>
             </MyModal>
 
-            <!-- Modal Editar Álbum -->
-            <MyModal :isVisible="showEditModal" @close="showEditModal = false">
-              <form @submit.prevent="handleEdit">
-                <h2>Editar Álbum</h2>
-                <!-- Subir Imagen en edición -->
-                <div class="form-group custom-form-group">
-                  <label for="edit-imagen" class="upload-label custom-upload-label">
-                    <i class="bx bx-check"></i> Cambiar Imagen
-                  </label>
-                  <input type="file" id="edit-imagen" class="custom-upload-input" @change="handleEditFileUpload"
-                    accept="image/*" />
-                </div>
-                <!-- Vista previa de la imagen seleccionada en edición -->
-                <div v-if="editImagePreview" class="image-preview custom-image-preview">
-                  <img :src="editImagePreview" alt="Vista previa de la imagen" class="custom-preview-img" />
-                </div>
+            <MyModal :isVisible="showViewModal" @close="closeViewModal">
+              <!-- Información detallada del álbum -->
+              <div v-if="selectedAlbum">
+                <h2>Detalles del Álbum</h2>
                 <div class="form-group">
-                  <label for="editAlbumName">Nombre del Álbum:</label>
-                  <input type="text" v-model="editFormData.albumName" required />
+                  <label>Foto:</label>
+                  <img
+                    :src="selectedAlbum.foto_album"
+                    alt="Foto del álbum"
+                    class="preview-img"
+                  />
                 </div>
+
                 <div class="form-group">
-                  <label for="editBandName">Nombre del Grupo:</label>
-                  <input type="text" v-model="editFormData.artistName" required />
+                  <label>Nombre del Álbum:</label>
+                  <p>{{ selectedAlbum.nombre_album }}</p>
                 </div>
+
                 <div class="form-group">
-                  <label for="editIntegrantes">Integrantes:</label>
-                  <input type="text" v-model="editFormData.album" required />
+                  <label>Nombre del Grupo:</label>
+                  <p>{{ selectedAlbum.grupo_musical }}</p>
                 </div>
+
                 <div class="form-group">
-                  <label for="editGrupo">Grupo:</label>
-                  <div class="container">
-                    <select v-model="editFormData.grupo" class="custom-select">
-                      <option value="1">Grupo 1</option>
-                      <option value="2">Grupo 2</option>
-                      <option value="3">Grupo 3</option>
-                    </select>
-                  </div>
+                  <label>Número de Integrantes:</label>
+                  <p>{{ selectedAlbum.integrantes }}</p>
                 </div>
+
                 <div class="form-group">
-                  <label for="editUrl">URL:</label>
-                  <input type="url" v-model="editFormData.url" required />
+                  <label>URL:</label>
+                  <p>{{ selectedAlbum.url }}</p>
                 </div>
-                <div class="button-container">
-                  <button type="submit">Guardar Cambios</button>
+
+                <div class="form-group">
+                  <label>Estado:</label>
+                  <p>{{ getStatusLabel(selectedAlbum.estado_fk) }}</p>
                 </div>
-              </form>
+              </div>
             </MyModal>
           </div>
         </div>
@@ -108,89 +140,62 @@
 
       <!-- Botones para exportar y buscar -->
       <div class="button-container">
-        <button class="pdf">PDF</button>
-        <button class="excel">EXCEL</button>
-        <input type="text" placeholder="Buscar . . ." class="buscar" v-model="searchQuery" />
+        <button class="pdf" @click="exportToPDF">PDF</button>
+        <button class="excel" @click="exportToExcel">EXCEL</button>
+        <input
+          type="text"
+          placeholder="Buscar . . ."
+          class="buscar"
+          v-model="searchQuery"
+        />
       </div>
 
-      <!-- Tabla de Canciones -->
+      <!-- Tabla de Álbumes -->
       <div class="table-container">
         <table>
           <thead>
             <tr>
-              <th>
-                <div class="cell">#</div>
-              </th>
-              <th>
-                <div class="cell">Logo</div>
-              </th>
-              <th>
-                <div class="cell">Nombre del Álbum</div>
-              </th>
-              <th>
-                <div class="cell">Nombre del Grupo</div>
-              </th>
-              <th>
-                <div class="cell">Integrantes</div>
-              </th>
-              <th>
-                <div class="cell">URL</div>
-              </th>
-              <th>
-                <div class="cell">Grupo</div>
-              </th>
-              <th>
-                <div class="cell">Estado</div>
-              </th>
-              <th>
-                <div class="cell">Acciones</div>
-              </th>
+              <th>#</th>
+              <th>Foto</th>
+              <th>Nombre del Álbum</th>
+              <th>Nombre del Grupo</th>
+              <th>Integrantes</th>
+              <th>URL</th>
+              <th>Estado</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(song, index) in filteredSongs" :key="index">
+            <tr v-for="(album, index) in filteredAlbums" :key="album.id_Album">
+              <td>{{ index + 1 }}</td>
               <td>
-                <div class="cell">{{ index + 1 }}</div>
+                <img :src="album.foto_album" alt="Foto" class="album-photo" />
               </td>
+              <td>{{ album.nombre_album }}</td>
+              <td>{{ album.grupo_musical }}</td>
+              <td>{{ album.integrantes }}</td>
+              <td>{{ album.url }}</td>
               <td>
-                <div class="cell">
-                  <img :src="song.photo" alt="Logo" class="song-photo" />
-                </div>
-              </td>
-              <td>
-                <div class="cell">{{ song.albumName }}</div> <!-- Cambiado aquí -->
-              </td>
-              <td>
-                <div class="cell">{{ song.artistName }}</div>
-              </td>
-              <td>
-                <div class="cell">{{ song.album }}</div>
-              </td>
-              <td>
-                <div class="cell">
-                  <a :href="song.url" target="_blank">{{ song.url }}</a>
-                </div>
-              </td>
-              <td>
-                <div class="cell">{{ getGrupoText(song.grupo) }}</div>
-              </td>
-              <td>
-                <span :class="getSongStatusClass(song.status)">
-                  {{ song.status }}
+                <span :class="getStatusClass(album.estado_fk)">
+                  {{ getStatusLabel(album.estado_fk) }}
                 </span>
               </td>
               <td>
                 <div class="button-group">
-                  <button class="btn view-btn" @click="viewSongDetails(song)">
+                  <button class="btn view-btn" @click="viewAlbumDetails(album)">
                     <i class="bx bx-show"></i>
                   </button>
-                  <button class="btn edit-btn" @click="startEditing(song)">
+                  <button class="btn edit-btn" @click="startEditing(album)">
                     <i class="bx bx-edit"></i>
                   </button>
-                  <button class="btn delete-btn" v-if="song.status === 'Activo'" @click="deleteSong(song)">
+                  <button
+                    class="btn delete-btn"
+                    v-if="album.estado_fk === 1"
+                    @click="deleteAlbum(album)"
+                  >
                     <i class="bx bx-trash"></i>
                   </button>
-                  <button class="btn restore-btn" v-else @click="restoreSong(song)">
+                  <button class="btn restore-btn" v-else @click="restoreAlbum(album)">
                     <i class="bx bx-undo"></i>
                   </button>
                 </div>
@@ -202,8 +207,8 @@
     </div>
   </div>
 </template>
-
 <script>
+import instance from "@/pluggins/axios";
 import ProtectedNavbar from "../components/ProtectedNavbar.vue";
 import MyModal from "../components/Modal.vue";
 import Swal from "sweetalert2";
@@ -216,155 +221,195 @@ export default {
   data() {
     return {
       showCreateModal: false,
-      showEditModal: false,
-      searchQuery: "",
+      showViewModal: false,
       formData: {
-        albumName: "",
-        artistName: "",
-        album: "",
+        foto_album: "",
+        nombre_album: "",
+        grupo_musical: "",
+        integrantes: "",
         url: "",
-        grupo: "1",
-        status: "Activo",
-        photo: "",
+        estado_fk: null,
       },
-      editFormData: {
-        id: null,
-        albumName: "",
-        artistName: "",
-        album: "",
-        url: "",
-        grupo: "1",
-        status: "",
-        photo: "",
-      },
-      songs: [
-        {
-          id: 1,
-          albumName: "Album 1", // Corregido aquí
-          artistName: "Grupo 1",
-          album: "Integrantes 1",
-          url: "https://example.com/1",
-          grupo: 1,
-          status: "Activo",
-          photo: "https://via.placeholder.com/50",
-        },
-        {
-          id: 2,
-          albumName: "Album 2", // Corregido aquí
-          artistName: "Grupo 2",
-          album: "Integrantes 2",
-          url: "https://example.com/2",
-          grupo: 2,
-          status: "Eliminado",
-          photo: "https://via.placeholder.com/50",
-        },
-      ],
-      imagePreview: "",
-      editImagePreview: "",
+      albums: [],
+      estados: [],
+      csrfToken: "",
+      isEditing: false,
+      editAlbumId: null,
+      searchQuery: "",
+      selectedAlbum: null,
     };
   },
-
+  async mounted() {
+    try {
+      // Obtén el token CSRF del backend
+      const response = await instance.get("/");
+      this.csrfToken = response.data.csrfToken;
+      // Configura el token CSRF en Axios
+      instance.defaults.headers["X-CSRF-Token"] = this.csrfToken;
+      this.fetchAlbums();
+      this.fetchEstados();
+    } catch (error) {
+      console.error("Error al obtener el token CSRF:", error);
+    }
+  },
+  methods: {
+    fetchAlbums() {
+      instance
+        .get("/albums")
+        .then((response) => {
+          this.albums = response.data;
+        })
+        .catch((error) => {
+          console.error("Error al obtener álbumes:", error);
+        });
+    },
+    fetchEstados() {
+      instance
+        .get("/estadoManager")
+        .then((response) => {
+          this.estados = response.data;
+        })
+        .catch((error) => {
+          console.error("Error al obtener estados:", error);
+        });
+    },
+    handleCreate() {
+      instance
+        .post("/albums", this.formData)
+        .then((response) => {
+          this.albums.push(response.data);
+          this.showCreateModal = false;
+          this.resetFormData();
+          Swal.fire("¡Éxito!", "El álbum ha sido creado exitosamente.", "success");
+        })
+        .catch((error) => {
+          console.error("Error al crear álbum:", error);
+        });
+    },
+    handleEdit() {
+      instance
+        .put(`/albums/${this.editAlbumId}`, this.formData)
+        .then((response) => {
+          const updatedAlbum = response.data;
+          const index = this.albums.findIndex(
+            (album) => album.id_Album === updatedAlbum.id_Album
+          );
+          if (index !== -1) {
+            this.albums.splice(index, 1, updatedAlbum);
+          }
+          this.showCreateModal = false;
+          this.isEditing = false;
+          this.resetFormData();
+          Swal.fire("¡Éxito!", "El álbum ha sido actualizado exitosamente.", "success");
+        })
+        .catch((error) => {
+          console.error("Error al actualizar álbum:", error);
+        });
+    },
+    startEditing(album) {
+      this.isEditing = true;
+      this.editAlbumId = album.id_Album;
+      this.formData = { ...album };
+      this.showCreateModal = true;
+    },
+    viewAlbumDetails(album) {
+      this.selectedAlbum = album;
+      this.showViewModal = true;
+    },
+    deleteAlbum(album) {
+      Swal.fire({
+        title: "¿Estás seguro?",
+        text: "Esta acción cambiará el estado del álbum a 'Eliminado'.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          instance
+            .put(`/albums/${album.id_Album}/eliminar`, { ...album, estado_fk: 2 })
+            .then(() => {
+              album.estado_fk = 2;
+              Swal.fire("¡Eliminado!", "El álbum ha sido eliminado.", "success");
+            })
+            .catch((error) => {
+              console.error("Error al eliminar álbum:", error);
+            });
+        }
+      });
+    },
+    restoreAlbum(album) {
+      Swal.fire({
+        title: "¿Estás seguro?",
+        text: "Esta acción cambiará el estado del álbum a 'Activo'.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, restaurar",
+        cancelButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          instance
+            .put(`/albums/${album.id_Album}/restaurar`, { ...album, estado_fk: 1 })
+            .then(() => {
+              album.estado_fk = 1;
+              Swal.fire("¡Restaurado!", "El álbum ha sido restaurado.", "success");
+            })
+            .catch((error) => {
+              console.error("Error al restaurar álbum:", error);
+            });
+        }
+      });
+    },
+    openCreateModal() {
+      this.isEditing = false;
+      this.resetFormData();
+      this.showCreateModal = true;
+    },
+    closeModal() {
+      this.showCreateModal = false;
+      this.resetFormData();
+    },
+    closeViewModal() {
+      this.showViewModal = false;
+      this.selectedAlbum = null;
+    },
+    resetFormData() {
+      this.formData = {
+        foto_album: "",
+        nombre_album: "",
+        grupo_musical: "",
+        integrantes: "",
+        url: "",
+        estado_fk: null,
+      };
+    },
+    getStatusClass(estado_fk) {
+      return estado_fk === 1 ? "active" : "inactive";
+    },
+    getStatusLabel(estado_fk) {
+      return estado_fk === 1 ? "Activo" : "Eliminado";
+    },
+    exportToPDF() {
+      // Implementar exportación a PDF
+    },
+    exportToExcel() {
+      // Implementar exportación a Excel
+    },
+  },
   computed: {
-    filteredSongs() {
-      if (!this.searchQuery) {
-        return this.songs;
-      }
-      const searchQueryLower = this.searchQuery.toLowerCase();
-      return this.songs.filter(
-        (song) =>
-          song.songName.toLowerCase().includes(searchQueryLower) ||
-          song.artistName.toLowerCase().includes(searchQueryLower) ||
-          song.album.toLowerCase().includes(searchQueryLower) ||
-          song.url.toLowerCase().includes(searchQueryLower)
+    filteredAlbums() {
+      const query = this.searchQuery.toLowerCase();
+      return this.albums.filter(
+        (album) =>
+          album.nombre_album.toLowerCase().includes(query) ||
+          album.grupo_musical.toLowerCase().includes(query)
       );
     },
   },
-  methods: {
-    handleCreate() {
-      const newSong = {
-        ...this.formData,
-        id: this.songs.length + 1
-      };
-      this.songs.push(newSong);
-      this.showCreateModal = false;
-      this.resetForm();
-    },
-    handleEdit() {
-      const songIndex = this.songs.findIndex(song => song.id === this.editFormData.id);
-      if (songIndex !== -1) {
-        this.songs[songIndex] = { ...this.editFormData };
-        this.showEditModal = false;
-      }
-    },
-
-    startEditing(song) {
-      this.editFormData = { ...song };
-      this.editImagePreview = song.photo;
-      this.showEditModal = true;
-    },
-    viewSongDetails(song) {
-      Swal.fire({
-        title: song.albumName,
-        text: `Artista: ${song.artistName}\nÁlbum: ${song.album}\nURL: ${song.url}\nGrupo: ${this.getGrupoText(song.grupo)}\nEstado: ${song.status}`,
-        imageUrl: song.photo,
-        imageWidth: 400,
-        imageHeight: 200,
-        imageAlt: "Imagen del Álbum",
-      });
-    },
-    deleteSong(song) {
-      const songIndex = this.songs.findIndex(s => s.id === song.id);
-      if (songIndex !== -1) {
-        this.songs[songIndex].status = "Eliminado";
-      }
-    },
-    restoreSong(song) {
-      const songIndex = this.songs.findIndex(s => s.id === song.id);
-      if (songIndex !== -1) {
-        this.songs[songIndex].status = "Activo";
-      }
-    },
-    resetForm() {
-      this.formData = {
-        albumName: "",
-        artistName: "",
-        album: "",
-        url: "",
-        grupo: "1",
-        status: "Activo",
-        photo: "",
-      };
-      this.imagePreview = "";
-    },
-    handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.formData.photo = e.target.result;
-          this.imagePreview = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    },
-    handleEditFileUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.editFormData.photo = e.target.result;
-          this.editImagePreview = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    },
-    getGrupoText(grupo) {
-      return `Grupo ${grupo}`;
-    },
-    getSongStatusClass(status) {
-      return status === "Activo" ? "status-active" : "status-deleted";
-    }
-  }
 };
 </script>
 
@@ -608,18 +653,34 @@ th {
 }
 
 .custom-preview-img {
-  max-width: 80%;
+  max-width: 20%;
   max-height: 50px;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.song-photo {
-  max-width: 70px;
-  max-height: 50px;
-  border-radius: 4px;
-  object-fit: cover;
+.image-preview {
+  text-align: center;
+  margin-top: 10px;
 }
+
+.preview-img {
+  max-width: 80%;
+  max-height: 80px; /* Controla la altura máxima de la imagen */
+  object-fit: contain; /* Mantiene las proporciones de la imagen */
+  border-radius: 8px; /* Añade un borde redondeado a la imagen, opcional */
+  border: 1px solid #ccc; /* Añade un borde para que la imagen se vea mejor */
+}
+
+.table-container img.album-photo {
+  max-width: 60px; /* Ancho máximo de la imagen */
+  max-height: 70px; /* Altura máxima de la imagen */
+  width: auto; /* Ancho automático para mantener la relación de aspecto */
+  height: auto; /* Altura automática para mantener la relación de aspecto */
+  object-fit: cover; /* Ajusta la imagen al contenedor sin distorsionar */
+  border-radius: 4px; 
+}
+
 
 .buscar {}
 </style>
