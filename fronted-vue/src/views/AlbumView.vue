@@ -424,7 +424,11 @@ export default {
   padding: 10px;
 
 }
-
+img{
+  width:80px !important;
+  height:80px !important;
+  margin-bottom: 14px !important;
+}
 #app {
   text-align: center;
   margin-top: 10px;

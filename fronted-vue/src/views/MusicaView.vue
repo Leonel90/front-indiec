@@ -7,14 +7,14 @@
         <div id="capa-padre">
           <h1>Canción</h1>
           <div id="app">
-            <button @click="openCreateModal">Crear Canción</button>
+            <button @click="openCreateModal">Crear Musica</button>
             <MyModal :isVisible="showCreateModal" @close="closeModal">
               <!-- Formulario para crear o editar una canción -->
               <form @submit.prevent="isEditing ? handleEdit() : handleCreate()">
                 <h2>{{ isEditing ? "Editar Canción" : "Crear Canción" }}</h2>
 
                 <div class="form-group">
-                  <label for="imagen">Imagen (URL):</label>
+                  <label for="imagen">Imagen (URL):</label> 
                   <input
                     type="text"
                     id="imagen"
@@ -76,6 +76,7 @@
 
             <MyModal :isVisible="showViewModal" @close="closeViewModal">
               <!-- Información detallada de la canción -->
+
               <div v-if="selectedSong">
                 <h2>Detalles de la Canción</h2>
                 <div class="form-group">
@@ -376,6 +377,7 @@ export default {
 </script>
 
 <style scoped>
+
 #capa-padre {
   background-color: aliceblue;
   border-radius: 20px;
@@ -605,9 +607,16 @@ th {
 .custom-upload-input {
   display: none;
 }
-
+img{
+  width:80px;
+  height:80px;
+  margin-bottom: 14px;
+}
 .custom-image-preview {
   margin-top: 10px;
+  width:20px !important;
+  height:20px;
+  border-radius:10px;
 }
 
 .custom-preview-img {

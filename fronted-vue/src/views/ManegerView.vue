@@ -427,6 +427,11 @@ export default {
 </script>
 <style scoped>
 /* Estilos para el contenedor principal */
+img{
+  width:80px;
+  height:80px;
+  margin-bottom: 14px;
+}
 #capa-padre {
   background-color: aliceblue;
   border-radius: 20px;

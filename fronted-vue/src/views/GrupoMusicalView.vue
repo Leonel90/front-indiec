@@ -541,13 +541,6 @@ th {
   border-radius: 15px;
 }
 
-.status-active {
-  background-color: #28a745; /* Verde */
-}
-
-.status-deleted {
-  background-color: #dc3545; /* Rojo */
-}
 
 
 .button-group {

@@ -6,7 +6,7 @@
         <h4 class="animation a1">
           ¡Por favor, complete el formulario para el Administrador!
         </h4>
-        <br />
+
       </div>
       <div class="form">
         <input

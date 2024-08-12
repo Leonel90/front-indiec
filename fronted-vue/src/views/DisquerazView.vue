@@ -106,6 +106,7 @@
                     :src="selectedDisquera.Foto_disquera"
                     alt="Foto de la disquera"
                     class="preview-img"
+                    style=""
                   />
                 </div>
 
@@ -433,7 +434,11 @@ export default {
   font-size: 16px;
   color: black;
 }
-
+img{
+  width:80px !important;
+  height:80px !important;
+  margin-bottom: 14px !important;
+}
 #app {
   text-align: center;
   margin-top: 10px;

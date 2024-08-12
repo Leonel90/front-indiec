@@ -486,7 +486,11 @@ export default {
   font-size: 16px;
   color: black;
 }
-
+img{
+  width:80px !important;
+  height:80px !important;
+  margin-bottom: 14px !important;
+}
 #app {
   text-align: center;
   margin-top: 10px;
@@ -561,16 +565,15 @@ button[type="submit"]:hover {
   padding: 20px;
   border-radius: 10px;
   margin-top: 20px; 
+  background-color: aliceblue;
+  margin-top: 20px; 
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   background-color: aliceblue;
-  box-shadow: 1px 2px 2px 5px rgba(0, 0, 0, 0.164);
   border-radius: 20px;
-
-
 }
 
 th,
@@ -578,13 +581,10 @@ td {
   padding: 10px;
   text-align: center;
   border-bottom: 1px solid #ddd;
-
 }
 
 th {
-  background-color: white;
-
-
+  background-color: rgb(255, 255, 255);
 }
 
 .cell {
@@ -609,13 +609,6 @@ th {
   border-radius: 15px;
 }
 
-.status-active {
-  background-color: #28a745;
-}
-
-.status-inactive {
-  background-color: #dc3545;
-}
 
 .button-group {
   display: flex;
@@ -736,12 +729,7 @@ th {
   text-align: center; /* Centra la imagen en el contenedor */
 }
 
-.preview-img {
-  max-width: 15%; /* Asegura que la imagen no se desborde */
-  height: auto;    /* Mantiene la proporción de la imagen */
-  border: 1px solid #ddd; /* Añade un borde sutil alrededor de la imagen */
-  border-radius: 4px; /* Añade bordes redondeados */
-}
+
 
 .buscar {}
 

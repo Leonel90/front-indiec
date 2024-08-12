@@ -49,11 +49,13 @@
                 <td><div class="cell">{{ genero.genero_musical_text }}</div></td>
                 <td>
                   <div class="button-group">
-                    <button class="btn delete-btn" @click="deleteGeneroMusical(genero)">
-                      <i class="bx bx-trash"></i> Eliminar
+                    <button class="btn delete-btn" @click="deleteGeneroMusical(genero)" style="  background-color: #c90000;
+  color: white !important;">
+                      <i class="bx bx-trash"></i> 
                     </button>
                     <button class="btn edit-btn" @click="editGeneroMusical(genero)">
-                      <i class="bx bx-edit"></i> Editar
+                      <i class="bx bx-edit"></i> 
+                      Editar
                     </button>
                   </div>
                 </td>
@@ -219,10 +221,6 @@ button {
 #delete :hover {
   background-color: #ff0202;
   color: white;
-}
-
-button:hover {
-  background-color: #067b80;
 }
 
 form {
@@ -398,5 +396,4 @@ th {
   height: 1em; /* Ajusta la altura de los botones de navegación */
 }
 
-.buscar {}
 </style>
