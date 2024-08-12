@@ -62,7 +62,7 @@ indexCtl.CerrarSesion = (req, res, next) => {
         if (err) {
             return next(err);
         }
-        res.json({ message: 'Sesión cerrada con éxito', redirect: '/login' });
+        res.json({ message: 'Cuenta Registrada', redirect: '/' });
     });
 };
 

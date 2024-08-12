@@ -15,17 +15,17 @@ import MusicaView from '@/views/MusicaView.vue'
 const routes = [
 
   {
-    path: '/register',
+    path: '/registro',
     name: 'registre',
     component: RegistreView
   },
   {
-    path: '/Login',
+    path: '/',
     name: 'login',
     component: LoginViev
   },
   {
-    path: '/',
+    path: '/nformacion',
     name: 'informacion',
     component: InformacionView
   },

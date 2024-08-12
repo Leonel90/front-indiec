@@ -6,14 +6,21 @@
         <h4 class="animation a1">
           ¡Por favor, complete el formulario para el Administrador!
         </h4>
-
       </div>
       <div class="form">
         <input
           v-model="foto_artista"
           type="text"
           class="form-field animation a3"
-          placeholder="Ingrese Foto"
+          placeholder="Ingrese Apodo"
+          required
+        />
+
+        <input
+          v-model="nombre"
+          type="text"
+          class="form-field animation a3"
+          placeholder="Ingrese Nombre"
           required
         />
         <input
@@ -21,13 +28,6 @@
           type="text"
           class="form-field animation a3"
           placeholder="Ingrese Apellido"
-          required
-        />
-        <input
-          v-model="nombre"
-          type="text"
-          class="form-field animation a3"
-          placeholder="Ingrese Nombre"
           required
         />
         <input
@@ -52,7 +52,7 @@
         <button type="button" @click="registro">Registrarse</button>
         <p class="animation a5">
           ¿Sí tengo una cuenta?
-          <router-link to="/login"><strong>Inicia Sesión</strong></router-link>
+          <router-link to="/"><strong>Inicia Sesión</strong></router-link>
         </p>
       </div>
     </div>
@@ -135,11 +135,12 @@ export default {
 }
 
 .left {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center; /* Centrar horizontalmente */
   overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
   animation-name: left;
   animation-duration: 1s;
   animation-fill-mode: both;
@@ -147,7 +148,7 @@ export default {
 }
 
 .right {
-  flex: 0 0 50%; /* Ajusta el tamaño de la imagen */
+  flex: 1;
   transition: 1s;
   background-image: url("/public/img/login.png");
   background-size: cover;
@@ -161,8 +162,7 @@ export default {
 }
 
 .form {
-  max-width: 100%;
-  width: 400px; /* Ajusta el ancho del formulario según sea necesario */
+  max-width: 80%;
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -176,12 +176,12 @@ export default {
 
 .form-field {
   height: 30px;
-  padding: 10px; /* Ajusta el padding */
+  padding: 20px;
   border: 2px solid #656ed3;
   border-radius: 15px;
   outline: 0;
   transition: 0.2s;
-  margin: 13px 0; /* Ajusta el margen vertical */
+  margin: 13px;
 }
 
 .form-field:focus {
@@ -197,7 +197,7 @@ export default {
   border-radius: 15px;
   outline: 0;
   transition: 0.2s;
-  margin: 13px 0;
+  margin: 13px;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -220,7 +220,7 @@ export default {
   border-radius: 15px;
   outline: 0;
   transition: 0.2s;
-  margin: 13px 0;
+  margin: 13px;
 }
 
 .file-field:focus {
@@ -228,11 +228,11 @@ export default {
 }
 
 .form > button {
-  padding: 10px 20px; /* Ajusta el padding del botón */
+  padding: 10px 10px;
   border: 0;
   background: linear-gradient(to right, #656ed3 0%, #afb3ff 100%);
   border-radius: 15px;
-  margin: 5px 0; /* Ajusta el margen vertical del botón */
+  margin: 5px;
   color: #fff;
   letter-spacing: 1px;
 }

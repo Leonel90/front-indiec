@@ -11,9 +11,7 @@
         <router-link to="/dashboard">
           <i class="bx bx-home"></i> Inicio
         </router-link>
-        <router-link to="/perfil">
-          <i class="bx bx-user"></i> Perfil
-        </router-link>
+
         
         <router-link to="/genero-musical">
           <i class="bx bx-music"></i> Género musical
@@ -65,7 +63,7 @@ export default {
       }).then((result) => {
         if (result.isConfirmed) {
           localStorage.removeItem("token");
-          this.$router.push("/login");
+          this.$router.push("/");
           Swal.fire('Cerraste sesión', 'Hasta luego Artista!', 'success');
         }
       });

@@ -5,7 +5,7 @@
     <div class="content">
       <div class="header">
         <div id="capa-padre">
-          <h1>Canción</h1>
+          <h1>Musica</h1>
           <div id="app">
             <button @click="openCreateModal">Crear Musica</button>
             <MyModal :isVisible="showCreateModal" @close="closeModal">
