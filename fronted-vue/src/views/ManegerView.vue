@@ -54,7 +54,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="email">Email:</label>
+                  <label for="email" style="margin-right: 35px;">Email:</label>
                   <input
                     type="email"
                     id="email"
@@ -102,7 +102,7 @@
               <!-- Información detallada del manager -->
               <div v-if="selectedManager">
                 <h2>Detalles del Manager</h2>
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Foto:</label>
                   <img
                     :src="selectedManager.Foto_manager"
@@ -111,27 +111,27 @@
                   />
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Apellidos:</label>
                   <p>{{ selectedManager.Apellidos }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Nombres:</label>
                   <p>{{ selectedManager.Nombres }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Email:</label>
                   <p>{{ selectedManager.Email }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Género:</label>
                   <p>{{ getGeneroLabel(selectedManager.genero_fk) }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Estado:</label>
                   <p>{{ getStatusLabel(selectedManager.estado_fk) }}</p>
                 </div>
@@ -468,7 +468,12 @@ form {
   flex-direction: column;
   align-items: center;
 }
+#form-grou {
+  margin: 20px;
+  margin-bottom: 15px;
+  align-items: center;
 
+}
 .form-group {
   display: flex;
   flex-direction: row;
@@ -491,6 +496,36 @@ form {
   border-radius: 4px;
 }
 
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  appearance: none;
+  background-color: white;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23007bff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+.form-group select option {
+  padding: 10px;
+  font-size: 16px;
+}
+.form-group select:disabled {
+  background-color: #f8f9fa;
+  border-color: #e0e0e0;
+  cursor: not-allowed;
+}
 .button-container {
   display: flex;
   justify-content: center;

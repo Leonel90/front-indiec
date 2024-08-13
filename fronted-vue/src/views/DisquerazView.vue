@@ -14,7 +14,7 @@
                 <h2>{{ isEditing ? "Editar Disquera" : "Crear Disquera" }}</h2>
 
                 <div class="form-group">
-                  <label for="Foto_disquera">Foto (URL):</label>
+                  <label for="Foto_disquera" style="margin-right: 24px;">Foto (URL):</label>
                   <input
                     type="text"
                     id="Foto_disquera"
@@ -32,18 +32,18 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="Nombre_disquera">Nombre de la Disquera:</label>
+                  <label for="Nombre_disquera" style="margin-right: 42px;">Nombre de la Disquera:</label>
                   <input
                     type="text"
                     id="Nombre_disquera"
                     v-model="formData.Nombre_disquera"
                     required
-                    placeholder="Ingrese nombre de la disquera"
+                    placeholder="Nombre de la disquera"
                   />
                 </div>
 
                 <div class="form-group">
-                  <label for="Descripcion_disquera">Descripción:</label>
+                  <label for="Descripcion_disquera" style="margin-right: 8px;">Descripción:</label>
                   <input
                     type="text"
                     id="Descripcion_disquera"
@@ -53,7 +53,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="Url">URL:</label>
+                  <label for="Url" style="margin-right: 68px;">URL:</label>
                   <input
                     type="text"
                     id="Url"
@@ -64,7 +64,7 @@
 
                 <div class="form-group">
                   <label for="estado_fk">Estado:</label>
-                  <select v-model="formData.estado_fk" required>
+                  <select v-model="formData.estado_fk" required style="margin-left: 10px;">
                     <option
                       v-for="estado in estados"
                       :key="estado.id_estado_manager"
@@ -76,7 +76,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="plataforma_fk">Plataforma:</label>
+                  <label for="plataforma_fk" style="margin-left: 30px;">Plataforma:</label>
                   <select v-model="formData.plataforma_fk" required>
                     <option
                       v-for="plataforma in plataformas"
@@ -100,7 +100,7 @@
               <!-- Información detallada de la disquera -->
               <div v-if="selectedDisquera">
                 <h2>Detalles de la Disquera</h2>
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Foto:</label>
                   <img
                     :src="selectedDisquera.Foto_disquera"
@@ -110,27 +110,27 @@
                   />
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Nombre de la Disquera:</label>
                   <p>{{ selectedDisquera.Nombre_disquera }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Descripción:</label>
                   <p>{{ selectedDisquera.Descripcion_disquera }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>URL:</label>
                   <p>{{ selectedDisquera.Url }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Estado:</label>
                   <p>{{ getStatusLabel(selectedDisquera.estado_fk) }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Plataforma:</label>
                   <p>{{ getPlataformaLabel(selectedDisquera.plataforma_fk) }}</p>
                 </div>
@@ -485,7 +485,87 @@ form {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+#form-grou {
+  margin: 20px;
+  margin-bottom: 15px;
+  align-items: center;
+  border-radius: 10px;
+}
+.form-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 15px;
+}
 
+.form-group label {
+  flex: 1;
+  margin-right: 10px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.form-group input {
+  flex: 2;
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.form-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+}
+
+.form-group input {
+  flex: 2;
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  appearance: none;
+  background-color: white;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23007bff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.form-group select:disabled {
+  background-color: #f8f9fa;
+  border-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.form-group select option {
+  padding: 10px;
+  font-size: 16px;
+}
 .button-container {
   display: flex;
   justify-content: center;
@@ -665,7 +745,7 @@ th {
   max-width: 40%;
   max-height: 30px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 10px;
 }
 
 .song-photo {

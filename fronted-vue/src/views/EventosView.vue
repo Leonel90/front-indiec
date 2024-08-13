@@ -127,7 +127,7 @@
               <!-- Información detallada del evento -->
               <div v-if="selectedEvent">
                 <h2>Detalles del Evento</h2>
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Foto:</label>
                   <img
                     :src="selectedEvent.Foto_evento"
@@ -136,42 +136,42 @@
                   />
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Nombre del Evento:</label>
                   <p>{{ selectedEvent.Nombre_evento }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Descripción:</label>
                   <p>{{ selectedEvent.Descripcion }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Ubicación:</label>
                   <p>{{ selectedEvent.Ubicacion }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Fecha:</label>
                   <p>{{ selectedEvent.Fecha }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Contacto:</label>
                   <p>{{ selectedEvent.Contacto }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Capacidad:</label>
                   <p>{{ selectedEvent.Capacidad }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Artistas:</label>
                   <p>{{ selectedEvent.Artistas }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Estado:</label>
                   <p>{{ getStatusLabel(selectedEvent.estado_fk) }}</p>
                 </div>
@@ -538,6 +538,45 @@ form {
   border-radius: 4px;
 }
 
+#form-grou {
+  margin: 20px;
+  margin-bottom: 15px;
+  align-items: center;
+
+}
+
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  appearance: none;
+  background-color: white;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23007bff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.form-group select:disabled {
+  background-color: #f8f9fa;
+  border-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.form-group select option {
+  padding: 10px;
+  font-size: 16px;
+}
 .button-container {
   display: flex;
   justify-content: center;

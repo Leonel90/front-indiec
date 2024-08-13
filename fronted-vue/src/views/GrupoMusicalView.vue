@@ -32,7 +32,10 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="nombre_grupo">Nombre del Grupo Musical:</label>
+                  <label for="nombre_grupo" style="margin-right: 30px"
+                    >Nombre <br />
+                    del Grupo Musical:</label
+                  >
                   <input
                     type="text"
                     id="nombre_grupo"
@@ -53,7 +56,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="url">URL:</label>
+                  <label for="url" style="margin-right: 65px">URL:</label>
                   <input
                     type="text"
                     id="url"
@@ -100,7 +103,7 @@
               <!-- Información detallada del grupo musical -->
               <div v-if="selectedGrupoMusical">
                 <h2>Detalles del Grupo Musical</h2>
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Foto:</label>
                   <img
                     :src="selectedGrupoMusical.foto_grupo"
@@ -109,27 +112,27 @@
                   />
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Nombre del Grupo Musical:</label>
                   <p>{{ selectedGrupoMusical.nombre_grupo }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Descripción:</label>
                   <p>{{ selectedGrupoMusical.descripcion }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>URL:</label>
                   <p>{{ selectedGrupoMusical.url }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Estado:</label>
                   <p>{{ getStatusLabel(selectedGrupoMusical.estado_fk) }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Plataforma:</label>
                   <p>{{ getPlataformaLabel(selectedGrupoMusical.plataforma_fk) }}</p>
                 </div>
@@ -167,10 +170,17 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(grupoMusical, index) in filteredGruposMusicales" :key="grupoMusical.id_GrupoMusical">
+            <tr
+              v-for="(grupoMusical, index) in filteredGruposMusicales"
+              :key="grupoMusical.id_GrupoMusical"
+            >
               <td>{{ index + 1 }}</td>
               <td>
-                <img :src="grupoMusical.foto_grupo" alt="Foto" class="grupo-musical-photo" />
+                <img
+                  :src="grupoMusical.foto_grupo"
+                  alt="Foto"
+                  class="grupo-musical-photo"
+                />
               </td>
               <td>{{ grupoMusical.nombre_grupo }}</td>
               <td>{{ grupoMusical.descripcion }}</td>
@@ -183,7 +193,10 @@
               <td>{{ getPlataformaLabel(grupoMusical.plataforma_fk) }}</td>
               <td>
                 <div class="button-group">
-                  <button class="btn view-btn" @click="viewGrupoMusicalDetails(grupoMusical)">
+                  <button
+                    class="btn view-btn"
+                    @click="viewGrupoMusicalDetails(grupoMusical)"
+                  >
                     <i class="bx bx-show"></i>
                   </button>
                   <button class="btn edit-btn" @click="startEditing(grupoMusical)">
@@ -196,7 +209,11 @@
                   >
                     <i class="bx bx-trash"></i>
                   </button>
-                  <button class="btn restore-btn" v-else @click="restoreGrupoMusical(grupoMusical)">
+                  <button
+                    class="btn restore-btn"
+                    v-else
+                    @click="restoreGrupoMusical(grupoMusical)"
+                  >
                     <i class="bx bx-undo"></i>
                   </button>
                 </div>
@@ -334,52 +351,62 @@ export default {
       }
     },
     async deleteGrupoMusical(grupoMusical) {
-    try {
-      const result = await Swal.fire({
-        title: "¿Estás seguro?",
-        text: "Esta acción cambiará el estado del grupo musical a 'Eliminado'.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Sí, eliminar",
-        cancelButtonText: "Cancelar",
-      });
+      try {
+        const result = await Swal.fire({
+          title: "¿Estás seguro?",
+          text: "Esta acción cambiará el estado del grupo musical a 'Eliminado'.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Sí, eliminar",
+          cancelButtonText: "Cancelar",
+        });
 
-      if (result.isConfirmed) {
-        await instance.put(`/grupos-musicales/${grupoMusical.id_GrupoMusical}`, { ...grupoMusical, estado_fk: 2 });
-        Swal.fire("¡Eliminado!", "El grupo musical ha sido eliminado lógicamente.", "success");
-        this.fetchGruposMusicales(); // Actualiza la lista de grupos musicales
+        if (result.isConfirmed) {
+          await instance.put(`/grupos-musicales/${grupoMusical.id_GrupoMusical}`, {
+            ...grupoMusical,
+            estado_fk: 2,
+          });
+          Swal.fire(
+            "¡Eliminado!",
+            "El grupo musical ha sido eliminado lógicamente.",
+            "success"
+          );
+          this.fetchGruposMusicales(); // Actualiza la lista de grupos musicales
+        }
+      } catch (error) {
+        console.error("Error al eliminar grupo musical:", error);
+        Swal.fire("Error", "No se pudo eliminar el grupo musical.", "error");
       }
-    } catch (error) {
-      console.error("Error al eliminar grupo musical:", error);
-      Swal.fire("Error", "No se pudo eliminar el grupo musical.", "error");
-    }
-  },
+    },
 
-  async restoreGrupoMusical(grupoMusical) {
-    try {
-      const result = await Swal.fire({
-        title: "¿Estás seguro?",
-        text: "Esta acción cambiará el estado del grupo musical a 'Activo'.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Sí, restaurar",
-        cancelButtonText: "Cancelar",
-      });
+    async restoreGrupoMusical(grupoMusical) {
+      try {
+        const result = await Swal.fire({
+          title: "¿Estás seguro?",
+          text: "Esta acción cambiará el estado del grupo musical a 'Activo'.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Sí, restaurar",
+          cancelButtonText: "Cancelar",
+        });
 
-      if (result.isConfirmed) {
-        await instance.put(`/grupos-musicales/${grupoMusical.id_GrupoMusical}`, { ...grupoMusical, estado_fk: 1 });
-        Swal.fire("¡Restaurado!", "El grupo musical ha sido restaurado.", "success");
-        this.fetchGruposMusicales(); // Actualiza la lista de grupos musicales
+        if (result.isConfirmed) {
+          await instance.put(`/grupos-musicales/${grupoMusical.id_GrupoMusical}`, {
+            ...grupoMusical,
+            estado_fk: 1,
+          });
+          Swal.fire("¡Restaurado!", "El grupo musical ha sido restaurado.", "success");
+          this.fetchGruposMusicales(); // Actualiza la lista de grupos musicales
+        }
+      } catch (error) {
+        console.error("Error al restaurar grupo musical:", error);
+        Swal.fire("Error", "No se pudo restaurar el grupo musical.", "error");
       }
-    } catch (error) {
-      console.error("Error al restaurar grupo musical:", error);
-      Swal.fire("Error", "No se pudo restaurar el grupo musical.", "error");
-    }
-  },
+    },
     getStatusLabel(id) {
       const estado = this.estados.find((e) => e.id_estado_manager === id);
       return estado ? estado.estado : "Desconocido";
@@ -408,9 +435,6 @@ export default {
   },
 };
 </script>
-
-
-
 
 <style scoped>
 #capa-padre {
@@ -471,13 +495,59 @@ form {
   border-radius: 4px;
 }
 
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  appearance: none;
+  background-color: white;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23007bff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+#form-grou {
+  margin: 20px;
+  margin-bottom: 15px;
+  align-items: center;
+  border-radius: 10px;
+}
+.form-group select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.form-group select:disabled {
+  background-color: #f8f9fa;
+  border-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.form-group select option {
+  padding: 10px;
+  font-size: 16px;
+}
 .button-container {
   display: flex;
   justify-content: center;
   margin-top: 20px;
   background-color: aliceblue;
   padding: 10px;
-  border-radius:12px;
+  border-radius: 12px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  background-color: aliceblue;
+  padding: 10px;
+  border-radius: 12px;
 }
 
 button[type="submit"] {
@@ -499,7 +569,7 @@ button[type="submit"]:hover {
   background-color: aliceblue;
   border-radius: 10px;
   box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
-  margin-top: 20px; 
+  margin-top: 20px;
 }
 
 table {
@@ -540,8 +610,6 @@ th {
   padding: 5px 10px;
   border-radius: 15px;
 }
-
-
 
 .button-group {
   display: flex;
@@ -646,7 +714,6 @@ th {
   border-radius: 4px;
 }
 
-
 .image-preview {
   display: flex;
   align-items: center;
@@ -654,21 +721,22 @@ th {
 }
 
 .preview-img {
-  max-width: 50px; 
-  max-height: 50px; 
-  object-fit: cover; 
-  border: 2px solid #ddd; 
-  border-radius: 8px; 
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  max-width: 50px;
+  max-height: 50px;
+  object-fit: cover;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .grupo-musical-photo {
-  max-width: 60px; 
+  max-width: 60px;
   max-height: 70px;
-  width: auto; 
-  height: auto; 
-  object-fit: cover; 
-  border-radius: 4px; 
+  width: auto;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
 }
 
-.buscar {}
+.buscar {
+}
 </style>

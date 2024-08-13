@@ -99,7 +99,7 @@
               <!-- Información detallada del álbum -->
               <div v-if="selectedAlbum">
                 <h2>Detalles del Álbum</h2>
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Foto:</label>
                   <img
                     :src="selectedAlbum.foto_album"
@@ -108,27 +108,27 @@
                   />
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Nombre del Álbum:</label>
                   <p>{{ selectedAlbum.nombre_album }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Nombre del Grupo:</label>
                   <p>{{ selectedAlbum.grupo_musical }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Número de Integrantes:</label>
                   <p>{{ selectedAlbum.integrantes }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>URL:</label>
                   <p>{{ selectedAlbum.url }}</p>
                 </div>
 
-                <div class="form-group">
+                <div id="form-grou">
                   <label>Estado:</label>
                   <p>{{ getStatusLabel(selectedAlbum.estado_fk) }}</p>
                 </div>
@@ -453,7 +453,11 @@ form {
   flex-direction: column;
   align-items: center;
 }
-
+#form-grou {
+  margin: 20px;
+  margin-bottom: 15px;
+  align-items: center;
+}
 .form-group {
   display: flex;
   flex-direction: row;
@@ -475,7 +479,60 @@ form {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+.form-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+}
 
+.form-group input {
+  flex: 2;
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  appearance: none;
+  background-color: white;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23007bff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.form-group select:disabled {
+  background-color: #f8f9fa;
+  border-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.form-group select option {
+  padding: 10px;
+  font-size: 16px;
+}
 .button-container {
   display: flex;
   justify-content: center;

@@ -14,7 +14,7 @@
                 <h2>{{ isEditing ? "Editar Canción" : "Crear Canción" }}</h2>
 
                 <div class="form-group">
-                  <label for="imagen">Imagen (URL):</label> 
+                  <label for="imagen" style="margin-right: 8px">Imagen (URL):</label>
                   <input
                     type="text"
                     id="imagen"
@@ -32,7 +32,10 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="nombre_musica">Nombre de la Canción:</label>
+                  <label for="nombre_musica" style="margin-right: 32px"
+                    >Nombre de <br />
+                    la Canción:
+                  </label>
                   <input
                     type="text"
                     id="nombre_musica"
@@ -43,7 +46,10 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="nombre_Artista">Nombre del Artista:</label>
+                  <label for="nombre_Artista" style="margin-right: 32px"
+                    >Nombre del <br />
+                    Artista:</label
+                  >
                   <input
                     type="text"
                     id="nombre_Artista"
@@ -54,7 +60,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="estado_fk">Estado:</label>
+                  <label for="estado_fk" style="margin-right: 32px">Estado:</label>
                   <select v-model="formData.estado_fk" required>
                     <option
                       v-for="estado in estados"
@@ -79,26 +85,32 @@
 
               <div v-if="selectedSong">
                 <h2>Detalles de la Canción</h2>
-                <div class="form-group">
-                  <label>Imagen:</label>
+                <div id="form-grou">
+                  <label>Imagen: </label>
+
                   <img
                     :src="selectedSong.foto_musica"
                     alt="Imagen de la canción"
-                    class="preview-img"
+                    cla
+                    id="preview-img"
                   />
                 </div>
 
-                <div class="form-group">
-                  <label>Nombre de la Canción:</label>
+                <div cla id="form-grou">
+                  <label style="margin-right: 50px; margin-left: 50px"
+                    >Nombre de la Canción:</label
+                  >
                   <p>{{ selectedSong.nombre_musica }}</p>
                 </div>
 
-                <div class="form-group">
-                  <label>Nombre del Artista:</label>
+                <div cla id="form-grou">
+                  <label style="margin-right: 50px; margin-left: 50px"
+                    >Nombre del Artista:</label
+                  >
                   <p>{{ selectedSong.nombre_Artista }}</p>
                 </div>
 
-                <div class="form-group">
+                <div cla id="form-grou">
                   <label>Estado:</label>
                   <p>{{ getStatusLabel(selectedSong.estado_fk) }}</p>
                 </div>
@@ -377,7 +389,6 @@ export default {
 </script>
 
 <style scoped>
-
 #capa-padre {
   background-color: aliceblue;
   border-radius: 20px;
@@ -413,19 +424,24 @@ form {
   flex-direction: column;
   align-items: center;
 }
+#form-grou {
+  margin: 20px;
+  margin-bottom: 15px;
+  align-items: center;
 
+}
 .form-group {
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 15px;
 }
-
 .form-group label {
-  flex: 1;
-  margin-right: 10px;
+  display: block;
+  margin-bottom: 5px;
   font-weight: bold;
-  text-align: right;
+  font-size: 16px;
+  color: #333;
 }
 
 .form-group input {
@@ -436,6 +452,38 @@ form {
   border-radius: 4px;
 }
 
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  appearance: none;
+  background-color: white;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23007bff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.form-group select:disabled {
+  background-color: #f8f9fa;
+  border-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.form-group select option {
+  padding: 10px;
+  font-size: 16px;
+}
 .button-container {
   display: flex;
   justify-content: center;
@@ -607,16 +655,16 @@ th {
 .custom-upload-input {
   display: none;
 }
-img{
-  width:80px;
-  height:80px;
+img {
+  width: 80px;
+  height: 80px;
   margin-bottom: 14px;
 }
 .custom-image-preview {
   margin-top: 10px;
-  width:20px !important;
-  height:20px;
-  border-radius:10px;
+  width: 20px !important;
+  height: 20px;
+  border-radius: 10px;
 }
 
 .custom-preview-img {
@@ -632,7 +680,7 @@ img{
   width: auto; /* Ancho automático para mantener la relación de aspecto */
   height: auto; /* Altura automática para mantener la relación de aspecto */
   object-fit: cover; /* Ajusta la imagen al contenedor sin distorsionar */
-  border-radius: 4px; 
+  border-radius: 4px;
 }
 
 /* styles.css o archivo de estilo del componente */
@@ -651,7 +699,6 @@ img{
 .modal-content .form-group {
   margin-bottom: 15px;
 }
-
 
 .buscar {
 }
