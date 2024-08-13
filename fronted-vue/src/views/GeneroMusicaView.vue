@@ -4,14 +4,14 @@
     <div class="content">
       <div class="header">
         <div id="capa-padre">
-          <h1>Genero Musical</h1>
+          <h1>Género Musical</h1>
           <div id="app">
-            <button @click="showCreateModal = true">Crear Genero</button>
+            <button @click="showCreateModal = true">Crear Género</button>
             <MyModal :isVisible="showCreateModal" @close="closeModal">
               <form v-if="!isEditing" @submit.prevent="createGeneroMusical">
-                <h2>Crear Genero</h2>
+                <h2>Crear Género</h2>
                 <div class="form-group">
-                  <label for="songName">Nombre del genero:</label>
+                  <label for="songName">Nombre del Género:</label>
                   <input type="text" v-model="formData.songName" required />
                 </div>
                 <div class="button-container">
@@ -19,9 +19,9 @@
                 </div>
               </form>
               <form v-else @submit.prevent="updateGeneroMusical">
-                <h2>Editar Genero</h2>
+                <h2>Editar Género</h2>
                 <div class="form-group">
-                  <label for="songName">Nombre del genero:</label>
+                  <label for="songName">Nombre del Género:</label>
                   <input type="text" v-model="formData.songName" required />
                 </div>
                 <div class="button-container">
@@ -39,7 +39,7 @@
             <thead>
               <tr>
                 <th><div class="cell">#</div></th>
-                <th><div class="cell">Nombre del Genero</div></th>
+                <th><div class="cell">Nombre del Género</div></th>
                 <th><div class="cell">Acciones</div></th>
               </tr>
             </thead>

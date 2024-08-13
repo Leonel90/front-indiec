@@ -5,9 +5,9 @@
     <div class="content">
       <div class="header">
         <div id="capa-padre">
-          <h1>Musica</h1>
+          <h1>Música</h1>
           <div id="app">
-            <button @click="openCreateModal">Crear Musica</button>
+            <button @click="openCreateModal">Crear Música</button>
             <MyModal :isVisible="showCreateModal" @close="closeModal">
               <!-- Formulario para crear o editar una canción -->
               <form @submit.prevent="isEditing ? handleEdit() : handleCreate()">
@@ -34,7 +34,7 @@
                 <div class="form-group">
                   <label for="nombre_musica" style="margin-right: 32px"
                     >Nombre de <br />
-                    la Canción:
+                    la Música:
                   </label>
                   <input
                     type="text"
@@ -84,7 +84,7 @@
               <!-- Información detallada de la canción -->
 
               <div v-if="selectedSong">
-                <h2>Detalles de la Canción</h2>
+                <h2>Detalles de la Música</h2>
                 <div id="form-grou">
                   <label>Imagen: </label>
 
@@ -98,7 +98,7 @@
 
                 <div cla id="form-grou">
                   <label style="margin-right: 50px; margin-left: 50px"
-                    >Nombre de la Canción:</label
+                    >Nombre de la Música:</label
                   >
                   <p>{{ selectedSong.nombre_musica }}</p>
                 </div>
@@ -139,7 +139,7 @@
             <tr>
               <th>#</th>
               <th>Foto</th>
-              <th>Nombre de la Canción</th>
+              <th>Nombre de la Música</th>
               <th>Nombre del Artista</th>
               <th>Estado</th>
               <th>Acciones</th>
@@ -257,10 +257,10 @@ export default {
           this.songs.push(response.data);
           this.showCreateModal = false;
           this.resetFormData();
-          Swal.fire("¡Éxito!", "La canción ha sido creada exitosamente.", "success");
+          Swal.fire("¡Éxito!", "La Música ha sido creada exitosamente.", "success");
         })
         .catch((error) => {
-          console.error("Error al crear canción:", error);
+          console.error("Error al crear Música:", error);
         });
     },
     handleEdit() {
@@ -277,10 +277,10 @@ export default {
           this.showCreateModal = false;
           this.isEditing = false;
           this.resetFormData();
-          Swal.fire("¡Éxito!", "La canción ha sido actualizada exitosamente.", "success");
+          Swal.fire("¡Éxito!", "La Música ha sido actualizada exitosamente.", "success");
         })
         .catch((error) => {
-          console.error("Error al actualizar canción:", error);
+          console.error("Error al actualizar Música:", error);
         });
     },
     startEditing(song) {
@@ -296,7 +296,7 @@ export default {
     deleteSong(song) {
       Swal.fire({
         title: "¿Estás seguro?",
-        text: "Esta acción cambiará el estado de la canción a 'Eliminado'.",
+        text: "Esta acción cambiará el estado de la Música a 'Eliminado'.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -309,10 +309,10 @@ export default {
             .put(`/musicas/${song.id_Musica}`, { ...song, estado_fk: 2 })
             .then(() => {
               song.estado_fk = 2;
-              Swal.fire("¡Eliminado!", "La canción ha sido eliminada.", "success");
+              Swal.fire("¡Eliminado!", "La Música ha sido eliminada.", "success");
             })
             .catch((error) => {
-              console.error("Error al eliminar canción:", error);
+              console.error("Error al eliminar Música:", error);
             });
         }
       });
